@@ -17,7 +17,7 @@
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
 
-import 'app_text_theme.dart';
+import 'text/app_text_theme.dart';
 
 class AppThemeData {
   static ThemeData buildThemeData({

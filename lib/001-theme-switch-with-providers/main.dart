@@ -14,51 +14,42 @@
  * limitations under the License.
  */
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:ulusoyapps_flutter/cache/Preference.dart';
+import 'package:ulusoyapps_flutter/extensions/build_context_extensions.dart';
+import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
+import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
+import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final Preference _preference = Preference();
+  runApp(
+    ChangeNotifierProvider<ThemeViewModel>(
+      create: (context) => ThemeViewModel(_preference),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      theme: context.appThemeData,
+      home: MyHomePage(title: '001 Theme Switch'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -70,64 +61,131 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
+    });
+  }
+
+  void _resetCounter() {
+    setState(() {
+      _counter = 0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final themeViewModel = context.watch<ThemeViewModel>();
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+        brightness: context.brightness,
+        actions: [
+          GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_MEDIUM),
+              child: Icon(
+                themeViewModel.brightness == Brightness.dark
+                    ? MdiIcons.lightbulbOffOutline
+                    : MdiIcons.lightbulbOnOutline,
+                color: themeViewModel.appColors.colorScheme.onSurface,
+              ),
+            ),
+            onTap: () {
+              themeViewModel.toggleBrightness();
+            },
+          ),
+        ],
         title: Text(widget.title),
+        //actions: [Icon()],
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$_counter',
+                style: themeViewModel.baseTextTheme.headline4.copyWith(color: _getCounterColor(themeViewModel)),
+              ),
+              AspectRatio(
+                aspectRatio: 2.0,
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+                    child: _barChart(themeViewModel),
+                  ),
+                ),
+              ),
+              RaisedButton(
+                child: Text('Reset Counter'),
+                onPressed: _resetCounter,
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ), // This
     );
+  }
+
+  BarChart _barChart(ThemeViewModel themeViewModel) {
+    var graphColors = themeViewModel.appColors.graphColors;
+    return BarChart(
+      BarChartData(
+        alignment: BarChartAlignment.spaceAround,
+        maxY: 20,
+        barTouchData: BarTouchData(
+          enabled: false,
+        ),
+        titlesData: FlTitlesData(
+          show: true,
+          bottomTitles: SideTitles(
+            showTitles: true,
+            textStyle: themeViewModel.baseTextTheme.caption,
+            margin: 20,
+            getTitles: (double value) {
+              switch (value.toInt()) {
+                case 0:
+                  return 'Below';
+                case 1:
+                  return 'On Target';
+                case 2:
+                  return 'Above';
+                default:
+                  return '';
+              }
+            },
+          ),
+          leftTitles: SideTitles(showTitles: false),
+        ),
+        borderData: FlBorderData(
+          show: false,
+        ),
+        barGroups: [
+          BarChartGroupData(x: 0, barRods: [BarChartRodData(y: 5, color: graphColors.belowTarget)]),
+          BarChartGroupData(x: 1, barRods: [BarChartRodData(y: 10, color: graphColors.onTarget)]),
+          BarChartGroupData(x: 2, barRods: [BarChartRodData(y: 14, color: graphColors.aboveTarget)]),
+        ],
+      ),
+    );
+  }
+
+  /// This is bad but here only for demonstration purposes.
+  /// View should not contain any logic. The logic should be in view model.
+  Color _getCounterColor(ThemeViewModel themeViewModel) {
+    AlertLevels alertLevels = themeViewModel.appColors.alertLevels;
+    if (_counter < 5) {
+      return alertLevels.neutral;
+    } else if (_counter < 10) {
+      return alertLevels.warning;
+    } else {
+      return alertLevels.alert;
+    }
   }
 }

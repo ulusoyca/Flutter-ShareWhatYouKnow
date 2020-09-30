@@ -119,7 +119,7 @@ class AppTextTheme {
   }
 
   static AppTextTheme buildAppTextTheme({AppColors appColors}) => AppTextTheme(
-        displayColor: appColors.colorScheme.onBackground,
+        displayColor: appColors.colorScheme.onSurface,
         bodyColor: appColors.colorScheme.onSurface,
       );
 }
