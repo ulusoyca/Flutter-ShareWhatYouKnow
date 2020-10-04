@@ -18,18 +18,20 @@ import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
-class AppTheme {
-  final String companyName;
-  final Brightness brightness;
-  final CompanyColors colors;
-  final CompanyTextTheme textTheme;
-  final ThemeData themeData;
+import 'company_theme_data.dart';
 
-  AppTheme({
-    @required this.companyName,
-    @required this.brightness,
-    @required this.colors,
-    @required this.textTheme,
-    @required this.themeData,
-  });
+class CompanyThemeDataA extends CompanyThemeData {
+  @override
+  double borderRadius = 20.0;
+
+  CompanyThemeDataA(
+    Brightness brightness,
+    CompanyColors companyColors,
+    CompanyTextTheme companyTextTheme,
+  ) : super(brightness, companyColors, companyTextTheme) {
+    shapeBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(borderRadius),
+      borderSide: BorderSide(color: companyColors.colorScheme.background),
+    );
+  }
 }

@@ -20,8 +20,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
 import 'package:ulusoyapps_flutter/extensions/build_context_extensions.dart';
-import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
+import 'package:ulusoyapps_flutter/resources/colors/alert_level_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
+import 'package:ulusoyapps_flutter/resources/themes/companies.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
 void main() {
@@ -58,6 +59,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  List<bool> _isSelected = [true, false, false];
 
   void _incrementCounter() {
     setState(() {
@@ -85,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 themeViewModel.brightness == Brightness.dark
                     ? MdiIcons.lightbulbOffOutline
                     : MdiIcons.lightbulbOnOutline,
-                color: themeViewModel.appColors.colorScheme.onSurface,
+                color: themeViewModel.companyColors.colorScheme.onSurface,
               ),
             ),
             onTap: () {
@@ -102,40 +104,95 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(
-                'You have pushed the button this many times:',
+              ToggleButtons(
+                children: <Widget>[
+                  toggleButtonChild('Company A'),
+                  toggleButtonChild('Company B'),
+                  toggleButtonChild('Company C'),
+                ],
+                onPressed: (int index) {
+                  switch (index) {
+                    case 0:
+                      themeViewModel.updateCompany(Company.COMPANY_A);
+                      break;
+                    case 1:
+                      themeViewModel.updateCompany(Company.COMPANY_B);
+                      break;
+                    case 2:
+                      themeViewModel.updateCompany(Company.COMPANY_C);
+                      break;
+                  }
+                  setState(() {
+                    for (int buttonIndex = 0; buttonIndex < _isSelected.length; buttonIndex++) {
+                      if (buttonIndex == index) {
+                        _isSelected[buttonIndex] = true;
+                      } else {
+                        _isSelected[buttonIndex] = false;
+                      }
+                    }
+                  });
+                },
+                isSelected: _isSelected,
               ),
-              Text(
-                '$_counter',
-                style: themeViewModel.baseTextTheme.headline4.copyWith(color: _getCounterColor(themeViewModel)),
-              ),
-              AspectRatio(
-                aspectRatio: 2.0,
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
-                    child: _barChart(themeViewModel),
-                  ),
-                ),
-              ),
-              RaisedButton(
-                child: Text('Reset Counter'),
-                onPressed: _resetCounter,
-              ),
+              _clickNumberTexts(themeViewModel),
+              _graphs(themeViewModel),
+              _resetButton(),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This
+      floatingActionButton: _floatingButton(), // This
+    );
+  }
+
+  Widget toggleButtonChild(String text) => Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_SMALL),
+        child: Text(text),
+      );
+
+  RaisedButton _resetButton() {
+    return RaisedButton(
+      child: Text('Reset Counter'),
+      onPressed: _resetCounter,
+    );
+  }
+
+  Column _clickNumberTexts(ThemeViewModel themeViewModel) {
+    return Column(
+      children: [
+        Text(
+          'You have pushed the button this many times:',
+        ),
+        Text(
+          '$_counter',
+          style: themeViewModel.baseTextTheme.headline4.copyWith(color: _getCounterColor(themeViewModel)),
+        ),
+      ],
+    );
+  }
+
+  AspectRatio _graphs(ThemeViewModel themeViewModel) {
+    return AspectRatio(
+      aspectRatio: 2.0,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+          child: _barChart(themeViewModel),
+        ),
+      ),
+    );
+  }
+
+  FloatingActionButton _floatingButton() {
+    return FloatingActionButton(
+      onPressed: _incrementCounter,
+      tooltip: 'Increment',
+      child: Icon(Icons.add),
     );
   }
 
   BarChart _barChart(ThemeViewModel themeViewModel) {
-    var graphColors = themeViewModel.appColors.graphColors;
+    var graphColors = themeViewModel.companyColors.graphColors;
     return BarChart(
       BarChartData(
         alignment: BarChartAlignment.spaceAround,
@@ -179,7 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
   /// This is bad but here only for demonstration purposes.
   /// View should not contain any logic. The logic should be in view model.
   Color _getCounterColor(ThemeViewModel themeViewModel) {
-    AlertLevels alertLevels = themeViewModel.appColors.alertLevels;
+    AlertLevels alertLevels = themeViewModel.companyColors.alertLevels;
     if (_counter < 5) {
       return alertLevels.neutral;
     } else if (_counter < 10) {

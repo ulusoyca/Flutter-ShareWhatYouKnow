@@ -16,37 +16,34 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
+import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
-class AppTextTheme {
-  TextTheme baseTextTheme;
-  TextTheme primaryTextTheme;
-  TextTheme secondaryTextTheme;
-  Color displayColor;
-  Color bodyColor;
+class CompanyTextThemeA extends CompanyTextTheme {
+  CompanyTextThemeA(
+    Color displayColor,
+    Color bodyColor,
+  ) : super(displayColor, bodyColor);
 
-  static const DEFAULT_LETTER_SPACING = 0.3;
-
-  AppTextTheme({
-    @required this.displayColor,
-    @required this.bodyColor,
-  }) {
-    baseTextTheme = _buildBaseTextTheme();
-    primaryTextTheme = _buildPrimaryTextTheme();
-    // For now, primary and secondary text themes are the same
-    secondaryTextTheme = _buildPrimaryTextTheme();
-  }
-
-  TextTheme _buildPrimaryTextTheme() => baseTextTheme.copyWith(
+  @override
+  TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme.copyWith(
         button: baseTextTheme.caption.copyWith(
           fontWeight: FontWeight.w800,
           fontSize: 14,
-          letterSpacing: DEFAULT_LETTER_SPACING,
           color: displayColor,
         ),
       );
 
-  TextTheme _buildBaseTextTheme() {
+  @override
+  TextTheme buildSecondaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme.copyWith(
+        button: baseTextTheme.caption.copyWith(
+          fontWeight: FontWeight.w800,
+          fontSize: 14,
+          color: displayColor,
+        ),
+      );
+
+  @override
+  TextTheme buildBaseTextTheme(Color displayColor, Color bodyColor) {
     final currentTextTheme = TextTheme(
       headline6: TextStyle(
         fontSize: 24,
@@ -99,7 +96,7 @@ class AppTextTheme {
       button: TextStyle(
         fontWeight: FontWeight.w700,
         fontSize: 16,
-        letterSpacing: DEFAULT_LETTER_SPACING,
+        letterSpacing: 1.25,
       ),
       caption: TextStyle(
         fontSize: 14,
@@ -117,9 +114,4 @@ class AppTextTheme {
     );
     return GoogleFonts.montserratTextTheme(currentTextTheme);
   }
-
-  static AppTextTheme buildAppTextTheme({AppColors appColors}) => AppTextTheme(
-        displayColor: appColors.colorScheme.onSurface,
-        bodyColor: appColors.colorScheme.onSurface,
-      );
 }

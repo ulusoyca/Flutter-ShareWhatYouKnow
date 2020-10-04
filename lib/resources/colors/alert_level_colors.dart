@@ -13,23 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
-import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
+class AlertLevels {
+  final Color safe;
+  final Color alert;
+  final Color warning;
+  final Color neutral;
 
-class AppTheme {
-  final String companyName;
-  final Brightness brightness;
-  final CompanyColors colors;
-  final CompanyTextTheme textTheme;
-  final ThemeData themeData;
-
-  AppTheme({
-    @required this.companyName,
-    @required this.brightness,
-    @required this.colors,
-    @required this.textTheme,
-    @required this.themeData,
+  AlertLevels({
+    this.safe,
+    this.alert,
+    this.warning,
+    this.neutral,
   });
 }

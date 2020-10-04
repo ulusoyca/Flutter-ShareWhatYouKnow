@@ -15,55 +15,63 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
+import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
-import 'text/app_text_theme.dart';
+abstract class CompanyThemeData {
+  ShapeBorder shapeBorder;
+  double borderRadius;
+  final Brightness brightness;
+  final CompanyColors companyColors;
+  final CompanyTextTheme companyTextTheme;
 
-class AppThemeData {
-  static ThemeData buildThemeData({
-    Brightness brightness,
-    AppColors appColors,
-    AppTextTheme appTextTheme,
-  }) {
-    final _colorScheme = appColors.colorScheme;
+  CompanyThemeData(
+    this.brightness,
+    this.companyColors,
+    this.companyTextTheme,
+  );
+
+  ThemeData buildThemeData() {
+    final _colorScheme = companyColors.colorScheme;
 
     /// Button Theme
     final buttonThemeData = ButtonThemeData(
-      shape: StadiumBorder(),
       height: 45,
       colorScheme: _colorScheme,
       textTheme: ButtonTextTheme.primary,
+      shape: shapeBorder,
     );
 
     /// Card Theme
     final cardTheme = CardTheme(
-      shape: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: _colorScheme.background),
-      ),
-      color: appColors.fillColor,
-      shadowColor: appColors.boxShadowColor,
+      color: companyColors.colorScheme.surface,
+      shadowColor: companyColors.shadowColor,
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      elevation: 4.0, // this field changes the shadow of the card
+      elevation: 4.0,
+      // this field changes the shadow of the card
+      shape: shapeBorder,
     );
 
     /// Divider Theme
     final dividerThemeData = DividerThemeData(
-      color: appColors.dividerColor,
+      color: companyColors.dividerColor,
       thickness: 1,
+    );
+
+    /// Toggle Button ThemeData
+    final toggleButtonTheme = ToggleButtonsThemeData(
+      borderRadius: BorderRadius.circular(borderRadius),
     );
 
     /// App bar
     final appBarThemeData = AppBarTheme(
-      color: appColors.colorScheme.onPrimary,
-      shadowColor: appColors.boxShadowColor,
-      textTheme: appTextTheme.baseTextTheme,
+      shadowColor: companyColors.shadowColor,
     );
 
     /// Snackbar
     final snackbarThemeData = SnackBarThemeData(
-      backgroundColor: appColors.snackbarBackground,
-      contentTextStyle: appTextTheme.baseTextTheme.bodyText2.copyWith(color: appColors.colorScheme.onPrimary),
+      backgroundColor: companyColors.colorScheme.surface,
+      contentTextStyle: companyTextTheme.baseTextTheme.bodyText2.copyWith(color: companyColors.colorScheme.onPrimary),
     );
 
     return ThemeData(
@@ -73,20 +81,19 @@ class AppThemeData {
       textSelectionColor: _colorScheme.primary,
       colorScheme: _colorScheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: appColors.colorScheme.background,
-      cardColor: appColors.fillColor,
+      scaffoldBackgroundColor: companyColors.colorScheme.background,
       dividerTheme: dividerThemeData,
-      textTheme: appTextTheme.baseTextTheme,
-      primaryTextTheme: appTextTheme.primaryTextTheme,
-      accentTextTheme: appTextTheme.secondaryTextTheme,
+      textTheme: companyTextTheme.baseTextTheme,
+      primaryTextTheme: companyTextTheme.primaryTextTheme,
+      accentTextTheme: companyTextTheme.secondaryTextTheme,
       buttonTheme: buttonThemeData,
       cardTheme: cardTheme,
       appBarTheme: appBarThemeData,
       brightness: brightness,
       backgroundColor: _colorScheme.background,
-      primaryColorLight: appColors.primaryLight,
-      primaryColorDark: appColors.colorScheme.primaryVariant,
+      primaryColorDark: companyColors.colorScheme.primaryVariant,
       snackBarTheme: snackbarThemeData,
+      toggleButtonsTheme: toggleButtonTheme,
     );
   }
 }
