@@ -22,96 +22,56 @@ class CompanyTextThemeA extends CompanyTextTheme {
   CompanyTextThemeA(
     Color displayColor,
     Color bodyColor,
-  ) : super(displayColor, bodyColor);
+    Color primaryDisplayColor,
+    Color primaryBodyColor,
+  ) : super(displayColor, bodyColor, primaryDisplayColor, primaryBodyColor);
 
   @override
-  TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme.copyWith(
+  TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme
+      .copyWith(
         button: baseTextTheme.caption.copyWith(
-          fontWeight: FontWeight.w800,
           fontSize: 14,
           color: displayColor,
         ),
+      )
+      .apply(
+        displayColor: displayColor,
+        bodyColor: bodyColor,
       );
 
   @override
-  TextTheme buildSecondaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme.copyWith(
+  TextTheme buildSecondaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme
+      .copyWith(
         button: baseTextTheme.caption.copyWith(
-          fontWeight: FontWeight.w800,
           fontSize: 14,
           color: displayColor,
         ),
+      )
+      .apply(
+        displayColor: displayColor,
+        bodyColor: bodyColor,
       );
 
   @override
   TextTheme buildBaseTextTheme(Color displayColor, Color bodyColor) {
     final currentTextTheme = TextTheme(
-      headline6: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.15,
-      ),
-      headline5: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.w400,
-      ),
-      headline4: TextStyle(
-        fontSize: 40,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.25,
-      ),
-      headline3: TextStyle(
-        fontSize: 56,
-        fontWeight: FontWeight.w400,
-      ),
-      headline2: TextStyle(
-        fontSize: 71,
-        fontWeight: FontWeight.w300,
-        letterSpacing: -0.5,
-      ),
-      headline1: TextStyle(
-        fontSize: 113,
-        fontWeight: FontWeight.w300,
-        letterSpacing: -1.5,
-      ),
-      subtitle1: TextStyle(
-        fontSize: 19,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.15,
-      ),
-      subtitle2: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.1,
-      ),
-      bodyText1: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.5,
-      ),
-      bodyText2: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.25,
-      ),
-      button: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontSize: 16,
-        letterSpacing: 1.25,
-      ),
-      caption: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 1.25,
-      ),
-      overline: TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 1.5,
-      ),
+      headline1: GoogleFonts.rubik(fontSize: 98, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+      headline2: GoogleFonts.rubik(fontSize: 61, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+      headline3: GoogleFonts.rubik(fontSize: 49, fontWeight: FontWeight.w400),
+      headline4: GoogleFonts.rubik(fontSize: 35, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      headline5: GoogleFonts.rubik(fontSize: 24, fontWeight: FontWeight.w400),
+      headline6: GoogleFonts.rubik(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+      subtitle1: GoogleFonts.rubik(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+      subtitle2: GoogleFonts.rubik(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+      bodyText1: GoogleFonts.rubik(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+      bodyText2: GoogleFonts.rubik(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      button: GoogleFonts.rubik(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+      caption: GoogleFonts.rubik(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+      overline: GoogleFonts.rubik(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
     ).apply(
       displayColor: displayColor,
       bodyColor: bodyColor,
     );
-    return GoogleFonts.montserratTextTheme(currentTextTheme);
+    return GoogleFonts.rubikTextTheme(currentTextTheme);
   }
 }

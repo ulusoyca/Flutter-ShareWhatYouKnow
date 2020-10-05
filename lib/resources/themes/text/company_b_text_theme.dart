@@ -19,43 +19,59 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
 class CompanyTextThemeB extends CompanyTextTheme {
-  CompanyTextThemeB(Color displayColor, Color bodyColor) : super(displayColor, bodyColor);
+  CompanyTextThemeB(
+    Color displayColor,
+    Color bodyColor,
+    Color primaryDisplayColor,
+    Color primaryBodyColor,
+  ) : super(displayColor, bodyColor, primaryDisplayColor, primaryBodyColor);
 
   @override
-  TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme.copyWith(
+  TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme
+      .copyWith(
         button: baseTextTheme.caption.copyWith(
-          fontWeight: FontWeight.w800,
           fontSize: 14,
           color: displayColor,
         ),
+      )
+      .apply(
+        displayColor: displayColor,
+        bodyColor: bodyColor,
       );
 
   @override
-  TextTheme buildSecondaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme.copyWith(
+  TextTheme buildSecondaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme
+      .copyWith(
         button: baseTextTheme.caption.copyWith(
-          fontWeight: FontWeight.w800,
           fontSize: 14,
           color: displayColor,
         ),
+      )
+      .apply(
+        displayColor: displayColor,
+        bodyColor: bodyColor,
       );
 
   @override
   TextTheme buildBaseTextTheme(Color displayColor, Color bodyColor) {
     final currentTextTheme = TextTheme(
-      headline1: GoogleFonts.ubuntu(fontSize: 98, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-      headline2: GoogleFonts.ubuntu(fontSize: 61, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-      headline3: GoogleFonts.ubuntu(fontSize: 49, fontWeight: FontWeight.w400),
-      headline4: GoogleFonts.ubuntu(fontSize: 35, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      headline5: GoogleFonts.ubuntu(fontSize: 24, fontWeight: FontWeight.w400),
-      headline6: GoogleFonts.ubuntu(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-      subtitle1: GoogleFonts.ubuntu(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
-      subtitle2: GoogleFonts.ubuntu(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-      bodyText1: GoogleFonts.ubuntu(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-      bodyText2: GoogleFonts.ubuntu(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      button: GoogleFonts.ubuntu(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-      caption: GoogleFonts.ubuntu(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-      overline: GoogleFonts.ubuntu(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+      headline1: GoogleFonts.righteous(fontSize: 97, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+      headline2: GoogleFonts.righteous(fontSize: 61, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+      headline3: GoogleFonts.righteous(fontSize: 48, fontWeight: FontWeight.w400),
+      headline4: GoogleFonts.righteous(fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      headline5: GoogleFonts.righteous(fontSize: 24, fontWeight: FontWeight.w400),
+      headline6: GoogleFonts.righteous(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+      subtitle1: GoogleFonts.righteous(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+      subtitle2: GoogleFonts.righteous(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+      bodyText1: GoogleFonts.righteous(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+      bodyText2: GoogleFonts.righteous(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      button: GoogleFonts.righteous(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+      caption: GoogleFonts.righteous(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+      overline: GoogleFonts.righteous(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+    ).apply(
+      displayColor: displayColor,
+      bodyColor: bodyColor,
     );
-    return GoogleFonts.ubuntuTextTheme(currentTextTheme);
+    return GoogleFonts.righteousTextTheme(currentTextTheme);
   }
 }

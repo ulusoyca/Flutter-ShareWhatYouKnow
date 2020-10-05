@@ -31,5 +31,17 @@ class CompanyThemeDataC extends CompanyThemeData {
     Brightness brightness,
     CompanyColors companyColors,
     CompanyTextTheme companyTextTheme,
-  ) : super(brightness, companyColors, companyTextTheme);
+  ) : super(brightness, companyColors, companyTextTheme) {
+    fabTheme = FloatingActionButtonThemeData(shape: shapeBorder);
+    toggleButtonsThemeData = ToggleButtonsThemeData(
+      borderRadius: BorderRadius.circular(borderRadius),
+    );
+    bottomAppBarTheme = BottomAppBarTheme(
+      shape: AutomaticNotchedShape(
+        shapeBorder,
+        shapeBorder,
+      ),
+      color: companyColors.colorScheme.primary,
+    );
+  }
 }

@@ -21,6 +21,9 @@ import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart
 abstract class CompanyThemeData {
   ShapeBorder shapeBorder;
   double borderRadius;
+  FloatingActionButtonThemeData fabTheme;
+  ToggleButtonsThemeData toggleButtonsThemeData;
+  BottomAppBarTheme bottomAppBarTheme;
   final Brightness brightness;
   final CompanyColors companyColors;
   final CompanyTextTheme companyTextTheme;
@@ -44,10 +47,9 @@ abstract class CompanyThemeData {
 
     /// Card Theme
     final cardTheme = CardTheme(
-      color: companyColors.colorScheme.surface,
       shadowColor: companyColors.shadowColor,
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      elevation: 4.0,
+      elevation: 5.0,
       // this field changes the shadow of the card
       shape: shapeBorder,
     );
@@ -58,25 +60,18 @@ abstract class CompanyThemeData {
       thickness: 1,
     );
 
-    /// Toggle Button ThemeData
-    final toggleButtonTheme = ToggleButtonsThemeData(
-      borderRadius: BorderRadius.circular(borderRadius),
-    );
-
-    /// App bar
-    final appBarThemeData = AppBarTheme(
-      shadowColor: companyColors.shadowColor,
-    );
-
     /// Snackbar
     final snackbarThemeData = SnackBarThemeData(
       backgroundColor: companyColors.colorScheme.surface,
       contentTextStyle: companyTextTheme.baseTextTheme.bodyText2.copyWith(color: companyColors.colorScheme.onPrimary),
     );
 
+    final primaryIconTheme = IconThemeData(
+      color: _colorScheme.onPrimary,
+    );
+
     return ThemeData(
       primaryColor: _colorScheme.primary,
-      accentColor: _colorScheme.secondary,
       buttonColor: _colorScheme.primary,
       textSelectionColor: _colorScheme.primary,
       colorScheme: _colorScheme,
@@ -88,12 +83,14 @@ abstract class CompanyThemeData {
       accentTextTheme: companyTextTheme.secondaryTextTheme,
       buttonTheme: buttonThemeData,
       cardTheme: cardTheme,
-      appBarTheme: appBarThemeData,
       brightness: brightness,
       backgroundColor: _colorScheme.background,
-      primaryColorDark: companyColors.colorScheme.primaryVariant,
       snackBarTheme: snackbarThemeData,
-      toggleButtonsTheme: toggleButtonTheme,
+      toggleButtonsTheme: toggleButtonsThemeData,
+      floatingActionButtonTheme: fabTheme,
+      bottomAppBarTheme: bottomAppBarTheme,
+      primaryIconTheme: primaryIconTheme,
+      applyElevationOverlayColor: true,
     );
   }
 }

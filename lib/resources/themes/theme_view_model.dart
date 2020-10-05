@@ -69,6 +69,8 @@ class ThemeViewModel with ChangeNotifier {
 
   TextTheme get baseTextTheme => _currentTheme.textTheme.baseTextTheme;
 
+  TextTheme get primaryTextTheme => _currentTheme.textTheme.primaryTextTheme;
+
   Brightness get brightness => _currentTheme.brightness;
 
   ThemeData get themeData => _currentTheme.themeData;
@@ -128,6 +130,8 @@ class ThemeViewModel with ChangeNotifier {
         textTheme = CompanyTextThemeA(
           colors.colorScheme.onSurface,
           colors.colorScheme.onSurface,
+          colors.colorScheme.onPrimary,
+          colors.colorScheme.onPrimary,
         );
         companyThemeData = CompanyThemeDataA(brightness, colors, textTheme);
         break;
@@ -136,6 +140,8 @@ class ThemeViewModel with ChangeNotifier {
         textTheme = CompanyTextThemeB(
           colors.colorScheme.onSurface,
           colors.colorScheme.onSurface,
+          colors.colorScheme.onPrimary,
+          colors.colorScheme.onPrimary,
         );
         companyThemeData = CompanyThemeDataB(brightness, colors, textTheme);
         break;
@@ -144,6 +150,8 @@ class ThemeViewModel with ChangeNotifier {
         textTheme = CompanyTextThemeC(
           colors.colorScheme.onSurface,
           colors.colorScheme.onSurface,
+          colors.colorScheme.onPrimary,
+          colors.colorScheme.onPrimary,
         );
         companyThemeData = CompanyThemeDataC(brightness, colors, textTheme);
         break;

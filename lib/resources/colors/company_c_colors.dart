@@ -21,12 +21,28 @@ import 'app_colors.dart';
 class CompanyColorsC extends CompanyColors {
   CompanyColorsC(Brightness currentBrightness) : super(currentBrightness);
 
+  List<Color> lightSupplementaryColors = [
+    AppColors.keppel,
+    AppColors.tomato,
+    AppColors.capri,
+    AppColors.winterSky,
+    AppColors.plumpPurple,
+  ];
+
+  List<Color> darkSupplementaryColors = [
+    AppColors.aquamarine,
+    AppColors.vividTangerine,
+    AppColors.mayaBlue,
+    AppColors.persianPink,
+    AppColors.lavender,
+  ];
+
   @override
   final darkColorScheme = ColorScheme(
-    primary: AppColors.turquoiseGreen,
-    primaryVariant: AppColors.hunterGreen,
-    secondary: AppColors.amaranthPink,
-    secondaryVariant: AppColors.amaranthMp,
+    primary: AppColors.beauBlue,
+    primaryVariant: AppColors.charcoal,
+    secondary: AppColors.vividTangerine,
+    secondaryVariant: AppColors.darkLiverHorses,
     background: AppColors.balticSea,
     surface: AppColors.darkGrey,
     onBackground: AppColors.alabaster,
@@ -40,10 +56,10 @@ class CompanyColorsC extends CompanyColors {
 
   @override
   final lightColorScheme = ColorScheme(
-    primary: AppColors.mediumSeaGreen,
-    primaryVariant: AppColors.hunterGreen,
-    secondary: AppColors.frenchRose,
-    secondaryVariant: AppColors.amaranthMp,
+    primary: AppColors.slateGray,
+    primaryVariant: AppColors.charcoal,
+    secondary: AppColors.orangeRed,
+    secondaryVariant: AppColors.darkLiverHorses,
     background: AppColors.alabaster,
     surface: AppColors.white,
     onBackground: AppColors.white,

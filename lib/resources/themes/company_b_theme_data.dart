@@ -33,5 +33,10 @@ class CompanyThemeDataB extends CompanyThemeData {
       borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
       side: BorderSide(color: companyColors.colorScheme.background),
     );
+    fabTheme = FloatingActionButtonThemeData(shape: shapeBorder);
+    toggleButtonsThemeData = ToggleButtonsThemeData();
+    bottomAppBarTheme = BottomAppBarTheme(
+      color: companyColors.colorScheme.primary,
+    );
   }
 }

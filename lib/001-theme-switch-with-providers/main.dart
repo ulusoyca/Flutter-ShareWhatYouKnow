@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SampleBarChart.dart';
+import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SamplePieChart.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
 import 'package:ulusoyapps_flutter/extensions/build_context_extensions.dart';
 import 'package:ulusoyapps_flutter/resources/colors/alert_level_colors.dart';
@@ -76,67 +77,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final themeViewModel = context.watch<ThemeViewModel>();
+    var onPrimaryColor = themeViewModel.companyColors.colorScheme.onPrimary;
     return Scaffold(
-      appBar: AppBar(
-        brightness: context.brightness,
-        actions: [
-          GestureDetector(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_MEDIUM),
-              child: Icon(
-                themeViewModel.brightness == Brightness.dark
-                    ? MdiIcons.lightbulbOffOutline
-                    : MdiIcons.lightbulbOnOutline,
-                color: themeViewModel.companyColors.colorScheme.onSurface,
-              ),
-            ),
-            onTap: () {
-              themeViewModel.toggleBrightness();
-            },
-          ),
-        ],
-        title: Text(widget.title),
-        //actions: [Icon()],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+      appBar: _appBar(themeViewModel, onPrimaryColor),
+      bottomNavigationBar: _bottomAppBar(onPrimaryColor),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: Padding(
+        padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              ToggleButtons(
-                children: <Widget>[
-                  toggleButtonChild('Company A'),
-                  toggleButtonChild('Company B'),
-                  toggleButtonChild('Company C'),
-                ],
-                onPressed: (int index) {
-                  switch (index) {
-                    case 0:
-                      themeViewModel.updateCompany(Company.COMPANY_A);
-                      break;
-                    case 1:
-                      themeViewModel.updateCompany(Company.COMPANY_B);
-                      break;
-                    case 2:
-                      themeViewModel.updateCompany(Company.COMPANY_C);
-                      break;
-                  }
-                  setState(() {
-                    for (int buttonIndex = 0; buttonIndex < _isSelected.length; buttonIndex++) {
-                      if (buttonIndex == index) {
-                        _isSelected[buttonIndex] = true;
-                      } else {
-                        _isSelected[buttonIndex] = false;
-                      }
-                    }
-                  });
-                },
-                isSelected: _isSelected,
-              ),
-              _clickNumberTexts(themeViewModel),
-              _graphs(themeViewModel),
-              _resetButton(),
+              _companySelection(themeViewModel),
+              _clickNumber(themeViewModel),
+              Divider(),
+              SamplePieChart(),
+              Divider(),
+              _barChart(),
             ],
           ),
         ),
@@ -145,40 +101,118 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget _barChart() => Padding(
+        padding: EdgeInsets.symmetric(vertical: AppDimens.SIZE_SPACING_LARGE),
+        child: SampleBarChart(),
+      );
+
+  ToggleButtons _companySelection(ThemeViewModel themeViewModel) {
+    return ToggleButtons(
+      children: <Widget>[
+        toggleButtonChild('Company A'),
+        toggleButtonChild('Company B'),
+        toggleButtonChild('Company C'),
+      ],
+      onPressed: (int index) {
+        switch (index) {
+          case 0:
+            themeViewModel.updateCompany(Company.COMPANY_A);
+            break;
+          case 1:
+            themeViewModel.updateCompany(Company.COMPANY_B);
+            break;
+          case 2:
+            themeViewModel.updateCompany(Company.COMPANY_C);
+            break;
+        }
+        setState(() {
+          for (int buttonIndex = 0; buttonIndex < _isSelected.length; buttonIndex++) {
+            if (buttonIndex == index) {
+              _isSelected[buttonIndex] = true;
+            } else {
+              _isSelected[buttonIndex] = false;
+            }
+          }
+        });
+      },
+      isSelected: _isSelected,
+    );
+  }
+
+  BottomAppBar _bottomAppBar(Color onPrimaryColor) {
+    return BottomAppBar(
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.menu),
+            color: onPrimaryColor,
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.search),
+            color: onPrimaryColor,
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  AppBar _appBar(ThemeViewModel themeViewModel, Color onPrimaryColor) {
+    return AppBar(
+      brightness: themeViewModel.brightness,
+      actions: [
+        GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_MEDIUM),
+            child: Icon(
+              themeViewModel.brightness == Brightness.dark ? MdiIcons.lightbulbOffOutline : MdiIcons.lightbulbOnOutline,
+              color: onPrimaryColor,
+            ),
+          ),
+          onTap: () {
+            themeViewModel.toggleBrightness();
+          },
+        ),
+      ],
+      title: Text(
+        widget.title,
+        style: themeViewModel.baseTextTheme.headline6.copyWith(color: onPrimaryColor),
+      ),
+      //act
+    );
+  }
+
   Widget toggleButtonChild(String text) => Padding(
         padding: EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_SMALL),
         child: Text(text),
       );
 
-  RaisedButton _resetButton() {
-    return RaisedButton(
-      child: Text('Reset Counter'),
-      onPressed: _resetCounter,
-    );
-  }
-
-  Column _clickNumberTexts(ThemeViewModel themeViewModel) {
-    return Column(
-      children: [
-        Text(
-          'You have pushed the button this many times:',
-        ),
-        Text(
-          '$_counter',
-          style: themeViewModel.baseTextTheme.headline4.copyWith(color: _getCounterColor(themeViewModel)),
-        ),
-      ],
-    );
-  }
-
-  AspectRatio _graphs(ThemeViewModel themeViewModel) {
-    return AspectRatio(
-      aspectRatio: 2.0,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
-          child: _barChart(themeViewModel),
-        ),
+  Widget _clickNumber(ThemeViewModel themeViewModel) {
+    return Padding(
+      padding: EdgeInsets.only(top: AppDimens.SIZE_SPACING_XL),
+      child: Column(
+        children: [
+          Text(
+            'You have pushed the button this many times:',
+          ),
+          Text(
+            '$_counter',
+            style: themeViewModel.baseTextTheme.headline4.copyWith(color: _getCounterColor(themeViewModel)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              top: AppDimens.SIZE_SPACING_SMALL,
+              bottom: AppDimens.SIZE_SPACING_LARGE,
+            ),
+            child: RaisedButton(
+              child: Text('Reset Counter'),
+              onPressed: _resetCounter,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -188,48 +222,6 @@ class _MyHomePageState extends State<MyHomePage> {
       onPressed: _incrementCounter,
       tooltip: 'Increment',
       child: Icon(Icons.add),
-    );
-  }
-
-  BarChart _barChart(ThemeViewModel themeViewModel) {
-    var graphColors = themeViewModel.companyColors.graphColors;
-    return BarChart(
-      BarChartData(
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
-        barTouchData: BarTouchData(
-          enabled: false,
-        ),
-        titlesData: FlTitlesData(
-          show: true,
-          bottomTitles: SideTitles(
-            showTitles: true,
-            textStyle: themeViewModel.baseTextTheme.caption,
-            margin: 20,
-            getTitles: (double value) {
-              switch (value.toInt()) {
-                case 0:
-                  return 'Below';
-                case 1:
-                  return 'On Target';
-                case 2:
-                  return 'Above';
-                default:
-                  return '';
-              }
-            },
-          ),
-          leftTitles: SideTitles(showTitles: false),
-        ),
-        borderData: FlBorderData(
-          show: false,
-        ),
-        barGroups: [
-          BarChartGroupData(x: 0, barRods: [BarChartRodData(y: 5, color: graphColors.belowTarget)]),
-          BarChartGroupData(x: 1, barRods: [BarChartRodData(y: 10, color: graphColors.onTarget)]),
-          BarChartGroupData(x: 2, barRods: [BarChartRodData(y: 14, color: graphColors.aboveTarget)]),
-        ],
-      ),
     );
   }
 

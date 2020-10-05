@@ -27,6 +27,11 @@ abstract class CompanyColors {
 
   ColorScheme get colorScheme => isDark() ? darkColorScheme : lightColorScheme;
 
+  List<Color> lightSupplementaryColors;
+  List<Color> darkSupplementaryColors;
+
+  List<Color> get supplementaryColors => isDark() ? darkSupplementaryColors : lightSupplementaryColors;
+
   Color get dividerColor => isDark() ? AppColors.onyx : AppColors.shadow;
   Color get shadowColor => isDark() ? AppColors.transparent : AppColors.shadow;
 

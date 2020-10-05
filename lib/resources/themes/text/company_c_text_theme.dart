@@ -19,43 +19,59 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
 class CompanyTextThemeC extends CompanyTextTheme {
-  CompanyTextThemeC(Color displayColor, Color bodyColor) : super(displayColor, bodyColor);
+  CompanyTextThemeC(
+    Color displayColor,
+    Color bodyColor,
+    Color primaryDisplayColor,
+    Color primaryBodyColor,
+  ) : super(displayColor, bodyColor, primaryDisplayColor, primaryBodyColor);
 
   @override
-  TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme.copyWith(
+  TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme
+      .copyWith(
         button: baseTextTheme.caption.copyWith(
-          fontWeight: FontWeight.w800,
           fontSize: 14,
           color: displayColor,
         ),
+      )
+      .apply(
+        displayColor: displayColor,
+        bodyColor: bodyColor,
       );
 
   @override
-  TextTheme buildSecondaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme.copyWith(
+  TextTheme buildSecondaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme
+      .copyWith(
         button: baseTextTheme.caption.copyWith(
-          fontWeight: FontWeight.w800,
           fontSize: 14,
           color: displayColor,
         ),
+      )
+      .apply(
+        displayColor: displayColor,
+        bodyColor: bodyColor,
       );
 
   @override
   TextTheme buildBaseTextTheme(Color displayColor, Color bodyColor) {
     final currentTextTheme = TextTheme(
-      headline1: GoogleFonts.sansita(fontSize: 97, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-      headline2: GoogleFonts.sansita(fontSize: 61, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-      headline3: GoogleFonts.sansita(fontSize: 48, fontWeight: FontWeight.w400),
-      headline4: GoogleFonts.sansita(fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      headline5: GoogleFonts.sansita(fontSize: 24, fontWeight: FontWeight.w400),
-      headline6: GoogleFonts.sansita(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-      subtitle1: GoogleFonts.sansita(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
-      subtitle2: GoogleFonts.sansita(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-      bodyText1: GoogleFonts.sansita(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-      bodyText2: GoogleFonts.sansita(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      button: GoogleFonts.sansita(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-      caption: GoogleFonts.sansita(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-      overline: GoogleFonts.sansita(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+      headline1: GoogleFonts.sourceCodePro(fontSize: 105, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+      headline2: GoogleFonts.sourceCodePro(fontSize: 66, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+      headline3: GoogleFonts.sourceCodePro(fontSize: 52, fontWeight: FontWeight.w400),
+      headline4: GoogleFonts.sourceCodePro(fontSize: 37, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      headline5: GoogleFonts.sourceCodePro(fontSize: 26, fontWeight: FontWeight.w400),
+      headline6: GoogleFonts.sourceCodePro(fontSize: 22, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+      subtitle1: GoogleFonts.sourceCodePro(fontSize: 17, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+      subtitle2: GoogleFonts.sourceCodePro(fontSize: 15, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+      bodyText1: GoogleFonts.sourceCodePro(fontSize: 17, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+      bodyText2: GoogleFonts.sourceCodePro(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      button: GoogleFonts.sourceCodePro(fontSize: 15, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+      caption: GoogleFonts.sourceCodePro(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+      overline: GoogleFonts.sourceCodePro(fontSize: 11, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+    ).apply(
+      displayColor: displayColor,
+      bodyColor: bodyColor,
     );
-    return GoogleFonts.sansitaTextTheme(currentTextTheme);
+    return GoogleFonts.sourceCodeProTextTheme(currentTextTheme);
   }
 }

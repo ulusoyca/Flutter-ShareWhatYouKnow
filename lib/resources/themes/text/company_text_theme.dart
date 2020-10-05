@@ -22,14 +22,18 @@ abstract class CompanyTextTheme {
   TextTheme secondaryTextTheme;
   Color displayColor;
   Color bodyColor;
+  Color primaryDisplayColor;
+  Color primaryBodyColor;
 
   CompanyTextTheme(
     Color displayColor,
     Color bodyColor,
+    Color primaryDisplayColor,
+    Color primaryBodyColor,
   ) {
     baseTextTheme = buildBaseTextTheme(displayColor, bodyColor);
-    primaryTextTheme = buildPrimaryTextTheme(displayColor, bodyColor);
-    secondaryTextTheme = buildSecondaryTextTheme(displayColor, bodyColor);
+    primaryTextTheme = buildPrimaryTextTheme(primaryDisplayColor, primaryBodyColor);
+    secondaryTextTheme = buildSecondaryTextTheme(primaryDisplayColor, primaryBodyColor);
   }
 
   TextTheme buildBaseTextTheme(
