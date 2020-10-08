@@ -29,9 +29,9 @@ abstract class CompanyColors {
 
   List<Color> lightSupplementaryColors;
   List<Color> darkSupplementaryColors;
+  HeatmapColors heatmapColors;
 
   List<Color> get supplementaryColors => isDark() ? darkSupplementaryColors : lightSupplementaryColors;
-
   Color get dividerColor => isDark() ? AppColors.onyx : AppColors.shadow;
   Color get shadowColor => isDark() ? AppColors.transparent : AppColors.shadow;
 

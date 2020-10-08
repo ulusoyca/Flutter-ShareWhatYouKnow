@@ -17,15 +17,53 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
+import 'package:ulusoyapps_flutter/widgets/LegendTextWithBullet.dart';
 
 class SamplePieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeViewModel = context.watch<ThemeViewModel>();
-    return _pieChart(
-      themeViewModel.companyColors.supplementaryColors,
-      themeViewModel.primaryTextTheme,
+    var supplementaryColors = themeViewModel.companyColors.supplementaryColors;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 180,
+            child: _pieChart(
+              supplementaryColors,
+              themeViewModel.primaryTextTheme,
+            ),
+          ),
+          flex: 1,
+        ),
+        Expanded(
+          child: _legend(supplementaryColors),
+          flex: 1,
+        )
+      ],
+    );
+  }
+
+  Widget _legend(List<Color> supplementaryColors) {
+    List<Widget> rows = [];
+    supplementaryColors.asMap().forEach((index, e) {
+      Widget widget = Padding(
+        padding: const EdgeInsets.only(
+          top: AppDimens.SIZE_SPACING_XS,
+          bottom: AppDimens.SIZE_SPACING_XS,
+          left: AppDimens.SIZE_SPACING_MEDIUM,
+        ),
+        child: LegendTextWithBullet('Item $index', supplementaryColors[index]),
+      );
+      rows.add(widget);
+    });
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: rows,
     );
   }
 
@@ -36,7 +74,7 @@ class SamplePieChart extends StatelessWidget {
             show: false,
           ),
           sectionsSpace: 0,
-          centerSpaceRadius: 40,
+          centerSpaceRadius: 25,
           sections: showingSections(supplementaryColors, textTheme)),
     );
   }

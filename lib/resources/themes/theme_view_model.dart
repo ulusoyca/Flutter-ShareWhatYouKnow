@@ -67,13 +67,15 @@ class ThemeViewModel with ChangeNotifier {
 
   CompanyColors get companyColors => _currentTheme.colors;
 
+  CompanyThemeData get companyThemeData => _currentTheme.themeData;
+
   TextTheme get baseTextTheme => _currentTheme.textTheme.baseTextTheme;
 
   TextTheme get primaryTextTheme => _currentTheme.textTheme.primaryTextTheme;
 
   Brightness get brightness => _currentTheme.brightness;
 
-  ThemeData get themeData => _currentTheme.themeData;
+  CompanyThemeData get themeData => _currentTheme.themeData;
 
   ThemeViewModel(this.preference) {
     _currentTheme = _buildTheme(ThemePreference(DEFAULT_COMPANY, DEFAULT_BRIGHTNESS));
@@ -159,7 +161,7 @@ class ThemeViewModel with ChangeNotifier {
 
     return AppTheme(
       companyName: themePreference.companyName,
-      themeData: companyThemeData.buildThemeData(),
+      themeData: companyThemeData,
       colors: colors,
       textTheme: textTheme,
       brightness: brightness,

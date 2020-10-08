@@ -19,8 +19,10 @@ import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
 abstract class CompanyThemeData {
-  ShapeBorder shapeBorder;
-  double borderRadius;
+  ShapeBorder materialShapeBorder;
+  ShapeBorder barGraphShapeBorder;
+  double borderRadiusValue;
+  BorderRadius borderRadius;
   FloatingActionButtonThemeData fabTheme;
   ToggleButtonsThemeData toggleButtonsThemeData;
   BottomAppBarTheme bottomAppBarTheme;
@@ -42,7 +44,7 @@ abstract class CompanyThemeData {
       height: 45,
       colorScheme: _colorScheme,
       textTheme: ButtonTextTheme.primary,
-      shape: shapeBorder,
+      shape: materialShapeBorder,
     );
 
     /// Card Theme
@@ -51,7 +53,7 @@ abstract class CompanyThemeData {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5.0,
       // this field changes the shadow of the card
-      shape: shapeBorder,
+      shape: materialShapeBorder,
     );
 
     /// Divider Theme

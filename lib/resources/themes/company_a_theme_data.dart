@@ -22,7 +22,10 @@ import 'company_theme_data.dart';
 
 class CompanyThemeDataA extends CompanyThemeData {
   @override
-  double borderRadius = 20.0;
+  double borderRadiusValue = 20.0;
+
+  @override
+  BorderRadius borderRadius;
 
   CompanyThemeDataA(
     Brightness brightness,
@@ -30,12 +33,18 @@ class CompanyThemeDataA extends CompanyThemeData {
     CompanyTextTheme companyTextTheme,
   ) : super(brightness, companyColors, companyTextTheme) {
     fabTheme = FloatingActionButtonThemeData();
+    borderRadius = BorderRadius.circular(borderRadiusValue);
     toggleButtonsThemeData = ToggleButtonsThemeData(
-      borderRadius: BorderRadius.circular(borderRadius),
+      borderRadius: borderRadius,
     );
-    shapeBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(borderRadius),
-      borderSide: BorderSide(color: companyColors.colorScheme.background),
+    materialShapeBorder = RoundedRectangleBorder(
+      borderRadius: borderRadius,
+    );
+    barGraphShapeBorder = RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(borderRadiusValue),
+        topRight: Radius.circular(borderRadiusValue),
+      ),
     );
     bottomAppBarTheme = BottomAppBarTheme(
       shape: CircularNotchedRectangle(),

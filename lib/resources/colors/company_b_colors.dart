@@ -21,7 +21,7 @@ import 'app_colors.dart';
 class CompanyColorsB extends CompanyColors {
   CompanyColorsB(Brightness currentBrightness) : super(currentBrightness);
 
-  List<Color> lightSupplementaryColors = [
+  final List<Color> lightSupplementaryColors = [
     AppColors.keppel,
     AppColors.tomato,
     AppColors.capri,
@@ -29,7 +29,7 @@ class CompanyColorsB extends CompanyColors {
     AppColors.plumpPurple,
   ];
 
-  List<Color> darkSupplementaryColors = [
+  final List<Color> darkSupplementaryColors = [
     AppColors.aquamarine,
     AppColors.vividTangerine,
     AppColors.mayaBlue,
@@ -38,11 +38,17 @@ class CompanyColorsB extends CompanyColors {
   ];
 
   @override
+  final HeatmapColors heatmapColors = HeatmapColors(
+    start: HSVColor.fromColor(AppColors.persianPink),
+    end: HSVColor.fromColor(AppColors.amaranthMp),
+  );
+
+  @override
   final darkColorScheme = ColorScheme(
     primary: AppColors.babyBlue,
     primaryVariant: AppColors.capri,
     secondary: AppColors.persianPink,
-    secondaryVariant: AppColors.rust,
+    secondaryVariant: AppColors.amaranthMp,
     background: AppColors.balticSea,
     surface: AppColors.darkGrey,
     onBackground: AppColors.alabaster,
@@ -59,7 +65,7 @@ class CompanyColorsB extends CompanyColors {
     primary: AppColors.capri,
     primaryVariant: AppColors.lapisLazuli,
     secondary: AppColors.frenchRose,
-    secondaryVariant: AppColors.rust,
+    secondaryVariant: AppColors.amaranthMp,
     background: AppColors.alabaster,
     surface: AppColors.white,
     onBackground: AppColors.white,

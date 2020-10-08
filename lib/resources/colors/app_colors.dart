@@ -64,11 +64,24 @@ class AppColors {
   static const Color lapisLazuli = Color(0xFF005BA7); // 900
   static const Color electricBlue = Color(0xFF76E5E3); // 200
   static const Color darkTurquoise = Color(0xFF00C9D1); // 500
-  static const Color pineGreen = Color(0xFF00a1a3); // 900
+  static const Color pineGreen = Color(0xFF006861); // 900
   static const Color turquoiseGreen = Color(0xFFA0D7BA); // 200
   static const Color aquamarine = Color(0xFF63FFDA);
   static const Color keppel = Color(0xFF00BFA5);
   static const Color mediumSeaGreen = Color(0xFF3DB177); // 500
   static const Color hunterGreen = Color(0xFF235E3F); // 900
+}
 
+class HeatmapColors {
+  final HSVColor start;
+  final HSVColor end;
+
+  HeatmapColors({
+    this.start,
+    this.end,
+  });
+
+  Color getColor(double weight) {
+    return HSVColor.lerp(start, end, weight).toColor();
+  }
 }

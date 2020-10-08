@@ -16,6 +16,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
+import 'package:ulusoyapps_flutter/resources/themes/company_theme_data.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
 class AppTheme {
@@ -23,7 +24,7 @@ class AppTheme {
   final Brightness brightness;
   final CompanyColors colors;
   final CompanyTextTheme textTheme;
-  final ThemeData themeData;
+  final CompanyThemeData themeData;
 
   AppTheme({
     @required this.companyName,

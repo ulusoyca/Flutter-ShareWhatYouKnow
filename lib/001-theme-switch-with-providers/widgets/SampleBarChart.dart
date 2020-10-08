@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-import 'package:fl_chart/fl_chart.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
 class SampleBarChart extends StatelessWidget {
+  final data = List.generate(20, (_) => Random().nextInt(50));
+
   @override
   Widget build(BuildContext context) {
     final themeViewModel = context.watch<ThemeViewModel>();
@@ -33,51 +37,52 @@ class SampleBarChart extends StatelessWidget {
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
-          child: _barChart(themeViewModel),
+          child: _barChart(
+            themeViewModel.companyColors.heatmapColors,
+            themeViewModel.companyThemeData.barGraphShapeBorder,
+          ),
         ),
       ),
     );
   }
 
-  BarChart _barChart(ThemeViewModel themeViewModel) {
-    var graphColors = themeViewModel.companyColors.graphColors;
-    return BarChart(
-      BarChartData(
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
-        barTouchData: BarTouchData(
-          enabled: false,
-        ),
-        titlesData: FlTitlesData(
-          show: true,
-          bottomTitles: SideTitles(
-            showTitles: true,
-            textStyle: themeViewModel.baseTextTheme.caption,
-            margin: 20,
-            getTitles: (double value) {
-              switch (value.toInt()) {
-                case 0:
-                  return 'Below';
-                case 1:
-                  return 'On Target';
-                case 2:
-                  return 'Above';
-                default:
-                  return '';
-              }
-            },
+  Widget _barChart(HeatmapColors heatmapColors, ShapeBorder shapeBorder) {
+    final maxValue = data.reduce(max);
+    final minValue = data.reduce(min);
+    final List<Widget> columns = [];
+    for (int index = 0; index < data.length; index++) {
+      var weight = (data[index] - minValue) / (maxValue - minValue);
+      var color = heatmapColors.getColor(weight);
+      columns.add(
+        Expanded(
+          flex: 1,
+          child: Column(
+            children: [
+              Expanded(
+                flex: _calculateFlex(1.0 - weight),
+                child: Container(),
+              ),
+              Expanded(
+                flex: _calculateFlex(weight),
+                child: Material(
+                  shape: shapeBorder,
+                  color: color,
+                  type: MaterialType.canvas,
+                  child: Container(),
+                ),
+              ),
+            ],
           ),
-          leftTitles: SideTitles(showTitles: false),
         ),
-        borderData: FlBorderData(
-          show: false,
-        ),
-        barGroups: [
-          BarChartGroupData(x: 0, barRods: [BarChartRodData(y: 5, color: graphColors.belowTarget)]),
-          BarChartGroupData(x: 1, barRods: [BarChartRodData(y: 10, color: graphColors.onTarget)]),
-          BarChartGroupData(x: 2, barRods: [BarChartRodData(y: 14, color: graphColors.aboveTarget)]),
-        ],
+      );
+    }
+    return Container(
+      height: 100,
+      child: Row(
+        children: columns,
       ),
     );
   }
+
+  int _calculateFlex(double weight) => (weight * 100).round();
 }

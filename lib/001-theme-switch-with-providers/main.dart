@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: context.appThemeData,
+      theme: context.appThemeData.buildThemeData(),
       home: MyHomePage(title: '001 Theme Switch'),
     );
   }
@@ -196,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         children: [
           Text(
-            'You have pushed the button this many times:',
+            'You have pushed this many times:',
           ),
           Text(
             '$_counter',

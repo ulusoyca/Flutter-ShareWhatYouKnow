@@ -22,24 +22,28 @@ import 'company_theme_data.dart';
 
 class CompanyThemeDataC extends CompanyThemeData {
   @override
-  ShapeBorder shapeBorder = ContinuousRectangleBorder();
+  ShapeBorder materialShapeBorder = ContinuousRectangleBorder();
 
   @override
-  double borderRadius = 5.0;
+  double borderRadiusValue = 5.0;
+
+  @override
+  BorderRadius borderRadius;
 
   CompanyThemeDataC(
     Brightness brightness,
     CompanyColors companyColors,
     CompanyTextTheme companyTextTheme,
   ) : super(brightness, companyColors, companyTextTheme) {
-    fabTheme = FloatingActionButtonThemeData(shape: shapeBorder);
+    fabTheme = FloatingActionButtonThemeData(shape: materialShapeBorder);
     toggleButtonsThemeData = ToggleButtonsThemeData(
-      borderRadius: BorderRadius.circular(borderRadius),
+      borderRadius: BorderRadius.circular(borderRadiusValue),
     );
+    barGraphShapeBorder = materialShapeBorder;
     bottomAppBarTheme = BottomAppBarTheme(
       shape: AutomaticNotchedShape(
-        shapeBorder,
-        shapeBorder,
+        materialShapeBorder,
+        materialShapeBorder,
       ),
       color: companyColors.colorScheme.primary,
     );
