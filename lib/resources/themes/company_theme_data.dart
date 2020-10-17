@@ -74,6 +74,7 @@ abstract class CompanyThemeData {
 
     return ThemeData(
       primaryColor: _colorScheme.primary,
+      accentColor: Colors.red[500],
       buttonColor: _colorScheme.primary,
       textSelectionColor: _colorScheme.primary,
       colorScheme: _colorScheme,

@@ -21,59 +21,29 @@ import 'app_colors.dart';
 class CompanyColorsA extends CompanyColors {
   CompanyColorsA(Brightness currentBrightness) : super(currentBrightness);
 
-  final List<Color> lightSupplementaryColors = [
-    AppColors.keppel,
-    AppColors.tomato,
-    AppColors.capri,
-    AppColors.winterSky,
-    AppColors.plumpPurple,
-  ];
-
-  final List<Color> darkSupplementaryColors = [
-    AppColors.aquamarine,
-    AppColors.vividTangerine,
-    AppColors.mayaBlue,
-    AppColors.persianPink,
-    AppColors.lavender,
-  ];
-
   @override
   final HeatmapColors heatmapColors = HeatmapColors(
-    start: HSVColor.fromColor(AppColors.electricBlue),
-    end: HSVColor.fromColor(AppColors.pineGreen),
+    start: HSVColor.fromColor(AppColors.bluePurple.shade50),
+    end: HSVColor.fromColor(AppColors.bluePurple..shade900),
   );
 
   @override
-  final darkColorScheme = ColorScheme(
-    primary: AppColors.maximumBluePurple,
-    primaryVariant: AppColors.oceanBlue,
-    secondary: AppColors.electricBlue,
-    secondaryVariant: AppColors.pineGreen,
-    background: AppColors.balticSea,
-    surface: AppColors.darkGrey,
-    onBackground: AppColors.alabaster,
-    onSurface: AppColors.alabaster,
-    error: AppColors.rose,
-    onError: AppColors.alabaster,
+  final darkColorScheme = ColorScheme.dark(
+    primary: AppColors.bluePurple.shade200,
+    primaryVariant: AppColors.bluePurple[700],
+    secondary: AppColors.turquoise,
+    secondaryVariant: AppColors.turquoise[700],
     onPrimary: AppColors.black,
     onSecondary: AppColors.black,
-    brightness: Brightness.dark,
   );
 
   @override
-  final lightColorScheme = ColorScheme(
-    primary: AppColors.mediumSlateBluePurple,
-    primaryVariant: AppColors.oceanBlue,
-    secondary: AppColors.darkTurquoise,
-    secondaryVariant: AppColors.pineGreen,
-    background: AppColors.alabaster,
-    surface: AppColors.white,
-    onBackground: AppColors.white,
-    onSurface: AppColors.black,
-    error: AppColors.rose,
-    onError: AppColors.white,
+  final lightColorScheme = ColorScheme.light(
+    primary: AppColors.bluePurple,
+    primaryVariant: AppColors.bluePurple[700],
+    secondary: AppColors.turquoise.shade200,
+    secondaryVariant: AppColors.turquoise[700],
     onPrimary: AppColors.white,
     onSecondary: AppColors.white,
-    brightness: Brightness.light,
   );
 }

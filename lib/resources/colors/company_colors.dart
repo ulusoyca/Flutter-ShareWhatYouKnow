@@ -27,8 +27,22 @@ abstract class CompanyColors {
 
   ColorScheme get colorScheme => isDark() ? darkColorScheme : lightColorScheme;
 
-  List<Color> lightSupplementaryColors;
-  List<Color> darkSupplementaryColors;
+  final List<Color> lightSupplementaryColors = [
+    AppColors.veroneseGreen.shade400,
+    AppColors.tomato.shade400,
+    AppColors.vividSky.shade400,
+    AppColors.champagne.shade400,
+    AppColors.mauve.shade400,
+  ];
+
+  final List<Color> darkSupplementaryColors = [
+    AppColors.veroneseGreen.shade200,
+    AppColors.tomato.shade200,
+    AppColors.vividSky.shade200,
+    AppColors.champagne.shade200,
+    AppColors.mauve.shade200,
+  ];
+
   HeatmapColors heatmapColors;
 
   List<Color> get supplementaryColors => isDark() ? darkSupplementaryColors : lightSupplementaryColors;

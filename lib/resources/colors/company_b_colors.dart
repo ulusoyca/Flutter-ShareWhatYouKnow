@@ -21,57 +21,37 @@ import 'app_colors.dart';
 class CompanyColorsB extends CompanyColors {
   CompanyColorsB(Brightness currentBrightness) : super(currentBrightness);
 
-  final List<Color> lightSupplementaryColors = [
-    AppColors.keppel,
-    AppColors.tomato,
-    AppColors.capri,
-    AppColors.winterSky,
-    AppColors.plumpPurple,
-  ];
-
-  final List<Color> darkSupplementaryColors = [
-    AppColors.aquamarine,
-    AppColors.vividTangerine,
-    AppColors.mayaBlue,
-    AppColors.persianPink,
-    AppColors.lavender,
-  ];
-
   @override
   final HeatmapColors heatmapColors = HeatmapColors(
-    start: HSVColor.fromColor(AppColors.persianPink),
-    end: HSVColor.fromColor(AppColors.amaranthMp),
+    start: HSVColor.fromColor(AppColors.capri.shade50),
+    end: HSVColor.fromColor(AppColors.capri.shade900),
   );
 
   @override
-  final darkColorScheme = ColorScheme(
-    primary: AppColors.babyBlue,
-    primaryVariant: AppColors.capri,
-    secondary: AppColors.persianPink,
-    secondaryVariant: AppColors.amaranthMp,
+  final darkColorScheme = ColorScheme.dark(
+    primary: AppColors.capri,
+    primaryVariant: AppColors.capri.shade900,
+    secondary: AppColors.rose.shade200,
+    secondaryVariant: AppColors.rose.shade700,
     background: AppColors.balticSea,
     surface: AppColors.darkGrey,
     onBackground: AppColors.alabaster,
     onSurface: AppColors.alabaster,
-    error: AppColors.rose,
-    onError: AppColors.alabaster,
     onPrimary: AppColors.black,
     onSecondary: AppColors.black,
     brightness: Brightness.dark,
   );
 
   @override
-  final lightColorScheme = ColorScheme(
+  final lightColorScheme = ColorScheme.light(
     primary: AppColors.capri,
-    primaryVariant: AppColors.lapisLazuli,
-    secondary: AppColors.frenchRose,
-    secondaryVariant: AppColors.amaranthMp,
+    primaryVariant: AppColors.capri.shade900,
+    secondary: AppColors.rose.shade400,
+    secondaryVariant: AppColors.rose.shade700,
     background: AppColors.alabaster,
     surface: AppColors.white,
     onBackground: AppColors.white,
     onSurface: AppColors.black,
-    error: AppColors.rose,
-    onError: AppColors.white,
     onPrimary: AppColors.white,
     onSecondary: AppColors.white,
     brightness: Brightness.light,

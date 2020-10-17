@@ -21,59 +21,29 @@ import 'app_colors.dart';
 class CompanyColorsC extends CompanyColors {
   CompanyColorsC(Brightness currentBrightness) : super(currentBrightness);
 
-  final List<Color> lightSupplementaryColors = [
-    AppColors.keppel,
-    AppColors.tomato,
-    AppColors.capri,
-    AppColors.winterSky,
-    AppColors.plumpPurple,
-  ];
-
-  final List<Color> darkSupplementaryColors = [
-    AppColors.aquamarine,
-    AppColors.vividTangerine,
-    AppColors.mayaBlue,
-    AppColors.persianPink,
-    AppColors.lavender,
-  ];
-
   @override
   final HeatmapColors heatmapColors = HeatmapColors(
-    start: HSVColor.fromColor(AppColors.vividTangerine),
-    end: HSVColor.fromColor(AppColors.darkLiverHorses),
+    start: HSVColor.fromColor(AppColors.slateGrey.shade50),
+    end: HSVColor.fromColor(AppColors.slateGrey.shade900),
   );
 
   @override
-  final darkColorScheme = ColorScheme(
-    primary: AppColors.beauBlue,
-    primaryVariant: AppColors.charcoal,
-    secondary: AppColors.vividTangerine,
-    secondaryVariant: AppColors.darkLiverHorses,
-    background: AppColors.balticSea,
-    surface: AppColors.darkGrey,
-    onBackground: AppColors.alabaster,
-    onSurface: AppColors.alabaster,
-    error: AppColors.rose,
-    onError: AppColors.alabaster,
+  final darkColorScheme = ColorScheme.dark(
+    primary: AppColors.slateGrey.shade200,
+    primaryVariant: AppColors.slateGrey[700],
+    secondary: AppColors.orangeRed,
+    secondaryVariant: AppColors.orangeRed[700],
     onPrimary: AppColors.black,
     onSecondary: AppColors.black,
-    brightness: Brightness.dark,
   );
 
   @override
-  final lightColorScheme = ColorScheme(
-    primary: AppColors.slateGray,
-    primaryVariant: AppColors.charcoal,
-    secondary: AppColors.orangeRed,
-    secondaryVariant: AppColors.darkLiverHorses,
-    background: AppColors.alabaster,
-    surface: AppColors.white,
-    onBackground: AppColors.white,
-    onSurface: AppColors.black,
-    error: AppColors.rose,
-    onError: AppColors.white,
+  final lightColorScheme = ColorScheme.light(
+    primary: AppColors.slateGrey,
+    primaryVariant: AppColors.slateGrey[700],
+    secondary: AppColors.orangeRed.shade200,
+    secondaryVariant: AppColors.orangeRed[700],
     onPrimary: AppColors.white,
     onSecondary: AppColors.white,
-    brightness: Brightness.light,
   );
 }

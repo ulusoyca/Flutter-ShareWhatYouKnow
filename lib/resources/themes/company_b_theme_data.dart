@@ -22,7 +22,7 @@ import 'company_theme_data.dart';
 
 class CompanyThemeDataB extends CompanyThemeData {
   @override
-  double borderRadiusValue = 20.0;
+  double borderRadiusValue = 30.0;
 
   @override
   BorderRadius borderRadius;
