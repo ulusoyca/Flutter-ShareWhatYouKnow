@@ -19,28 +19,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
-import 'package:ulusoyapps_flutter/widgets/LegendTextWithBullet.dart';
+import 'package:ulusoyapps_flutter/widgets/contained_input_chip.dart';
 
 class SamplePieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeViewModel = context.watch<ThemeViewModel>();
-    var supplementaryColors = themeViewModel.companyColors.supplementaryColors;
+    var companyColors = themeViewModel.companyColors;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: SizedBox(
-            height: 180,
-            child: _pieChart(
-              supplementaryColors,
-              themeViewModel.primaryTextTheme,
-            ),
+          child: _pieChart(
+            companyColors.supplementaryColors,
+            themeViewModel.primaryTextTheme,
           ),
           flex: 1,
         ),
         Expanded(
-          child: _legend(supplementaryColors),
+          child: _legend(companyColors.supplementaryAccentColors),
           flex: 1,
         )
       ],
@@ -50,20 +47,19 @@ class SamplePieChart extends StatelessWidget {
   Widget _legend(List<Color> supplementaryColors) {
     List<Widget> rows = [];
     supplementaryColors.asMap().forEach((index, e) {
-      Widget widget = Padding(
-        padding: const EdgeInsets.only(
-          top: AppDimens.SIZE_SPACING_XS,
-          bottom: AppDimens.SIZE_SPACING_XS,
-          left: AppDimens.SIZE_SPACING_MEDIUM,
-        ),
-        child: LegendTextWithBullet('Item $index', supplementaryColors[index]),
-      );
-      rows.add(widget);
+      rows.add(_chip(index, supplementaryColors));
     });
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Wrap(
+      spacing: AppDimens.SIZE_SPACING_MEDIUM,
+      direction: Axis.horizontal,
       children: rows,
+    );
+  }
+
+  ContainedInputChip _chip(int index, List<Color> supplementaryColors) {
+    return ContainedInputChip(
+      labelText: 'Case $index',
+      color: supplementaryColors[index],
     );
   }
 

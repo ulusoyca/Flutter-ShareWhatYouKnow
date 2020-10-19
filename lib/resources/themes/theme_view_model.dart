@@ -15,21 +15,11 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
-import 'package:ulusoyapps_flutter/resources/colors/company_a_colors.dart';
-import 'package:ulusoyapps_flutter/resources/colors/company_b_colors.dart';
-import 'package:ulusoyapps_flutter/resources/colors/company_c_colors.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
-import 'package:ulusoyapps_flutter/resources/themes/company_a_theme_data.dart';
+import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
 import 'package:ulusoyapps_flutter/resources/themes/company_theme_data.dart';
-import 'package:ulusoyapps_flutter/resources/themes/text/company_a_text_theme.dart';
-import 'package:ulusoyapps_flutter/resources/themes/text/company_b_text_theme.dart';
-import 'package:ulusoyapps_flutter/resources/themes/text/company_c_text_theme.dart';
-import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
-import 'app_theme.dart';
 import 'companies.dart';
-import 'company_b_theme_data.dart';
-import 'company_c_theme_data.dart';
 
 class ThemePreference {
   final String companyName;
@@ -46,11 +36,11 @@ class ThemeViewModel with ChangeNotifier {
   static const String _LIGHT_BRIGHTNESS = 'LIGHT_BRIGHTNESS';
   static const Brightness DEFAULT_BRIGHTNESS = Brightness.dark;
 
-  static const String _COMPANY_A = 'COMPANY_A';
-  static const String _COMPANY_B = 'COMPANY_B';
-  static const String _COMPANY_C = 'COMPANY_C';
+  static const String _COMPANY_A_NAME = 'COMPANY_A';
+  static const String _COMPANY_B_NAME = 'COMPANY_B';
+  static const String _COMPANY_C_NAME = 'COMPANY_C';
   static const String KEY_COMPANY = 'COMPANY';
-  static const String DEFAULT_COMPANY = _COMPANY_A;
+  static const String DEFAULT_COMPANY = _COMPANY_A_NAME;
 
   static const Map<Brightness, String> _brightness = {
     Brightness.dark: _DARK_BRIGHTNESS,
@@ -58,16 +48,18 @@ class ThemeViewModel with ChangeNotifier {
   };
 
   static const Map<Company, String> _companies = {
-    Company.COMPANY_A: _COMPANY_A,
-    Company.COMPANY_B: _COMPANY_B,
-    Company.COMPANY_C: _COMPANY_C,
+    Company.COMPANY_A: _COMPANY_A_NAME,
+    Company.COMPANY_B: _COMPANY_B_NAME,
+    Company.COMPANY_C: _COMPANY_C_NAME,
   };
 
-  AppTheme _currentTheme;
+  CompanyThemeData _currentTheme;
 
   CompanyColors get companyColors => _currentTheme.colors;
 
-  CompanyThemeData get companyThemeData => _currentTheme.themeData;
+  CompanyThemeData get currentTheme => _currentTheme;
+
+  CompanyShapes get companyShapes => _currentTheme.shapes;
 
   TextTheme get baseTextTheme => _currentTheme.textTheme.baseTextTheme;
 
@@ -75,7 +67,7 @@ class ThemeViewModel with ChangeNotifier {
 
   Brightness get brightness => _currentTheme.brightness;
 
-  CompanyThemeData get themeData => _currentTheme.themeData;
+  bool get isDark => _currentTheme.brightness == Brightness.dark;
 
   ThemeViewModel(this.preference) {
     _currentTheme = _buildTheme(ThemePreference(DEFAULT_COMPANY, DEFAULT_BRIGHTNESS));
@@ -98,13 +90,14 @@ class ThemeViewModel with ChangeNotifier {
   }
 
   toggleBrightness() {
+    final String companyName = _companies.entries.firstWhere((e) => e.key == _currentTheme.company).value;
     String toBeUpdatedBrightness;
     if (_currentTheme.brightness == Brightness.dark) {
-      var themePreference = ThemePreference(_currentTheme.companyName, Brightness.light);
+      var themePreference = ThemePreference(companyName, Brightness.light);
       _currentTheme = _buildTheme(themePreference);
       toBeUpdatedBrightness = _LIGHT_BRIGHTNESS;
     } else {
-      var themePreference = ThemePreference(_currentTheme.companyName, Brightness.dark);
+      final themePreference = ThemePreference(companyName, Brightness.dark);
       _currentTheme = _buildTheme(themePreference);
       toBeUpdatedBrightness = _DARK_BRIGHTNESS;
     }
@@ -120,51 +113,15 @@ class ThemeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  AppTheme _buildTheme(ThemePreference themePreference) {
-    CompanyColors colors;
-    CompanyTextTheme textTheme;
-    CompanyThemeData companyThemeData;
+  CompanyThemeData _buildTheme(ThemePreference themePreference) {
     final brightness = themePreference.brightness;
-
     switch (themePreference.companyName) {
-      case _COMPANY_A:
-        colors = CompanyColorsA(brightness);
-        textTheme = CompanyTextThemeA(
-          colors.colorScheme.onSurface,
-          colors.colorScheme.onSurface,
-          colors.colorScheme.onPrimary,
-          colors.colorScheme.onPrimary,
-        );
-        companyThemeData = CompanyThemeDataA(brightness, colors, textTheme);
-        break;
-      case _COMPANY_B:
-        colors = CompanyColorsB(brightness);
-        textTheme = CompanyTextThemeB(
-          colors.colorScheme.onSurface,
-          colors.colorScheme.onSurface,
-          colors.colorScheme.onPrimary,
-          colors.colorScheme.onPrimary,
-        );
-        companyThemeData = CompanyThemeDataB(brightness, colors, textTheme);
-        break;
-      case _COMPANY_C:
-        colors = CompanyColorsC(brightness);
-        textTheme = CompanyTextThemeC(
-          colors.colorScheme.onSurface,
-          colors.colorScheme.onSurface,
-          colors.colorScheme.onPrimary,
-          colors.colorScheme.onPrimary,
-        );
-        companyThemeData = CompanyThemeDataC(brightness, colors, textTheme);
-        break;
+      case _COMPANY_A_NAME:
+        return CompanyThemeData.companyA(brightness);
+      case _COMPANY_B_NAME:
+        return CompanyThemeData.companyB(brightness);
+      case _COMPANY_C_NAME:
+        return CompanyThemeData.companyC(brightness);
     }
-
-    return AppTheme(
-      companyName: themePreference.companyName,
-      themeData: companyThemeData,
-      colors: colors,
-      textTheme: textTheme,
-      brightness: brightness,
-    );
   }
 }

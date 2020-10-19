@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/resources/colors/graph_colors.dart';
-import 'package:ulusoyapps_flutter/resources/colors/trend_level_colors.dart';
 
-import 'alert_level_colors.dart';
 import 'app_colors.dart';
 
 abstract class CompanyColors {
@@ -27,25 +24,20 @@ abstract class CompanyColors {
 
   ColorScheme get colorScheme => isDark() ? darkColorScheme : lightColorScheme;
 
-  final List<Color> lightSupplementaryColors = [
-    AppColors.veroneseGreen.shade400,
-    AppColors.tomato.shade400,
-    AppColors.vividSky.shade400,
-    AppColors.champagne.shade400,
-    AppColors.mauve.shade400,
+  final List<MaterialAccentColor> supplementaryAccentColors = [
+    AppColors.veroneseGreen,
+    AppColors.tomato,
+    AppColors.vividSky,
+    AppColors.champagne,
+    AppColors.mauve,
   ];
 
-  final List<Color> darkSupplementaryColors = [
-    AppColors.veroneseGreen.shade200,
-    AppColors.tomato.shade200,
-    AppColors.vividSky.shade200,
-    AppColors.champagne.shade200,
-    AppColors.mauve.shade200,
-  ];
+  List<Color> get _supplementaryLightColors => supplementaryAccentColors.map((e) => e.shade400).toList();
+  List<Color> get _supplementaryDarkColors => supplementaryAccentColors.map((e) => e.shade200).toList();
+  List<Color> get supplementaryColors => isDark() ? _supplementaryDarkColors : _supplementaryLightColors;
 
   HeatmapColors heatmapColors;
 
-  List<Color> get supplementaryColors => isDark() ? darkSupplementaryColors : lightSupplementaryColors;
   Color get dividerColor => isDark() ? AppColors.onyx : AppColors.shadow;
   Color get shadowColor => isDark() ? AppColors.transparent : AppColors.shadow;
 
@@ -73,4 +65,44 @@ abstract class CompanyColors {
   ColorScheme lightColorScheme;
 
   bool isDark() => currentBrightness == Brightness.dark;
+}
+
+class GraphColors {
+  final Color backgroundColor;
+  final Color aboveTarget;
+  final Color onTarget;
+  final Color belowTarget;
+
+  GraphColors({
+    this.backgroundColor,
+    this.aboveTarget,
+    this.onTarget,
+    this.belowTarget,
+  });
+}
+
+class TrendLevelColors {
+  final Color increasing;
+  final Color decreasing;
+  final Color unchanged;
+
+  TrendLevelColors({
+    this.increasing,
+    this.decreasing,
+    this.unchanged,
+  });
+}
+
+class AlertLevels {
+  final Color safe;
+  final Color alert;
+  final Color warning;
+  final Color neutral;
+
+  AlertLevels({
+    this.safe,
+    this.alert,
+    this.warning,
+    this.neutral,
+  });
 }

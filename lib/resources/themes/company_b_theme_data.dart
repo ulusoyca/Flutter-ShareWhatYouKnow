@@ -16,34 +16,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
+import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
+import 'companies.dart';
 import 'company_theme_data.dart';
 
 class CompanyThemeDataB extends CompanyThemeData {
-  @override
-  double borderRadiusValue = 30.0;
-
-  @override
-  BorderRadius borderRadius;
-
   CompanyThemeDataB(
+    Company company,
     Brightness brightness,
     CompanyColors companyColors,
     CompanyTextTheme companyTextTheme,
-  ) : super(brightness, companyColors, companyTextTheme) {
-    borderRadius = BorderRadius.all(Radius.circular(borderRadiusValue));
-    materialShapeBorder = BeveledRectangleBorder(
-      borderRadius: borderRadius,
-    );
-    barGraphShapeBorder = BeveledRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
-    );
-    fabTheme = FloatingActionButtonThemeData(shape: materialShapeBorder);
-    toggleButtonsThemeData = ToggleButtonsThemeData();
+    CompanyShapes companyShapes,
+  ) : super(
+          company,
+          brightness,
+          companyColors,
+          companyTextTheme,
+          companyShapes,
+        ) {
+    fabTheme = FloatingActionButtonThemeData(shape: companyShapes.fabShapeBorder);
     bottomAppBarTheme = BottomAppBarTheme(
       color: companyColors.colorScheme.primary,
     );

@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
-class AlertLevels {
-  final Color safe;
-  final Color alert;
-  final Color warning;
-  final Color neutral;
-
-  AlertLevels({
-    this.safe,
-    this.alert,
-    this.warning,
-    this.neutral,
-  });
+abstract class CompanyShapes {
+  ShapeBorder buttonShapeBorder;
+  ShapeBorder cardShapeBorder;
+  ShapeBorder snackbarShapeBorder;
+  ShapeBorder chipShapeBorder;
+  ShapeBorder toggleButtonShapeBorder;
+  ShapeBorder barGraphShapeBorder;
+  ShapeBorder fabShapeBorder;
 }

@@ -17,6 +17,8 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  AppColors._();
+
   /// Base Colors
   static const Color white = Colors.white;
   static const Color black = Colors.black;
@@ -126,6 +128,7 @@ class AppColors {
   );
 
   static const Map<int, Color> veroneseGreenSwatch = {
+    50: Color(0xFFddf4f0),
     100: Color(0xFFaae3d8),
     200: Color(0xFF6dd2bf),
     400: Color(0xFF00b092),
@@ -138,6 +141,7 @@ class AppColors {
   );
 
   static const Map<int, Color> tomatoSwatch = {
+    50: Color(0xFFffedef),
     100: Color(0xFFffd2d6),
     200: Color(0xFFf4a3a1),
     400: Color(0xFFf8635a),
@@ -150,6 +154,7 @@ class AppColors {
   );
 
   static const Map<int, Color> vividSkySwatch = {
+    50: Color(0xFFdafaff),
     100: Color(0xFF9ff2fe),
     200: Color(0xFF42e9ff),
     400: Color(0xFF00d5f7),
@@ -175,6 +180,7 @@ class AppColors {
   );
 
   static const Map<int, Color> mauveSwatch = {
+    50: Color(0xFFeedfe7),
     100: Color(0xFFd6afc6),
     200: Color(0xFFBA7BA1),
     400: Color(0xFF8f156a),

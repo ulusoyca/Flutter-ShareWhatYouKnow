@@ -15,61 +15,134 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_a_colors.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_b_colors.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_c_colors.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
+import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
+import 'package:ulusoyapps_flutter/resources/shape/company_a_shapes.dart';
+import 'package:ulusoyapps_flutter/resources/shape/company_b_shapes.dart';
+import 'package:ulusoyapps_flutter/resources/shape/company_c_shapes.dart';
+import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
+import 'package:ulusoyapps_flutter/resources/themes/text/company_a_text_theme.dart';
+import 'package:ulusoyapps_flutter/resources/themes/text/company_b_text_theme.dart';
+import 'package:ulusoyapps_flutter/resources/themes/text/company_c_text_theme.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
+import 'companies.dart';
+import 'company_a_theme_data.dart';
+import 'company_b_theme_data.dart';
+import 'company_c_theme_data.dart';
+
 abstract class CompanyThemeData {
-  ShapeBorder materialShapeBorder;
-  ShapeBorder barGraphShapeBorder;
-  double borderRadiusValue;
-  BorderRadius borderRadius;
   FloatingActionButtonThemeData fabTheme;
-  ToggleButtonsThemeData toggleButtonsThemeData;
   BottomAppBarTheme bottomAppBarTheme;
   final Brightness brightness;
-  final CompanyColors companyColors;
-  final CompanyTextTheme companyTextTheme;
+  final CompanyColors colors;
+  final CompanyTextTheme textTheme;
+  final CompanyShapes shapes;
+  final Company company;
+
+  factory CompanyThemeData.companyA(brightness) {
+    final colors = CompanyColorsA(brightness);
+    return CompanyThemeDataA(
+      Company.COMPANY_A,
+      brightness,
+      colors,
+      CompanyTextThemeA(
+        colors.colorScheme.onSurface,
+        colors.colorScheme.onSurface,
+        colors.colorScheme.onPrimary,
+        colors.colorScheme.onPrimary,
+      ),
+      CompanyShapesA(),
+    );
+  }
+
+  factory CompanyThemeData.companyB(brightness) {
+    final colors = CompanyColorsB(brightness);
+    return CompanyThemeDataB(
+      Company.COMPANY_B,
+      brightness,
+      colors,
+      CompanyTextThemeB(
+        colors.colorScheme.onSurface,
+        colors.colorScheme.onSurface,
+        colors.colorScheme.onPrimary,
+        colors.colorScheme.onPrimary,
+      ),
+      CompanyShapesB(),
+    );
+  }
+
+  factory CompanyThemeData.companyC(brightness) {
+    final colors = CompanyColorsC(brightness);
+    return CompanyThemeDataC(
+      Company.COMPANY_C,
+      brightness,
+      colors,
+      CompanyTextThemeC(
+        colors.colorScheme.onSurface,
+        colors.colorScheme.onSurface,
+        colors.colorScheme.onPrimary,
+        colors.colorScheme.onPrimary,
+      ),
+      CompanyShapesC(),
+    );
+  }
 
   CompanyThemeData(
+    this.company,
     this.brightness,
-    this.companyColors,
-    this.companyTextTheme,
+    this.colors,
+    this.textTheme,
+    this.shapes,
   );
 
-  ThemeData buildThemeData() {
-    final _colorScheme = companyColors.colorScheme;
+  ThemeData get themeData {
+    final _colorScheme = colors.colorScheme;
 
     /// Button Theme
     final buttonThemeData = ButtonThemeData(
       height: 45,
       colorScheme: _colorScheme,
       textTheme: ButtonTextTheme.primary,
-      shape: materialShapeBorder,
+      shape: shapes.buttonShapeBorder,
     );
 
     /// Card Theme
     final cardTheme = CardTheme(
-      shadowColor: companyColors.shadowColor,
+      shadowColor: colors.shadowColor,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5.0,
       // this field changes the shadow of the card
-      shape: materialShapeBorder,
+      shape: shapes.cardShapeBorder,
     );
 
     /// Divider Theme
     final dividerThemeData = DividerThemeData(
-      color: companyColors.dividerColor,
+      color: colors.dividerColor,
       thickness: 1,
-    );
-
-    /// Snackbar
-    final snackbarThemeData = SnackBarThemeData(
-      backgroundColor: companyColors.colorScheme.surface,
-      contentTextStyle: companyTextTheme.baseTextTheme.bodyText2.copyWith(color: companyColors.colorScheme.onPrimary),
     );
 
     final primaryIconTheme = IconThemeData(
       color: _colorScheme.onPrimary,
+    );
+
+    final toggleButtonsTheme = ToggleButtonsThemeData(
+      borderWidth: 0.0,
+    );
+
+    final chipThemeData = ChipThemeData(
+      backgroundColor: _colorScheme.background,
+      disabledColor: _colorScheme.background,
+      selectedColor: _colorScheme.background,
+      secondarySelectedColor: _colorScheme.background,
+      padding: EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_SMALL, vertical: AppDimens.SIZE_SPACING_XS),
+      shape: shapes.chipShapeBorder,
+      labelStyle: textTheme.baseTextTheme.caption,
+      secondaryLabelStyle: textTheme.secondaryTextTheme.caption,
+      brightness: brightness,
     );
 
     return ThemeData(
@@ -79,21 +152,21 @@ abstract class CompanyThemeData {
       textSelectionColor: _colorScheme.primary,
       colorScheme: _colorScheme,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: companyColors.colorScheme.background,
+      scaffoldBackgroundColor: colors.colorScheme.background,
       dividerTheme: dividerThemeData,
-      textTheme: companyTextTheme.baseTextTheme,
-      primaryTextTheme: companyTextTheme.primaryTextTheme,
-      accentTextTheme: companyTextTheme.secondaryTextTheme,
+      textTheme: textTheme.baseTextTheme,
+      primaryTextTheme: textTheme.primaryTextTheme,
+      accentTextTheme: textTheme.secondaryTextTheme,
       buttonTheme: buttonThemeData,
       cardTheme: cardTheme,
       brightness: brightness,
       backgroundColor: _colorScheme.background,
-      snackBarTheme: snackbarThemeData,
-      toggleButtonsTheme: toggleButtonsThemeData,
+      toggleButtonsTheme: toggleButtonsTheme,
       floatingActionButtonTheme: fabTheme,
       bottomAppBarTheme: bottomAppBarTheme,
       primaryIconTheme: primaryIconTheme,
       applyElevationOverlayColor: true,
+      chipTheme: chipThemeData,
     );
   }
 }

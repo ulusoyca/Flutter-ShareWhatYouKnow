@@ -31,16 +31,13 @@ class SampleBarChart extends StatelessWidget {
     return _barGraph(themeViewModel);
   }
 
-  AspectRatio _barGraph(ThemeViewModel themeViewModel) {
-    return AspectRatio(
-      aspectRatio: 2.1,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
-          child: _barChart(
-            themeViewModel.companyColors.heatmapColors,
-            themeViewModel.companyThemeData.barGraphShapeBorder,
-          ),
+  Widget _barGraph(ThemeViewModel themeViewModel) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+        child: _barChart(
+          themeViewModel.companyColors.heatmapColors,
+          themeViewModel.companyShapes.barGraphShapeBorder,
         ),
       ),
     );

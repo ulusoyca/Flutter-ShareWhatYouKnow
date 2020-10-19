@@ -20,8 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SampleBarChart.dart';
 import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SamplePieChart.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
-import 'package:ulusoyapps_flutter/extensions/build_context_extensions.dart';
-import 'package:ulusoyapps_flutter/resources/colors/alert_level_colors.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 import 'package:ulusoyapps_flutter/resources/themes/companies.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
@@ -42,9 +41,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeViewModel = context.watch<ThemeViewModel>();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: context.appThemeData.buildThemeData(),
+      theme: themeViewModel.currentTheme.themeData,
       home: MyHomePage(title: '001 Theme Switch'),
     );
   }
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
               _companySelection(themeViewModel),
               _clickNumber(themeViewModel),
               Divider(),
-              SamplePieChart(),
+              _pieChart(),
               Divider(),
               _barChart(),
             ],
@@ -101,41 +101,55 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _barChart() => Padding(
-        padding: EdgeInsets.symmetric(vertical: AppDimens.SIZE_SPACING_LARGE),
-        child: SampleBarChart(),
+  Widget _pieChart() => SizedBox(
+        height: 180,
+        child: SamplePieChart(),
       );
 
-  ToggleButtons _companySelection(ThemeViewModel themeViewModel) {
-    return ToggleButtons(
-      children: <Widget>[
-        toggleButtonChild('Company A'),
-        toggleButtonChild('Company B'),
-        toggleButtonChild('Company C'),
-      ],
-      onPressed: (int index) {
-        switch (index) {
-          case 0:
-            themeViewModel.updateCompany(Company.COMPANY_A);
-            break;
-          case 1:
-            themeViewModel.updateCompany(Company.COMPANY_B);
-            break;
-          case 2:
-            themeViewModel.updateCompany(Company.COMPANY_C);
-            break;
-        }
-        setState(() {
-          for (int buttonIndex = 0; buttonIndex < _isSelected.length; buttonIndex++) {
-            if (buttonIndex == index) {
-              _isSelected[buttonIndex] = true;
-            } else {
-              _isSelected[buttonIndex] = false;
-            }
+  Widget _barChart() => Padding(
+        padding: EdgeInsets.symmetric(vertical: AppDimens.SIZE_SPACING_LARGE),
+        child: SizedBox(
+          height: 180,
+          child: SampleBarChart(),
+        ),
+      );
+
+  Widget _companySelection(ThemeViewModel themeViewModel) {
+    return Material(
+      shape: themeViewModel.companyShapes.toggleButtonShapeBorder,
+      elevation: 2.0,
+      type: MaterialType.card,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: ToggleButtons(
+        children: [
+          _toggleButtonChild('Company A'),
+          _toggleButtonChild('Company B'),
+          _toggleButtonChild('Company C'),
+        ],
+        onPressed: (int index) {
+          switch (index) {
+            case 0:
+              themeViewModel.updateCompany(Company.COMPANY_A);
+              break;
+            case 1:
+              themeViewModel.updateCompany(Company.COMPANY_B);
+              break;
+            case 2:
+              themeViewModel.updateCompany(Company.COMPANY_C);
+              break;
           }
-        });
-      },
-      isSelected: _isSelected,
+          setState(() {
+            for (int buttonIndex = 0; buttonIndex < _isSelected.length; buttonIndex++) {
+              if (buttonIndex == index) {
+                _isSelected[buttonIndex] = true;
+              } else {
+                _isSelected[buttonIndex] = false;
+              }
+            }
+          });
+        },
+        isSelected: _isSelected,
+      ),
     );
   }
 
@@ -185,8 +199,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget toggleButtonChild(String text) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_SMALL),
+  Widget _toggleButtonChild(String text) => Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_MEDIUM),
         child: Text(text),
       );
 
