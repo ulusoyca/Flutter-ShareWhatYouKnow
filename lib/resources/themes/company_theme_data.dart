@@ -20,6 +20,10 @@ import 'package:ulusoyapps_flutter/resources/colors/company_b_colors.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_c_colors.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_a_icons.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_b_icons.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_c_icons.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
 import 'package:ulusoyapps_flutter/resources/shape/company_a_shapes.dart';
 import 'package:ulusoyapps_flutter/resources/shape/company_b_shapes.dart';
 import 'package:ulusoyapps_flutter/resources/shape/company_c_shapes.dart';
@@ -41,6 +45,7 @@ abstract class CompanyThemeData {
   final CompanyColors colors;
   final CompanyTextTheme textTheme;
   final CompanyShapes shapes;
+  final CompanyIcons icons;
   final Company company;
 
   factory CompanyThemeData.companyA(brightness) {
@@ -56,6 +61,7 @@ abstract class CompanyThemeData {
         colors.colorScheme.onPrimary,
       ),
       CompanyShapesA(),
+      CompanyIconsA(),
     );
   }
 
@@ -72,6 +78,7 @@ abstract class CompanyThemeData {
         colors.colorScheme.onPrimary,
       ),
       CompanyShapesB(),
+      CompanyIconsB(),
     );
   }
 
@@ -88,6 +95,7 @@ abstract class CompanyThemeData {
         colors.colorScheme.onPrimary,
       ),
       CompanyShapesC(),
+      CompanyIconsC(),
     );
   }
 
@@ -97,6 +105,7 @@ abstract class CompanyThemeData {
     this.colors,
     this.textTheme,
     this.shapes,
+    this.icons,
   );
 
   ThemeData get themeData {

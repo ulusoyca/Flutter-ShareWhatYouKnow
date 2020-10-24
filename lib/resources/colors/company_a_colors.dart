@@ -31,7 +31,7 @@ class CompanyColorsA extends CompanyColors {
   final darkColorScheme = ColorScheme.dark(
     primary: AppColors.bluePurple.shade200,
     primaryVariant: AppColors.bluePurple[700],
-    secondary: AppColors.turquoise,
+    secondary: AppColors.turquoise.shade200,
     secondaryVariant: AppColors.turquoise[700],
     onPrimary: AppColors.black,
     onSecondary: AppColors.black,
@@ -39,9 +39,9 @@ class CompanyColorsA extends CompanyColors {
 
   @override
   final lightColorScheme = ColorScheme.light(
-    primary: AppColors.bluePurple,
+    primary: AppColors.bluePurple.shade500,
     primaryVariant: AppColors.bluePurple[700],
-    secondary: AppColors.turquoise.shade200,
+    secondary: AppColors.turquoise.shade400,
     secondaryVariant: AppColors.turquoise[700],
     onPrimary: AppColors.white,
     onSecondary: AppColors.white,

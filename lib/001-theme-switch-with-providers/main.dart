@@ -15,13 +15,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SampleBarChart.dart';
 import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SamplePieChart.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
 import 'package:ulusoyapps_flutter/resources/themes/companies.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
@@ -77,10 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final themeViewModel = context.watch<ThemeViewModel>();
-    var onPrimaryColor = themeViewModel.companyColors.colorScheme.onPrimary;
+    final onPrimaryColor = themeViewModel.colors.colorScheme.onPrimary;
+    final icons = themeViewModel.icons;
     return Scaffold(
       appBar: _appBar(themeViewModel, onPrimaryColor),
-      bottomNavigationBar: _bottomAppBar(onPrimaryColor),
+      bottomNavigationBar: _bottomAppBar(icons, onPrimaryColor),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(
         padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
@@ -97,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      floatingActionButton: _floatingButton(), // This
+      floatingActionButton: _floatingButton(icons), // This
     );
   }
 
@@ -116,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _companySelection(ThemeViewModel themeViewModel) {
     return Material(
-      shape: themeViewModel.companyShapes.toggleButtonShapeBorder,
+      shape: themeViewModel.shapes.toggleButtonShapeBorder,
       elevation: 2.0,
       type: MaterialType.card,
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -153,19 +154,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  BottomAppBar _bottomAppBar(Color onPrimaryColor) {
+  BottomAppBar _bottomAppBar(CompanyIcons icons, Color onPrimaryColor) {
     return BottomAppBar(
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(icons.menu),
             color: onPrimaryColor,
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(icons.search),
             color: onPrimaryColor,
             onPressed: () {},
           ),
@@ -175,6 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   AppBar _appBar(ThemeViewModel themeViewModel, Color onPrimaryColor) {
+    var icons = themeViewModel.icons;
     return AppBar(
       brightness: themeViewModel.brightness,
       actions: [
@@ -182,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_MEDIUM),
             child: Icon(
-              themeViewModel.brightness == Brightness.dark ? MdiIcons.lightbulbOffOutline : MdiIcons.lightbulbOnOutline,
+              themeViewModel.brightness == Brightness.dark ? icons.lightBulbOff : icons.lightBulbOn,
               color: onPrimaryColor,
             ),
           ),
@@ -231,18 +233,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  FloatingActionButton _floatingButton() {
+  FloatingActionButton _floatingButton(CompanyIcons icons) {
     return FloatingActionButton(
       onPressed: _incrementCounter,
       tooltip: 'Increment',
-      child: Icon(Icons.add),
+      child: Icon(icons.add),
     );
   }
 
-  /// This is bad but here only for demonstration purposes.
-  /// View should not contain any logic. The logic should be in view model.
   Color _getCounterColor(ThemeViewModel themeViewModel) {
-    AlertLevels alertLevels = themeViewModel.companyColors.alertLevels;
+    AlertLevels alertLevels = themeViewModel.colors.alertLevels;
     if (_counter < 5) {
       return alertLevels.neutral;
     } else if (_counter < 10) {

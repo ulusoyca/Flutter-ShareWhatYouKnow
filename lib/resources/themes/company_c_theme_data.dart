@@ -16,6 +16,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
 import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
@@ -29,12 +30,14 @@ class CompanyThemeDataC extends CompanyThemeData {
     CompanyColors companyColors,
     CompanyTextTheme companyTextTheme,
     CompanyShapes companyShapes,
+    CompanyIcons companyIcons,
   ) : super(
           company,
           brightness,
           companyColors,
           companyTextTheme,
           companyShapes,
+          companyIcons,
         ) {
     fabTheme = FloatingActionButtonThemeData(shape: companyShapes.fabShapeBorder);
     bottomAppBarTheme = BottomAppBarTheme(

@@ -16,6 +16,7 @@
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
 import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
 import 'package:ulusoyapps_flutter/resources/themes/company_theme_data.dart';
 
@@ -55,11 +56,13 @@ class ThemeViewModel with ChangeNotifier {
 
   CompanyThemeData _currentTheme;
 
-  CompanyColors get companyColors => _currentTheme.colors;
+  CompanyColors get colors => _currentTheme.colors;
 
   CompanyThemeData get currentTheme => _currentTheme;
 
-  CompanyShapes get companyShapes => _currentTheme.shapes;
+  CompanyShapes get shapes => _currentTheme.shapes;
+
+  CompanyIcons get icons => _currentTheme.icons;
 
   TextTheme get baseTextTheme => _currentTheme.textTheme.baseTextTheme;
 

@@ -31,7 +31,7 @@ class CompanyColorsC extends CompanyColors {
   final darkColorScheme = ColorScheme.dark(
     primary: AppColors.slateGrey.shade200,
     primaryVariant: AppColors.slateGrey[700],
-    secondary: AppColors.orangeRed,
+    secondary: AppColors.orangeRed.shade200,
     secondaryVariant: AppColors.orangeRed[700],
     onPrimary: AppColors.black,
     onSecondary: AppColors.black,
@@ -39,9 +39,9 @@ class CompanyColorsC extends CompanyColors {
 
   @override
   final lightColorScheme = ColorScheme.light(
-    primary: AppColors.slateGrey,
+    primary: AppColors.slateGrey.shade500,
     primaryVariant: AppColors.slateGrey[700],
-    secondary: AppColors.orangeRed.shade200,
+    secondary: AppColors.orangeRed.shade400,
     secondaryVariant: AppColors.orangeRed[700],
     onPrimary: AppColors.white,
     onSecondary: AppColors.white,

@@ -36,8 +36,8 @@ class SampleBarChart extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
         child: _barChart(
-          themeViewModel.companyColors.heatmapColors,
-          themeViewModel.companyShapes.barGraphShapeBorder,
+          themeViewModel.colors.heatmapColors,
+          themeViewModel.shapes.barGraphShapeBorder,
         ),
       ),
     );

@@ -25,7 +25,7 @@ class SamplePieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeViewModel = context.watch<ThemeViewModel>();
-    var companyColors = themeViewModel.companyColors;
+    var companyColors = themeViewModel.colors;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
