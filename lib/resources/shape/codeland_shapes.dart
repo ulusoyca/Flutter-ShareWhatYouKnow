@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 
 import 'company_shapes.dart';
 
-class CompanyShapesC extends CompanyShapes {
+class CodelandShapes extends CompanyShapes {
   ShapeBorder buttonShapeBorder = ContinuousRectangleBorder(
     borderRadius: BorderRadius.circular(5.0),
   );

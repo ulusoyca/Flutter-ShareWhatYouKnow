@@ -13,20 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import 'package:flutter/material.dart';
 
-import 'company_icons.dart';
-
-class CompanyIconsB extends CompanyIcons {
-  @override
-  IconData menu = Icons.menu_sharp;
-
-  @override
-  IconData home = Icons.home_sharp;
-
-  @override
-  IconData search = Icons.search_sharp;
-
-  @override
-  IconData add = Icons.add_sharp;
+enum CompanyName {
+  ATA,
+  BIOHACK,
+  CODELAND,
 }

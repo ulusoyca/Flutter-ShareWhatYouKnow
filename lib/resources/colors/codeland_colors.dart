@@ -18,42 +18,32 @@ import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 
 import 'app_colors.dart';
 
-class CompanyColorsB extends CompanyColors {
-  CompanyColorsB(Brightness currentBrightness) : super(currentBrightness);
+class CodelandColors extends CompanyColors {
+  CodelandColors(Brightness currentBrightness) : super(currentBrightness);
 
   @override
   final HeatmapColors heatmapColors = HeatmapColors(
-    start: HSVColor.fromColor(AppColors.capri.shade50),
-    end: HSVColor.fromColor(AppColors.capri.shade900),
+    start: HSVColor.fromColor(AppColors.slateGrey.shade50),
+    end: HSVColor.fromColor(AppColors.slateGrey.shade900),
   );
 
   @override
   final darkColorScheme = ColorScheme.dark(
-    primary: AppColors.capri,
-    primaryVariant: AppColors.capri.shade900,
-    secondary: AppColors.rose.shade200,
-    secondaryVariant: AppColors.rose.shade700,
-    background: AppColors.balticSea,
-    surface: AppColors.darkGrey,
-    onBackground: AppColors.alabaster,
-    onSurface: AppColors.alabaster,
+    primary: AppColors.slateGrey.shade200,
+    primaryVariant: AppColors.slateGrey[700],
+    secondary: AppColors.orangeRed.shade200,
+    secondaryVariant: AppColors.orangeRed[700],
     onPrimary: AppColors.black,
     onSecondary: AppColors.black,
-    brightness: Brightness.dark,
   );
 
   @override
   final lightColorScheme = ColorScheme.light(
-    primary: AppColors.capri,
-    primaryVariant: AppColors.capri.shade900,
-    secondary: AppColors.rose.shade400,
-    secondaryVariant: AppColors.rose.shade700,
-    background: AppColors.alabaster,
-    surface: AppColors.white,
-    onBackground: AppColors.white,
-    onSurface: AppColors.black,
+    primary: AppColors.slateGrey.shade500,
+    primaryVariant: AppColors.slateGrey[700],
+    secondary: AppColors.orangeRed.shade400,
+    secondaryVariant: AppColors.orangeRed[700],
     onPrimary: AppColors.white,
     onSecondary: AppColors.white,
-    brightness: Brightness.light,
   );
 }

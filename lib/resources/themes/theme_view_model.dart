@@ -18,9 +18,9 @@ import 'package:ulusoyapps_flutter/cache/Preference.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
 import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
-import 'package:ulusoyapps_flutter/resources/themes/company_theme_data.dart';
 
-import 'companies.dart';
+import 'company_name.dart';
+import 'company_theme.dart';
 
 class ThemePreference {
   final String companyName;
@@ -37,28 +37,29 @@ class ThemeViewModel with ChangeNotifier {
   static const String _LIGHT_BRIGHTNESS = 'LIGHT_BRIGHTNESS';
   static const Brightness DEFAULT_BRIGHTNESS = Brightness.dark;
 
-  static const String _COMPANY_A_NAME = 'COMPANY_A';
-  static const String _COMPANY_B_NAME = 'COMPANY_B';
-  static const String _COMPANY_C_NAME = 'COMPANY_C';
-  static const String KEY_COMPANY = 'COMPANY';
-  static const String DEFAULT_COMPANY = _COMPANY_A_NAME;
+  static const String _COMPANY_ATA = 'COMPANY_ATA';
+  static const String _COMPANY_BIOHACK = 'COMPANY_BIOHACK';
+  static const String _COMPANY_CODELAND = 'COMPANY_CODELAND';
+  static const String KEY_COMPANY = 'COMPANY_NAME';
+  static const String DEFAULT_COMPANY = _COMPANY_ATA;
 
   static const Map<Brightness, String> _brightness = {
     Brightness.dark: _DARK_BRIGHTNESS,
     Brightness.light: _LIGHT_BRIGHTNESS,
   };
 
-  static const Map<Company, String> _companies = {
-    Company.COMPANY_A: _COMPANY_A_NAME,
-    Company.COMPANY_B: _COMPANY_B_NAME,
-    Company.COMPANY_C: _COMPANY_C_NAME,
+  static const Map<CompanyName, String> _companies = {
+    CompanyName.ATA: _COMPANY_ATA,
+    CompanyName.BIOHACK: _COMPANY_BIOHACK,
+    CompanyName.CODELAND: _COMPANY_CODELAND,
   };
 
-  CompanyThemeData _currentTheme;
+  CompanyTheme _currentTheme;
+  CompanyName _currentCompanyName;
 
   CompanyColors get colors => _currentTheme.colors;
 
-  CompanyThemeData get currentTheme => _currentTheme;
+  CompanyTheme get currentTheme => _currentTheme;
 
   CompanyShapes get shapes => _currentTheme.shapes;
 
@@ -73,7 +74,7 @@ class ThemeViewModel with ChangeNotifier {
   bool get isDark => _currentTheme.brightness == Brightness.dark;
 
   ThemeViewModel(this.preference) {
-    _currentTheme = _buildTheme(ThemePreference(DEFAULT_COMPANY, DEFAULT_BRIGHTNESS));
+    _buildTheme(ThemePreference(DEFAULT_COMPANY, DEFAULT_BRIGHTNESS));
     _currentThemePreference.then((value) {
       _buildTheme(value);
       notifyListeners();
@@ -93,38 +94,44 @@ class ThemeViewModel with ChangeNotifier {
   }
 
   toggleBrightness() {
-    final String companyName = _companies.entries.firstWhere((e) => e.key == _currentTheme.company).value;
+    final String companyName = _companies.entries.firstWhere((e) => e.key == _currentCompanyName).value;
     String toBeUpdatedBrightness;
     if (_currentTheme.brightness == Brightness.dark) {
       var themePreference = ThemePreference(companyName, Brightness.light);
-      _currentTheme = _buildTheme(themePreference);
+      _buildTheme(themePreference);
       toBeUpdatedBrightness = _LIGHT_BRIGHTNESS;
     } else {
       final themePreference = ThemePreference(companyName, Brightness.dark);
-      _currentTheme = _buildTheme(themePreference);
+      _buildTheme(themePreference);
       toBeUpdatedBrightness = _DARK_BRIGHTNESS;
     }
     preference.putString(KEY_PREFERRED_BRIGHTNESS, toBeUpdatedBrightness);
     notifyListeners();
   }
 
-  updateCompany(Company company) {
-    String companyName = _companies.entries.firstWhere((element) => element.key == company).value;
+  updateCompany(CompanyName name) {
+    String companyName = _companies.entries.firstWhere((element) => element.key == name).value;
     preference.putString(KEY_COMPANY, companyName);
     final themePreference = ThemePreference(companyName, _currentTheme.brightness);
-    _currentTheme = _buildTheme(themePreference);
+    _buildTheme(themePreference);
     notifyListeners();
   }
 
-  CompanyThemeData _buildTheme(ThemePreference themePreference) {
+  _buildTheme(ThemePreference themePreference) {
     final brightness = themePreference.brightness;
     switch (themePreference.companyName) {
-      case _COMPANY_A_NAME:
-        return CompanyThemeData.companyA(brightness);
-      case _COMPANY_B_NAME:
-        return CompanyThemeData.companyB(brightness);
-      case _COMPANY_C_NAME:
-        return CompanyThemeData.companyC(brightness);
+      case _COMPANY_ATA:
+        _currentCompanyName = CompanyName.ATA;
+        _currentTheme = CompanyTheme.ata(brightness);
+        break;
+      case _COMPANY_BIOHACK:
+        _currentCompanyName = CompanyName.BIOHACK;
+        _currentTheme = CompanyTheme.biohack(brightness);
+        break;
+      case _COMPANY_CODELAND:
+        _currentCompanyName = CompanyName.CODELAND;
+        _currentTheme = CompanyTheme.codeland(brightness);
+        break;
     }
   }
 }

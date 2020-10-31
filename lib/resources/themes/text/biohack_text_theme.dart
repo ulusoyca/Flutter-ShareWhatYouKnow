@@ -16,15 +16,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
-class CompanyTextThemeB extends CompanyTextTheme {
-  CompanyTextThemeB(
-    Color displayColor,
-    Color bodyColor,
-    Color primaryDisplayColor,
-    Color primaryBodyColor,
-  ) : super(displayColor, bodyColor, primaryDisplayColor, primaryBodyColor);
+class BiohackTextTheme extends CompanyTextTheme {
+  BiohackTextTheme(
+    CompanyColors colors,
+  ) : super(colors);
 
   @override
   TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme

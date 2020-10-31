@@ -17,24 +17,26 @@ import 'package:flutter/material.dart';
 
 import 'company_shapes.dart';
 
-class CompanyShapesA extends CompanyShapes {
-  ShapeBorder buttonShapeBorder = RoundedRectangleBorder(
+class BiohackShapes extends CompanyShapes {
+  ShapeBorder buttonShapeBorder = BeveledRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(20)),
   );
-  ShapeBorder cardShapeBorder = RoundedRectangleBorder(
+  ShapeBorder cardShapeBorder = BeveledRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(24)),
   );
-  ShapeBorder chipShapeBorder = RoundedRectangleBorder(
+  ShapeBorder chipShapeBorder = BeveledRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(16)),
   );
-  ShapeBorder toggleButtonShapeBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(20)),
+  ShapeBorder toggleButtonShapeBorder = BeveledRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(28)),
   );
-  ShapeBorder fabShapeBorder = CircleBorder();
-  ShapeBorder barGraphShapeBorder = RoundedRectangleBorder(
+  ShapeBorder fabShapeBorder = BeveledRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(28)),
+  );
+  ShapeBorder barGraphShapeBorder = BeveledRectangleBorder(
     borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(15),
-      topRight: Radius.circular(15),
+      topLeft: Radius.circular(10),
+      topRight: Radius.circular(10),
     ),
   );
 }

@@ -15,22 +15,20 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 
 abstract class CompanyTextTheme {
   TextTheme baseTextTheme;
   TextTheme primaryTextTheme;
   TextTheme secondaryTextTheme;
-  Color displayColor;
-  Color bodyColor;
-  Color primaryDisplayColor;
-  Color primaryBodyColor;
 
   CompanyTextTheme(
-    Color displayColor,
-    Color bodyColor,
-    Color primaryDisplayColor,
-    Color primaryBodyColor,
+    CompanyColors companyColors,
   ) {
+    final Color displayColor = companyColors.colorScheme.onSurface;
+    final Color bodyColor = companyColors.colorScheme.onSurface;
+    final Color primaryDisplayColor = companyColors.colorScheme.onPrimary;
+    final Color primaryBodyColor = companyColors.colorScheme.onPrimary;
     baseTextTheme = buildBaseTextTheme(displayColor, bodyColor);
     primaryTextTheme = buildPrimaryTextTheme(primaryDisplayColor, primaryBodyColor);
     secondaryTextTheme = buildSecondaryTextTheme(primaryDisplayColor, primaryBodyColor);

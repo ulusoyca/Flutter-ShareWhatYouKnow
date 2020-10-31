@@ -22,7 +22,7 @@ import 'package:ulusoyapps_flutter/cache/Preference.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
-import 'package:ulusoyapps_flutter/resources/themes/companies.dart';
+import 'package:ulusoyapps_flutter/resources/themes/company_name.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
 void main() {
@@ -123,20 +123,20 @@ class _MyHomePageState extends State<MyHomePage> {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: ToggleButtons(
         children: [
-          _toggleButtonChild('Company A'),
-          _toggleButtonChild('Company B'),
-          _toggleButtonChild('Company C'),
+          _toggleButtonChild('ATA'),
+          _toggleButtonChild('Biohack'),
+          _toggleButtonChild('Codeland'),
         ],
         onPressed: (int index) {
           switch (index) {
             case 0:
-              themeViewModel.updateCompany(Company.COMPANY_A);
+              themeViewModel.updateCompany(CompanyName.ATA);
               break;
             case 1:
-              themeViewModel.updateCompany(Company.COMPANY_B);
+              themeViewModel.updateCompany(CompanyName.BIOHACK);
               break;
             case 2:
-              themeViewModel.updateCompany(Company.COMPANY_C);
+              themeViewModel.updateCompany(CompanyName.CODELAND);
               break;
           }
           setState(() {
@@ -178,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
   AppBar _appBar(ThemeViewModel themeViewModel, Color onPrimaryColor) {
     var icons = themeViewModel.icons;
     return AppBar(
-      brightness: themeViewModel.brightness,
+      brightness: themeViewModel.brightness == Brightness.dark ? Brightness.light : Brightness.dark,
       actions: [
         GestureDetector(
           child: Padding(
@@ -202,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _toggleButtonChild(String text) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_MEDIUM),
+        padding: EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_LARGE),
         child: Text(text),
       );
 

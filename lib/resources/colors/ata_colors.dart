@@ -18,8 +18,8 @@ import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 
 import 'app_colors.dart';
 
-class CompanyColorsA extends CompanyColors {
-  CompanyColorsA(Brightness currentBrightness) : super(currentBrightness);
+class AtaColors extends CompanyColors {
+  AtaColors(Brightness currentBrightness) : super(currentBrightness);
 
   @override
   final HeatmapColors heatmapColors = HeatmapColors(

@@ -16,33 +16,32 @@
 
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
-import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
 import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
-import 'companies.dart';
 import 'company_theme_data.dart';
 
-class CompanyThemeDataA extends CompanyThemeData {
-  CompanyThemeDataA(
-    Company company,
+class AtaThemeData extends CompanyThemeData {
+  @override
+  FloatingActionButtonThemeData fabTheme;
+
+  @override
+  BottomAppBarTheme bottomAppBarTheme;
+
+  AtaThemeData(
     Brightness brightness,
     CompanyColors companyColors,
     CompanyTextTheme companyTextTheme,
     CompanyShapes companyShapes,
-    CompanyIcons icons,
-  ) : super(
-          company,
-          brightness,
+  )   : fabTheme = FloatingActionButtonThemeData(),
+        bottomAppBarTheme = BottomAppBarTheme(
+          shape: CircularNotchedRectangle(),
+          color: companyColors.colorScheme.primary,
+        ),
+        super(
           companyColors,
-          companyTextTheme,
           companyShapes,
-          icons,
-        ) {
-    fabTheme = FloatingActionButtonThemeData();
-    bottomAppBarTheme = BottomAppBarTheme(
-      shape: CircularNotchedRectangle(),
-      color: companyColors.colorScheme.primary,
-    );
-  }
+          companyTextTheme,
+          brightness,
+        );
 }

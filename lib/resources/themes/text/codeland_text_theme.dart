@@ -16,15 +16,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
-class CompanyTextThemeA extends CompanyTextTheme {
-  CompanyTextThemeA(
-    Color displayColor,
-    Color bodyColor,
-    Color primaryDisplayColor,
-    Color primaryBodyColor,
-  ) : super(displayColor, bodyColor, primaryDisplayColor, primaryBodyColor);
+class CodelandTextTheme extends CompanyTextTheme {
+  CodelandTextTheme(
+    CompanyColors colors,
+  ) : super(colors);
 
   @override
   TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme
@@ -55,23 +53,23 @@ class CompanyTextThemeA extends CompanyTextTheme {
   @override
   TextTheme buildBaseTextTheme(Color displayColor, Color bodyColor) {
     final currentTextTheme = TextTheme(
-      headline1: GoogleFonts.rubik(fontSize: 98, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-      headline2: GoogleFonts.rubik(fontSize: 61, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-      headline3: GoogleFonts.rubik(fontSize: 49, fontWeight: FontWeight.w400),
-      headline4: GoogleFonts.rubik(fontSize: 35, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      headline5: GoogleFonts.rubik(fontSize: 24, fontWeight: FontWeight.w400),
-      headline6: GoogleFonts.rubik(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-      subtitle1: GoogleFonts.rubik(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
-      subtitle2: GoogleFonts.rubik(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-      bodyText1: GoogleFonts.rubik(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-      bodyText2: GoogleFonts.rubik(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      button: GoogleFonts.rubik(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-      caption: GoogleFonts.rubik(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-      overline: GoogleFonts.rubik(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+      headline1: GoogleFonts.sourceCodePro(fontSize: 105, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+      headline2: GoogleFonts.sourceCodePro(fontSize: 66, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+      headline3: GoogleFonts.sourceCodePro(fontSize: 52, fontWeight: FontWeight.w400),
+      headline4: GoogleFonts.sourceCodePro(fontSize: 37, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      headline5: GoogleFonts.sourceCodePro(fontSize: 26, fontWeight: FontWeight.w400),
+      headline6: GoogleFonts.sourceCodePro(fontSize: 22, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+      subtitle1: GoogleFonts.sourceCodePro(fontSize: 17, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+      subtitle2: GoogleFonts.sourceCodePro(fontSize: 15, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+      bodyText1: GoogleFonts.sourceCodePro(fontSize: 17, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+      bodyText2: GoogleFonts.sourceCodePro(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      button: GoogleFonts.sourceCodePro(fontSize: 15, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+      caption: GoogleFonts.sourceCodePro(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+      overline: GoogleFonts.sourceCodePro(fontSize: 11, fontWeight: FontWeight.w400, letterSpacing: 1.5),
     ).apply(
       displayColor: displayColor,
       bodyColor: bodyColor,
     );
-    return GoogleFonts.rubikTextTheme(currentTextTheme);
+    return GoogleFonts.sourceCodeProTextTheme(currentTextTheme);
   }
 }

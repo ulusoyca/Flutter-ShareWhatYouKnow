@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'company_icons.dart';
 
-class CompanyIconsC extends CompanyIcons {
+class AtaIcons extends CompanyIcons {
   @override
-  IconData menu = Icons.menu;
+  IconData menu = Icons.menu_rounded;
 
   @override
-  IconData home = Icons.home;
+  IconData home = Icons.home_rounded;
 
   @override
-  IconData search = Icons.search;
+  IconData search = Icons.search_rounded;
 
   @override
-  IconData add = Icons.add;
+  IconData add = Icons.add_rounded;
 }
