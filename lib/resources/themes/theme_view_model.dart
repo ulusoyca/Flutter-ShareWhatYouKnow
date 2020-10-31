@@ -15,74 +15,123 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
-import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
-import 'package:ulusoyapps_flutter/resources/themes/text/app_text_theme.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
+import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
 
-import 'app_theme.dart';
-import 'app_theme_data.dart';
+import 'company_name.dart';
+import 'company_theme.dart';
+
+class ThemePreference {
+  final String companyName;
+  final Brightness brightness;
+
+  ThemePreference(this.companyName, this.brightness);
+}
 
 class ThemeViewModel with ChangeNotifier {
   final Preference preference;
 
   static const String KEY_PREFERRED_BRIGHTNESS = 'PREFERRED_BRIGHTNESS';
-  static const String _DARK_BRIGHTNESS = 'PREFERRED_BRIGHTNESS';
-  static const String _LIGHT_BRIGHTNESS = 'PREFERRED_BRIGHTNESS';
+  static const String _DARK_BRIGHTNESS = 'DARK_BRIGHTNESS';
+  static const String _LIGHT_BRIGHTNESS = 'LIGHT_BRIGHTNESS';
   static const Brightness DEFAULT_BRIGHTNESS = Brightness.dark;
+
+  static const String _COMPANY_ATA = 'COMPANY_ATA';
+  static const String _COMPANY_BIOHACK = 'COMPANY_BIOHACK';
+  static const String _COMPANY_CODELAND = 'COMPANY_CODELAND';
+  static const String KEY_COMPANY = 'COMPANY_NAME';
+  static const String DEFAULT_COMPANY = _COMPANY_ATA;
 
   static const Map<Brightness, String> _brightness = {
     Brightness.dark: _DARK_BRIGHTNESS,
     Brightness.light: _LIGHT_BRIGHTNESS,
   };
 
-  AppTheme _currentTheme;
-  AppColors get appColors => _currentTheme.colors;
+  static const Map<CompanyName, String> _companies = {
+    CompanyName.ATA: _COMPANY_ATA,
+    CompanyName.BIOHACK: _COMPANY_BIOHACK,
+    CompanyName.CODELAND: _COMPANY_CODELAND,
+  };
+
+  CompanyTheme _currentTheme;
+  CompanyName _currentCompanyName;
+
+  CompanyColors get colors => _currentTheme.colors;
+
+  CompanyTheme get currentTheme => _currentTheme;
+
+  CompanyShapes get shapes => _currentTheme.shapes;
+
+  CompanyIcons get icons => _currentTheme.icons;
+
   TextTheme get baseTextTheme => _currentTheme.textTheme.baseTextTheme;
+
+  TextTheme get primaryTextTheme => _currentTheme.textTheme.primaryTextTheme;
+
   Brightness get brightness => _currentTheme.brightness;
-  ThemeData get themeData => _currentTheme.themeData;
+
+  bool get isDark => _currentTheme.brightness == Brightness.dark;
 
   ThemeViewModel(this.preference) {
-    _currentTheme = _buildTheme(DEFAULT_BRIGHTNESS);
-    _currentBrightness.then((value) {
+    _buildTheme(ThemePreference(DEFAULT_COMPANY, DEFAULT_BRIGHTNESS));
+    _currentThemePreference.then((value) {
       _buildTheme(value);
       notifyListeners();
     });
   }
 
-  Future<Brightness> get _currentBrightness async {
+  Future<ThemePreference> get _currentThemePreference async {
+    Brightness brightness;
     final String preferredBrightness = await preference.getString(KEY_PREFERRED_BRIGHTNESS, defaultValue: '');
     if (preferredBrightness.isEmpty) {
-      return MediaQueryData.fromWindow(WidgetsBinding.instance.window).platformBrightness;
+      brightness = MediaQueryData.fromWindow(WidgetsBinding.instance.window).platformBrightness;
     } else {
-      return _brightness.entries.firstWhere((element) => element.value == preferredBrightness).key;
+      brightness = _brightness.entries.firstWhere((element) => element.value == preferredBrightness).key;
     }
+    String preferredCompany = await preference.getString(KEY_COMPANY, defaultValue: DEFAULT_COMPANY);
+    return ThemePreference(preferredCompany, brightness);
   }
 
   toggleBrightness() {
+    final String companyName = _companies.entries.firstWhere((e) => e.key == _currentCompanyName).value;
     String toBeUpdatedBrightness;
     if (_currentTheme.brightness == Brightness.dark) {
-      _currentTheme = _buildTheme(Brightness.light);
+      var themePreference = ThemePreference(companyName, Brightness.light);
+      _buildTheme(themePreference);
       toBeUpdatedBrightness = _LIGHT_BRIGHTNESS;
     } else {
-      _currentTheme = _buildTheme(Brightness.dark);
+      final themePreference = ThemePreference(companyName, Brightness.dark);
+      _buildTheme(themePreference);
       toBeUpdatedBrightness = _DARK_BRIGHTNESS;
     }
     preference.putString(KEY_PREFERRED_BRIGHTNESS, toBeUpdatedBrightness);
     notifyListeners();
   }
 
-  AppTheme _buildTheme(Brightness brightness) {
-    final colors = AppColors.buildAppColors(brightness == Brightness.dark);
-    final textTheme = AppTextTheme.buildAppTextTheme(appColors: colors);
-    final themeData = AppThemeData.buildThemeData(
-      brightness: brightness,
-      appColors: colors,
-      appTextTheme: textTheme,
-    );
-    return AppTheme(
-      themeData: themeData,
-      colors: colors,
-      textTheme: textTheme,
-      brightness: brightness,
-    );
+  updateCompany(CompanyName name) {
+    String companyName = _companies.entries.firstWhere((element) => element.key == name).value;
+    preference.putString(KEY_COMPANY, companyName);
+    final themePreference = ThemePreference(companyName, _currentTheme.brightness);
+    _buildTheme(themePreference);
+    notifyListeners();
+  }
+
+  _buildTheme(ThemePreference themePreference) {
+    final brightness = themePreference.brightness;
+    switch (themePreference.companyName) {
+      case _COMPANY_ATA:
+        _currentCompanyName = CompanyName.ATA;
+        _currentTheme = CompanyTheme.ata(brightness);
+        break;
+      case _COMPANY_BIOHACK:
+        _currentCompanyName = CompanyName.BIOHACK;
+        _currentTheme = CompanyTheme.biohack(brightness);
+        break;
+      case _COMPANY_CODELAND:
+        _currentCompanyName = CompanyName.CODELAND;
+        _currentTheme = CompanyTheme.codeland(brightness);
+        break;
+    }
   }
 }

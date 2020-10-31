@@ -17,189 +17,203 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  AppColors._();
+
   /// Base Colors
-  static const Color _white = Colors.white;
-  static const Color _black = Colors.black;
-  static const Color _red = Color(0xFFFF0000);
-  static const Color _rose = Color(0xFFFF6363);
-  static const Color _green = Color(0xFF59DD00);
-  static const Color _brightSun = Color(0xFFFCC94A);
-  static const Color _balticSea = Color(0xFF18171d); // 900
-  static const Color _raisinBlack = Color(0xFF242329); // 900
-  static const Color _onyx = Color(0xFF45444B); // 900
-  static const Color _alabaster = Color(0xFFFAFAFA);
-  static const Color _abbey = Color(0xFF464648);
-  static const Color _dimGray = Color(0xFF666666);
-  static const Color _shadow = Color.fromRGBO(33, 22, 156, 0.1);
-  static const Color _whisper = Color(0xFFECECF4);
+  static const Color white = Colors.white;
+  static const Color black = Colors.black;
+  static const Color transparent = Colors.transparent;
+  static const Color red = Color(0xFFFF0000);
+  static const Color green = Color(0xFF59DD00);
+  static const Color brightSun = Color(0xFFFCC94A);
+  static const Color balticSea = Color(0xFF18171d); // 900
+  static const Color raisinBlack = Color(0xFF242329); // 900
+  static const Color darkGrey = Color(0xFF121212);
+  static const Color onyx = Color(0xFF45444B); // 900
+  static const Color alabaster = Color(0xFFFAFAFA);
+  static const Color abbey = Color(0xFF464648);
+  static const Color dimGray = Color(0xFF666666);
+  static const Color shadow = Color.fromRGBO(33, 22, 156, 0.1);
+  static const Color whisper = Color(0xFFECECF4);
 
-  static const Color _lavenderBlue = Color(0xFFdbcff5); // 100
-  static const Color _maximumBluePurple = Color(0xFFC4AFF0); // 200
-  static const Color _mediumSlateBluePurple = Color(0xFF8459dc); // 500
-  static const Color _oceanBlue = Color(0xFF532dc5); // 900
+  static const Map<int, Color> bluePurpleSwatch = {
+    50: Color(0xFFefe8fa),
+    100: Color(0xFFd5c6f2),
+    200: Color(0xFFb9a0ea),
+    300: Color(0xFF9c78e3),
+    400: Color(0xFF8559dc),
+    500: Color(0xFF6d3bd5),
+    600: Color(0xFF6235ce),
+    700: Color(0xFF532dc5),
+    800: Color(0xFF4427be),
+    900: Color(0xFF2b1bb0),
+  };
 
-  static const Color _celeste = Color(0xFFAEF0ED); // 100
-  static const Color _electricBlue = Color(0xFF76E5E3); // 200
-  static const Color _darkTurquoise = Color(0xFF00C9D1); // 500
-  static const Color _pineGreen = Color(0xFF00a1a3); // 900
+  static const MaterialColor bluePurple = MaterialColor(
+    0xFF6d3bd5,
+    bluePurpleSwatch,
+  );
 
-  final Color primaryLight;
-  final Color secondaryLight;
-  final Color dividerColor;
-  final Color snackbarBackground;
-  final Color boxShadowColor;
-  final Color fillColor;
-  final ColorScheme colorScheme;
-  final GraphColors graphColors;
-  final AlertLevels alertLevels;
-  final TrendLevelColors trendLevels;
+  static const Map<int, Color> turquoiseSwatch = {
+    50: Color(0xFFdff8f7),
+    100: Color(0xFFb1edec),
+    200: Color(0xFF7de1e2),
+    400: Color(0xFF00cad1),
+    700: Color(0xFF009ba1),
+  };
 
-  AppColors({
-    this.primaryLight,
-    this.secondaryLight,
-    this.dividerColor,
-    this.snackbarBackground,
-    this.colorScheme,
-    this.boxShadowColor,
-    this.fillColor,
-    this.graphColors,
-    this.alertLevels,
-    this.trendLevels,
-  });
+  static const MaterialAccentColor turquoise = MaterialAccentColor(
+    0xFF7de1e2,
+    turquoiseSwatch,
+  );
 
-  static AppColors buildAppColors(bool isDarkThemeOn) => isDarkThemeOn ? _buildDarkAppColors() : _buildLightAppColors();
+  static const Map<int, Color> capriSwatch = {
+    50: Color(0xFFe1f6ff),
+    100: Color(0xFFb2e7ff),
+    200: Color(0xFF7ed7ff),
+    300: Color(0xFF7ed7ff),
+    400: Color(0xFF00bbff),
+    500: Color(0xFF00afff),
+    600: Color(0xFF00a0f0),
+    700: Color(0xFF008ddb),
+    800: Color(0xFF007cc8),
+    900: Color(0xFF005ba5),
+  };
 
-  static AppColors _buildLightAppColors() => AppColors(
-        primaryLight: AppColors._lavenderBlue,
-        secondaryLight: AppColors._celeste,
-        dividerColor: AppColors._shadow,
-        snackbarBackground: _dimGray,
-        fillColor: AppColors._white,
-        boxShadowColor: AppColors._shadow,
-        colorScheme: ColorScheme(
-          primary: AppColors._mediumSlateBluePurple,
-          primaryVariant: AppColors._oceanBlue,
-          secondary: AppColors._darkTurquoise,
-          secondaryVariant: AppColors._pineGreen,
-          background: AppColors._alabaster,
-          surface: AppColors._white,
-          onBackground: AppColors._white,
-          onSurface: AppColors._black,
-          error: AppColors._red,
-          onError: AppColors._white,
-          onPrimary: AppColors._white,
-          onSecondary: AppColors._white,
-          brightness: Brightness.light,
-        ),
-        graphColors: GraphColors(
-          primaryColor: AppColors._mediumSlateBluePurple,
-          secondaryColor: AppColors._darkTurquoise,
-          targetFillColor: Colors.grey.shade700,
-          backgroundColor: AppColors._whisper,
-          belowTarget: AppColors._rose,
-          onTarget: AppColors._brightSun,
-          aboveTarget: AppColors._green,
-        ),
-        alertLevels: AlertLevels(
-          alert: AppColors._red,
-          warning: AppColors._brightSun,
-          neutral: Colors.grey.shade500,
-          safe: AppColors._green,
-        ),
-        trendLevels: TrendLevelColors(
-          increasing: AppColors._green,
-          decreasing: AppColors._red,
-          unchanged: Colors.grey.shade500,
-        ),
-      );
+  static const MaterialColor capri = MaterialColor(
+    0xFF00afff,
+    capriSwatch,
+  );
 
-  static AppColors _buildDarkAppColors() => AppColors(
-        primaryLight: AppColors._lavenderBlue,
-        secondaryLight: AppColors._celeste,
-        dividerColor: AppColors._onyx,
-        snackbarBackground: _alabaster,
-        fillColor: AppColors._raisinBlack,
-        boxShadowColor: Colors.transparent,
-        colorScheme: ColorScheme(
-          primary: AppColors._maximumBluePurple,
-          primaryVariant: AppColors._oceanBlue,
-          secondary: AppColors._electricBlue,
-          secondaryVariant: AppColors._pineGreen,
-          background: AppColors._balticSea,
-          surface: AppColors._raisinBlack,
-          onBackground: AppColors._alabaster,
-          onSurface: AppColors._alabaster,
-          error: AppColors._rose,
-          onError: AppColors._alabaster,
-          onPrimary: AppColors._black,
-          onSecondary: AppColors._white,
-          brightness: Brightness.dark,
-        ),
-        graphColors: GraphColors(
-          primaryColor: AppColors._maximumBluePurple,
-          secondaryColor: AppColors._electricBlue,
-          targetFillColor: AppColors._white,
-          backgroundColor: AppColors._abbey,
-          belowTarget: AppColors._rose,
-          onTarget: AppColors._brightSun,
-          aboveTarget: AppColors._green,
-        ),
-        alertLevels: AlertLevels(
-          alert: AppColors._red,
-          warning: AppColors._brightSun,
-          neutral: Colors.grey.shade500,
-          safe: AppColors._green,
-        ),
-        trendLevels: TrendLevelColors(
-          increasing: AppColors._green,
-          decreasing: AppColors._red,
-          unchanged: Colors.grey.shade500,
-        ),
-      );
+  static const Map<int, Color> roseSwatch = {
+    100: Color(0xFFfcbcd0),
+    200: Color(0xFFfa91b0),
+    400: Color(0xFFf54378),
+    700: Color(0xFFcb1b5a),
+  };
+
+  static const MaterialAccentColor rose = MaterialAccentColor(
+    0xFFfa91b0,
+    roseSwatch,
+  );
+
+  static const Map<int, Color> slateGreySwatch = {
+    50: Color(0xFFe8f0f7),
+    100: Color(0xFFcad9e2),
+    200: Color(0xFFacbfcb),
+    300: Color(0xFF8da6b5),
+    400: Color(0xFF7592a3),
+    500: Color(0xFF5d7f92),
+    600: Color(0xFF517081),
+    700: Color(0xFF425c6a),
+    800: Color(0xFF344955),
+    900: Color(0xFF23343d),
+  };
+
+  static const MaterialColor slateGrey = MaterialColor(
+    0xFF5d7f92,
+    slateGreySwatch,
+  );
+
+  static const Map<int, Color> orangeRedSwatch = {
+    100: Color(0xFFfecfbf),
+    200: Color(0xFFfeb096),
+    400: Color(0xFFff7a4c),
+    700: Color(0xFFe65824),
+  };
+
+  static const MaterialAccentColor orangeRed = MaterialAccentColor(
+    0xFFfeb096,
+    orangeRedSwatch,
+  );
+
+  static const Map<int, Color> veroneseGreenSwatch = {
+    50: Color(0xFFddf4f0),
+    100: Color(0xFFaae3d8),
+    200: Color(0xFF6dd2bf),
+    400: Color(0xFF00b092),
+    700: Color(0xFF008164),
+  };
+
+  static const MaterialAccentColor veroneseGreen = MaterialAccentColor(
+    0xFF6dd2bf,
+    veroneseGreenSwatch,
+  );
+
+  static const Map<int, Color> tomatoSwatch = {
+    50: Color(0xFFffedef),
+    100: Color(0xFFffd2d6),
+    200: Color(0xFFf4a3a1),
+    400: Color(0xFFf8635a),
+    700: Color(0xFFde4239),
+  };
+
+  static const MaterialAccentColor tomato = MaterialAccentColor(
+    0xFFf4a3a1,
+    tomatoSwatch,
+  );
+
+  static const Map<int, Color> vividSkySwatch = {
+    50: Color(0xFFdafaff),
+    100: Color(0xFF9ff2fe),
+    200: Color(0xFF42e9ff),
+    400: Color(0xFF00d5f7),
+    700: Color(0xFF00a6c3),
+  };
+
+  static const MaterialAccentColor vividSky = MaterialAccentColor(
+    0xFF42e9ff,
+    vividSkySwatch,
+  );
+
+  static const Map<int, Color> champagneSwatch = {
+    50: Color(0xFFfaf4e4),
+    100: Color(0xFFf3e2ba),
+    200: Color(0xFFEDCF8E),
+    400: Color(0xFFe6ad3a),
+    700: Color(0xFFdb8612),
+  };
+
+  static const MaterialAccentColor champagne = MaterialAccentColor(
+    0xFFEDCF8E,
+    champagneSwatch,
+  );
+
+  static const Map<int, Color> mauveSwatch = {
+    50: Color(0xFFeedfe7),
+    100: Color(0xFFd6afc6),
+    200: Color(0xFFBA7BA1),
+    400: Color(0xFF8f156a),
+    700: Color(0xFF65004d),
+  };
+
+  static const mauve = MaterialAccentColor(
+    0xFFBA7BA1,
+    mauveSwatch,
+  );
+
+  static const Map<int, Color> coffeeSwatch = {
+    50: Color(0xFFf5eae3),
+    200: Color(0xFFc2ab9f),
+    700: Color(0xFF43281f),
+  };
+
+  static const coffee = MaterialAccentColor(
+    0xFFc2ab9f,
+    coffeeSwatch,
+  );
 }
 
-class GraphColors {
-  final Color primaryColor;
-  final Color secondaryColor;
-  final Color backgroundColor;
-  final Color targetFillColor;
-  final Color aboveTarget;
-  final Color onTarget;
-  final Color belowTarget;
+class HeatmapColors {
+  final HSVColor start;
+  final HSVColor end;
 
-  GraphColors({
-    this.primaryColor,
-    this.secondaryColor,
-    this.backgroundColor,
-    this.targetFillColor,
-    this.aboveTarget,
-    this.onTarget,
-    this.belowTarget,
+  HeatmapColors({
+    this.start,
+    this.end,
   });
-}
 
-class AlertLevels {
-  final Color safe;
-  final Color alert;
-  final Color warning;
-  final Color neutral;
-
-  AlertLevels({
-    this.safe,
-    this.alert,
-    this.warning,
-    this.neutral,
-  });
-}
-
-class TrendLevelColors {
-  final Color increasing;
-  final Color decreasing;
-  final Color unchanged;
-
-  TrendLevelColors({
-    this.increasing,
-    this.decreasing,
-    this.unchanged,
-  });
+  Color getColor(double weight) {
+    return HSVColor.lerp(start, end, weight).toColor();
+  }
 }

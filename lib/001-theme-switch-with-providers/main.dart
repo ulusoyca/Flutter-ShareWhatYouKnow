@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SampleBarChart.dart';
+import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SamplePieChart.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
-import 'package:ulusoyapps_flutter/extensions/build_context_extensions.dart';
-import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
+import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
+import 'package:ulusoyapps_flutter/resources/themes/company_name.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
 void main() {
@@ -40,9 +41,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeViewModel = context.watch<ThemeViewModel>();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: context.appThemeData,
+      theme: themeViewModel.currentTheme.themeData,
       home: MyHomePage(title: '001 Theme Switch'),
     );
   }
@@ -58,6 +60,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  List<bool> _isSelected = [true, false, false];
 
   void _incrementCounter() {
     setState(() {
@@ -74,112 +77,172 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final themeViewModel = context.watch<ThemeViewModel>();
+    final onPrimaryColor = themeViewModel.colors.colorScheme.onPrimary;
+    final icons = themeViewModel.icons;
     return Scaffold(
-      appBar: AppBar(
-        brightness: context.brightness,
-        actions: [
-          GestureDetector(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_MEDIUM),
-              child: Icon(
-                themeViewModel.brightness == Brightness.dark
-                    ? MdiIcons.lightbulbOffOutline
-                    : MdiIcons.lightbulbOnOutline,
-                color: themeViewModel.appColors.colorScheme.onSurface,
-              ),
-            ),
-            onTap: () {
-              themeViewModel.toggleBrightness();
-            },
-          ),
-        ],
-        title: Text(widget.title),
-        //actions: [Icon()],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+      appBar: _appBar(themeViewModel, onPrimaryColor),
+      bottomNavigationBar: _bottomAppBar(icons, onPrimaryColor),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: Padding(
+        padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                '$_counter',
-                style: themeViewModel.baseTextTheme.headline4.copyWith(color: _getCounterColor(themeViewModel)),
-              ),
-              AspectRatio(
-                aspectRatio: 2.0,
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
-                    child: _barChart(themeViewModel),
-                  ),
-                ),
-              ),
-              RaisedButton(
-                child: Text('Reset Counter'),
-                onPressed: _resetCounter,
-              ),
+              _companySelection(themeViewModel),
+              _clickNumber(themeViewModel),
+              Divider(),
+              _pieChart(),
+              Divider(),
+              _barChart(),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This
+      floatingActionButton: _floatingButton(icons), // This
     );
   }
 
-  BarChart _barChart(ThemeViewModel themeViewModel) {
-    var graphColors = themeViewModel.appColors.graphColors;
-    return BarChart(
-      BarChartData(
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
-        barTouchData: BarTouchData(
-          enabled: false,
+  Widget _pieChart() => SizedBox(
+        height: 180,
+        child: SamplePieChart(),
+      );
+
+  Widget _barChart() => Padding(
+        padding: EdgeInsets.symmetric(vertical: AppDimens.SIZE_SPACING_LARGE),
+        child: SizedBox(
+          height: 180,
+          child: SampleBarChart(),
         ),
-        titlesData: FlTitlesData(
-          show: true,
-          bottomTitles: SideTitles(
-            showTitles: true,
-            textStyle: themeViewModel.baseTextTheme.caption,
-            margin: 20,
-            getTitles: (double value) {
-              switch (value.toInt()) {
-                case 0:
-                  return 'Below';
-                case 1:
-                  return 'On Target';
-                case 2:
-                  return 'Above';
-                default:
-                  return '';
+      );
+
+  Widget _companySelection(ThemeViewModel themeViewModel) {
+    return Material(
+      shape: themeViewModel.shapes.toggleButtonShapeBorder,
+      elevation: 2.0,
+      type: MaterialType.card,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: ToggleButtons(
+        children: [
+          _toggleButtonChild('ATA'),
+          _toggleButtonChild('Biohack'),
+          _toggleButtonChild('Codeland'),
+        ],
+        onPressed: (int index) {
+          switch (index) {
+            case 0:
+              themeViewModel.updateCompany(CompanyName.ATA);
+              break;
+            case 1:
+              themeViewModel.updateCompany(CompanyName.BIOHACK);
+              break;
+            case 2:
+              themeViewModel.updateCompany(CompanyName.CODELAND);
+              break;
+          }
+          setState(() {
+            for (int buttonIndex = 0; buttonIndex < _isSelected.length; buttonIndex++) {
+              if (buttonIndex == index) {
+                _isSelected[buttonIndex] = true;
+              } else {
+                _isSelected[buttonIndex] = false;
               }
-            },
+            }
+          });
+        },
+        isSelected: _isSelected,
+      ),
+    );
+  }
+
+  BottomAppBar _bottomAppBar(CompanyIcons icons, Color onPrimaryColor) {
+    return BottomAppBar(
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(icons.menu),
+            color: onPrimaryColor,
+            onPressed: () {},
           ),
-          leftTitles: SideTitles(showTitles: false),
-        ),
-        borderData: FlBorderData(
-          show: false,
-        ),
-        barGroups: [
-          BarChartGroupData(x: 0, barRods: [BarChartRodData(y: 5, color: graphColors.belowTarget)]),
-          BarChartGroupData(x: 1, barRods: [BarChartRodData(y: 10, color: graphColors.onTarget)]),
-          BarChartGroupData(x: 2, barRods: [BarChartRodData(y: 14, color: graphColors.aboveTarget)]),
+          IconButton(
+            icon: Icon(icons.search),
+            color: onPrimaryColor,
+            onPressed: () {},
+          ),
         ],
       ),
     );
   }
 
-  /// This is bad but here only for demonstration purposes.
-  /// View should not contain any logic. The logic should be in view model.
+  AppBar _appBar(ThemeViewModel themeViewModel, Color onPrimaryColor) {
+    var icons = themeViewModel.icons;
+    return AppBar(
+      brightness: themeViewModel.brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+      actions: [
+        GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_MEDIUM),
+            child: Icon(
+              themeViewModel.brightness == Brightness.dark ? icons.lightBulbOff : icons.lightBulbOn,
+              color: onPrimaryColor,
+            ),
+          ),
+          onTap: () {
+            themeViewModel.toggleBrightness();
+          },
+        ),
+      ],
+      title: Text(
+        widget.title,
+        style: themeViewModel.baseTextTheme.headline6.copyWith(color: onPrimaryColor),
+      ),
+      //act
+    );
+  }
+
+  Widget _toggleButtonChild(String text) => Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_LARGE),
+        child: Text(text),
+      );
+
+  Widget _clickNumber(ThemeViewModel themeViewModel) {
+    return Padding(
+      padding: EdgeInsets.only(top: AppDimens.SIZE_SPACING_XL),
+      child: Column(
+        children: [
+          Text(
+            'You have pushed this many times:',
+          ),
+          Text(
+            '$_counter',
+            style: themeViewModel.baseTextTheme.headline4.copyWith(color: _getCounterColor(themeViewModel)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              top: AppDimens.SIZE_SPACING_SMALL,
+              bottom: AppDimens.SIZE_SPACING_LARGE,
+            ),
+            child: RaisedButton(
+              child: Text('Reset Counter'),
+              onPressed: _resetCounter,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  FloatingActionButton _floatingButton(CompanyIcons icons) {
+    return FloatingActionButton(
+      onPressed: _incrementCounter,
+      tooltip: 'Increment',
+      child: Icon(icons.add),
+    );
+  }
+
   Color _getCounterColor(ThemeViewModel themeViewModel) {
-    AlertLevels alertLevels = themeViewModel.appColors.alertLevels;
+    AlertLevels alertLevels = themeViewModel.colors.alertLevels;
     if (_counter < 5) {
       return alertLevels.neutral;
     } else if (_counter < 10) {
