@@ -23,9 +23,6 @@ class AppColors {
   static const Color white = Colors.white;
   static const Color black = Colors.black;
   static const Color transparent = Colors.transparent;
-  static const Color red = Color(0xFFFF0000);
-  static const Color green = Color(0xFF59DD00);
-  static const Color brightSun = Color(0xFFFCC94A);
   static const Color balticSea = Color(0xFF18171d); // 900
   static const Color raisinBlack = Color(0xFF242329); // 900
   static const Color darkGrey = Color(0xFF121212);
@@ -46,7 +43,7 @@ class AppColors {
     600: Color(0xFF6235ce),
     700: Color(0xFF532dc5),
     800: Color(0xFF4427be),
-    900: Color(0xFF2b1bb0),
+    900: Color(0xFF271ab3),
   };
 
   static const MaterialColor bluePurple = MaterialColor(
@@ -131,11 +128,16 @@ class AppColors {
     50: Color(0xFFddf4f0),
     100: Color(0xFFaae3d8),
     200: Color(0xFF6dd2bf),
-    400: Color(0xFF00b092),
+    300: Color(0xFF23bea6),
+    400: Color(0xFF00af93),
+    500: Color(0xFF009f81),
+    600: Color(0xFF009174),
     700: Color(0xFF008164),
+    800: Color(0xFF007156),
+    900: Color(0xFF00543a),
   };
 
-  static const MaterialAccentColor veroneseGreen = MaterialAccentColor(
+  static const MaterialColor veroneseGreen = MaterialColor(
     0xFF6dd2bf,
     veroneseGreenSwatch,
   );
@@ -144,11 +146,16 @@ class AppColors {
     50: Color(0xFFffedef),
     100: Color(0xFFffd2d6),
     200: Color(0xFFf4a3a1),
+    300: Color(0xFFec7e7c),
     400: Color(0xFFf8635a),
+    500: Color(0xFFfd5440),
+    600: Color(0xFFef4c40),
     700: Color(0xFFde4239),
+    800: Color(0xFFd03c33),
+    900: Color(0xFFc13227),
   };
 
-  static const MaterialAccentColor tomato = MaterialAccentColor(
+  static const MaterialColor tomato = MaterialColor(
     0xFFf4a3a1,
     tomatoSwatch,
   );
@@ -157,11 +164,16 @@ class AppColors {
     50: Color(0xFFdafaff),
     100: Color(0xFF9ff2fe),
     200: Color(0xFF42e9ff),
+    300: Color(0xFF00defc),
     400: Color(0xFF00d5f7),
+    500: Color(0xFF00ccf4),
+    600: Color(0xFF00bbdf),
     700: Color(0xFF00a6c3),
+    800: Color(0xFF0091a9),
+    900: Color(0xFF006e79),
   };
 
-  static const MaterialAccentColor vividSky = MaterialAccentColor(
+  static const MaterialColor vividSky = MaterialColor(
     0xFF42e9ff,
     vividSkySwatch,
   );
@@ -170,11 +182,16 @@ class AppColors {
     50: Color(0xFFfaf4e4),
     100: Color(0xFFf3e2ba),
     200: Color(0xFFEDCF8E),
+    300: Color(0xFFe8bc5f),
     400: Color(0xFFe6ad3a),
+    500: Color(0xFFe5a01e),
+    600: Color(0xFFe19519),
     700: Color(0xFFdb8612),
+    800: Color(0xFFd67809),
+    900: Color(0xFFcd6100),
   };
 
-  static const MaterialAccentColor champagne = MaterialAccentColor(
+  static const MaterialColor champagne = MaterialColor(
     0xFFEDCF8E,
     champagneSwatch,
   );
@@ -183,22 +200,70 @@ class AppColors {
     50: Color(0xFFeedfe7),
     100: Color(0xFFd6afc6),
     200: Color(0xFFBA7BA1),
+    300: Color(0xFFa0467f),
     400: Color(0xFF8f156a),
+    500: Color(0xFF7d0056),
+    600: Color(0xFF730053),
     700: Color(0xFF65004d),
+    800: Color(0xFF570047),
+    900: Color(0xFF3f003c),
   };
 
-  static const mauve = MaterialAccentColor(
+  static const mauve = MaterialColor(
     0xFFBA7BA1,
     mauveSwatch,
   );
 
-  static const Map<int, Color> coffeeSwatch = {
-    50: Color(0xFFf5eae3),
-    200: Color(0xFFc2ab9f),
-    700: Color(0xFF43281f),
+  static const Map<int, Color> brightSunSwatch = {
+    50: Color(0xFFfef8e4),
+    100: Color(0xFFfeecb9),
+    200: Color(0xFFfddf8e),
+    300: Color(0xFFfdd464),
+    400: Color(0xFFfcca4a),
+    500: Color(0xFFfbc13f),
+    600: Color(0xFFf9b43a),
+    700: Color(0xFFf7a237),
+    800: Color(0xFFf59334),
+    900: Color(0xFFf3772c),
   };
 
-  static const coffee = MaterialAccentColor(
+  static const MaterialColor brightSun = MaterialColor(
+    0xFFfbc13f,
+    brightSunSwatch,
+  );
+
+  static const Map<int, Color> greenSwatch = {
+    50: Color(0xFFeefce7),
+    100: Color(0xFFd5f6c2),
+    200: Color(0xFFb7f09a),
+    300: Color(0xFF96e96c),
+    400: Color(0xFF78e344),
+    500: Color(0xFF58dd00),
+    600: Color(0xFF45cc00),
+    700: Color(0xFF21b700),
+    800: Color(0xFF00a300),
+    900: Color(0xFF008000),
+  };
+
+  static const MaterialColor green = MaterialColor(
+    0xFF59DD00,
+    greenSwatch,
+  );
+
+  static const Map<int, Color> coffeeSwatch = {
+    50: Color(0xFFf5eae3),
+    100: Color(0xFFddccc3),
+    200: Color(0xFFc2ab9f),
+    300: Color(0xFFa68a7a),
+    400: Color(0xFF92715e),
+    500: Color(0xFF7d5942),
+    600: Color(0xFF714f3c),
+    700: Color(0xFF624332),
+    800: Color(0xFF53362a),
+    900: Color(0xFF43291f),
+  };
+
+  static const coffee = MaterialColor(
     0xFFc2ab9f,
     coffeeSwatch,
   );
@@ -216,4 +281,18 @@ class HeatmapColors {
   Color getColor(double weight) {
     return HSVColor.lerp(start, end, weight).toColor();
   }
+}
+
+class AlertLevels {
+  final Color safe;
+  final Color alert;
+  final Color warning;
+  final Color neutral;
+
+  AlertLevels({
+    this.safe,
+    this.alert,
+    this.warning,
+    this.neutral,
+  });
 }

@@ -35,6 +35,8 @@ class CodelandColors extends CompanyColors {
     secondaryVariant: AppColors.orangeRed[700],
     onPrimary: AppColors.black,
     onSecondary: AppColors.black,
+    onBackground: AppColors.slateGrey[50],
+    onSurface: AppColors.slateGrey[50],
   );
 
   @override
@@ -45,5 +47,9 @@ class CodelandColors extends CompanyColors {
     secondaryVariant: AppColors.orangeRed[700],
     onPrimary: AppColors.white,
     onSecondary: AppColors.white,
+    background: AppColors.slateGrey[50],
+    surface: AppColors.slateGrey[100],
+    onBackground: AppColors.slateGrey[900],
+    onSurface: AppColors.slateGrey[900],
   );
 }

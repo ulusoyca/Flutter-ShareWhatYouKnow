@@ -14,8 +14,4 @@
  * limitations under the License.
  */
 
-enum CompanyName {
-  ATA,
-  BIOHACK,
-  CODELAND,
-}
+enum CompanyName { ATA, BIOHACK, CODELAND }

@@ -25,23 +25,11 @@ class AtaThemeData extends CompanyThemeData {
   @override
   FloatingActionButtonThemeData fabTheme;
 
-  @override
-  BottomAppBarTheme bottomAppBarTheme;
-
   AtaThemeData(
     Brightness brightness,
     CompanyColors companyColors,
     CompanyTextTheme companyTextTheme,
     CompanyShapes companyShapes,
   )   : fabTheme = FloatingActionButtonThemeData(),
-        bottomAppBarTheme = BottomAppBarTheme(
-          shape: CircularNotchedRectangle(),
-          color: companyColors.colorScheme.primary,
-        ),
-        super(
-          companyColors,
-          companyShapes,
-          companyTextTheme,
-          brightness,
-        );
+        super(companyColors, companyShapes, companyTextTheme, brightness);
 }

@@ -21,13 +21,10 @@ import 'company_icons.dart';
 class AtaIcons extends CompanyIcons {
   @override
   IconData menu = Icons.menu_rounded;
-
   @override
   IconData home = Icons.home_rounded;
-
   @override
   IconData search = Icons.search_rounded;
-
   @override
   IconData add = Icons.add_rounded;
 }

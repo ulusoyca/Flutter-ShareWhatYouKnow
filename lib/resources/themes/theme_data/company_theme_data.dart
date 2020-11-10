@@ -21,47 +21,32 @@ import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 abstract class CompanyThemeData {
   @protected
   FloatingActionButtonThemeData fabTheme;
-
-  @protected
-  BottomAppBarTheme bottomAppBarTheme;
-
   ThemeData get themeData => _themeData;
   ThemeData _themeData;
 
-  CompanyThemeData(
-    colors,
-    shapes,
-    companyTextTheme,
-    brightness,
-  ) {
+  CompanyThemeData(colors, shapes, companyTextTheme, brightness) {
     ButtonThemeData buttonThemeData = ButtonThemeData(
       height: AppDimens.SIZE_SPACING_3XL,
       colorScheme: colors.colorScheme,
       textTheme: ButtonTextTheme.primary,
       shape: shapes.buttonShapeBorder,
     );
-
     CardTheme cardTheme = CardTheme(
       shadowColor: colors.shadowColor,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5.0,
-      // this field changes the shadow of the card
       shape: shapes.cardShapeBorder,
     );
-
     DividerThemeData dividerThemeData = DividerThemeData(
       color: colors.dividerColor,
       thickness: 1,
     );
-
     IconThemeData primaryIconTheme = IconThemeData(
       color: colors.colorScheme.onPrimary,
     );
-
     ToggleButtonsThemeData toggleButtonsTheme = ToggleButtonsThemeData(
       borderWidth: 0.0,
     );
-
     ChipThemeData chipThemeData = ChipThemeData(
       backgroundColor: colors.colorScheme.background,
       disabledColor: colors.colorScheme.background,
@@ -72,6 +57,10 @@ abstract class CompanyThemeData {
       labelStyle: companyTextTheme.baseTextTheme.caption,
       secondaryLabelStyle: companyTextTheme.secondaryTextTheme.caption,
       brightness: brightness,
+    );
+    BottomAppBarTheme bottomAppBarTheme = BottomAppBarTheme(
+      shape: shapes.bottomAppBarShape,
+      color: colors.colorScheme.primary,
     );
 
     _themeData = ThemeData(

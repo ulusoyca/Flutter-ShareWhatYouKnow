@@ -19,7 +19,7 @@ import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
 class ContainedInputChip extends StatelessWidget {
   final String labelText;
-  final MaterialAccentColor color;
+  final MaterialColor color;
 
   const ContainedInputChip({
     @required this.labelText,
@@ -29,7 +29,7 @@ class ContainedInputChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeViewModel = context.watch<ThemeViewModel>();
-    final backgroundColor = themeViewModel.isDark ? color.shade200 : color.shade400;
+    final backgroundColor = themeViewModel.isDark ? color.shade200 : color.shade500;
     return RawChip(
       backgroundColor: backgroundColor,
       label: Text(

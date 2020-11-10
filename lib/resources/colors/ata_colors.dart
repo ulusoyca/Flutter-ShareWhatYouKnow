@@ -41,6 +41,8 @@ class AtaColors extends CompanyColors {
   final lightColorScheme = ColorScheme.light(
     primary: AppColors.bluePurple.shade500,
     primaryVariant: AppColors.bluePurple[700],
+    background: AppColors.bluePurple[50],
+    onBackground: AppColors.bluePurple[900],
     secondary: AppColors.turquoise.shade400,
     secondaryVariant: AppColors.turquoise[700],
     onPrimary: AppColors.white,

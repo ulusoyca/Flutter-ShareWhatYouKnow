@@ -18,12 +18,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
+import 'package:ulusoyapps_flutter/resources/shape/company_shapes.dart';
+import 'package:ulusoyapps_flutter/resources/strings/app_strings.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
 class SampleBarChart extends StatelessWidget {
   final data = List.generate(20, (_) => Random().nextInt(50));
+
+  static const int NUMBER_OF_LEGEND_BOXES = 7;
 
   @override
   Widget build(BuildContext context) {
@@ -35,37 +39,45 @@ class SampleBarChart extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
-        child: _barChart(
-          themeViewModel.colors.heatmapColors,
-          themeViewModel.shapes.barGraphShapeBorder,
+        child: Column(
+          children: [
+            _barChart(
+              themeViewModel.colors,
+              themeViewModel.shapes,
+            ),
+            SizedBox(height: AppDimens.SIZE_SPACING_MEDIUM),
+            _legend(
+              themeViewModel.baseTextTheme,
+              themeViewModel.colors,
+              themeViewModel.shapes.legendBoxShapeBorder,
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _barChart(HeatmapColors heatmapColors, ShapeBorder shapeBorder) {
+  Widget _barChart(CompanyColors companyColors, CompanyShapes companyShapes) {
     final maxValue = data.reduce(max);
     final minValue = data.reduce(min);
     final List<Widget> columns = [];
     for (int index = 0; index < data.length; index++) {
-      var weight = (data[index] - minValue) / (maxValue - minValue);
-      var color = heatmapColors.getColor(weight);
+      final weight = (data[index] - minValue) / (maxValue - minValue); // Calculate weight between 0 and 1
+      final color =
+          companyColors.heatmapColors.getColor(weight); // Linear interpolate between two HSVColors based on weight
       columns.add(
         Expanded(
-          flex: 1,
           child: Column(
             children: [
-              Expanded(
+              Flexible(
                 flex: _calculateFlex(1.0 - weight),
-                child: Container(),
+                child: Container(), // Empty transparent container from top to value
               ),
-              Expanded(
+              Flexible(
                 flex: _calculateFlex(weight),
-                child: Material(
-                  shape: shapeBorder,
-                  color: color,
-                  type: MaterialType.canvas,
-                  child: Container(),
+                child: Container(
+                  // Decorated container from bottom to value
+                  decoration: ShapeDecoration(shape: companyShapes.barGraphShapeBorder, color: color),
                 ),
               ),
             ],
@@ -75,11 +87,54 @@ class SampleBarChart extends StatelessWidget {
     }
     return Container(
       height: 100,
-      child: Row(
-        children: columns,
-      ),
+      child: Row(children: columns),
     );
   }
 
   int _calculateFlex(double weight) => (weight * 100).round();
+
+  Widget _legend(
+    TextTheme textTheme,
+    CompanyColors companyColors,
+    ShapeBorder shapeBorder,
+  ) {
+    final List<Widget> columns = [];
+    columns.add(_textLegend(AppStrings.MIN, textTheme, TextAlign.start));
+    for (int index = 0; index <= NUMBER_OF_LEGEND_BOXES; index++) {
+      columns.add(
+        Flexible(
+          flex: 1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.SIZE_SPACING_2XS),
+            child: Container(
+              height: AppDimens.SIZE_SPACING_SM,
+              decoration: ShapeDecoration(
+                shape: shapeBorder,
+                color: companyColors.heatmapColors.getColor(index / NUMBER_OF_LEGEND_BOXES),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    columns.add(_textLegend(AppStrings.MAX, textTheme, TextAlign.end));
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: columns,
+    );
+  }
+
+  Widget _textLegend(String text, TextTheme textTheme, TextAlign textAlignment) {
+    return SizedBox(
+      width: AppDimens.SIZE_SPACING_2XL,
+      child: Text(
+        text,
+        style: textTheme.caption,
+        textAlign: textAlignment,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
 }

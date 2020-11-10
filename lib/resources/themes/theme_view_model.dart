@@ -26,7 +26,10 @@ class ThemePreference {
   final String companyName;
   final Brightness brightness;
 
-  ThemePreference(this.companyName, this.brightness);
+  ThemePreference(
+    this.companyName,
+    this.brightness,
+  );
 }
 
 class ThemeViewModel with ChangeNotifier {

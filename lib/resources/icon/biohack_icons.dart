@@ -20,13 +20,10 @@ import 'company_icons.dart';
 class BiohackIcons extends CompanyIcons {
   @override
   IconData menu = Icons.menu_sharp;
-
   @override
   IconData home = Icons.home_sharp;
-
   @override
   IconData search = Icons.search_sharp;
-
   @override
   IconData add = Icons.add_sharp;
 }
