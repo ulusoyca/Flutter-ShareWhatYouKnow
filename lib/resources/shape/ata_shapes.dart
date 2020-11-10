@@ -14,27 +14,33 @@
  * limitations under the License.
  */
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 
 import 'company_shapes.dart';
 
 class AtaShapes extends CompanyShapes {
-  ShapeBorder buttonShapeBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-  );
-  ShapeBorder cardShapeBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(24)),
-  );
-  ShapeBorder chipShapeBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(16)),
-  );
-  ShapeBorder toggleButtonShapeBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-  );
-  ShapeBorder fabShapeBorder = CircleBorder();
-  ShapeBorder barGraphShapeBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(15),
-      topRight: Radius.circular(15),
-    ),
-  );
+  AtaShapes(CompanyColors colors) : super(colors);
+  @override
+  ShapeBorder get buttonShapeBorder => RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)));
+  @override
+  ShapeBorder get cardShapeBorder => RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(24)));
+  @override
+  ShapeBorder get chipShapeBorder => RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16)));
+  @override
+  ShapeBorder get legendBoxShapeBorder => RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)));
+  @override
+  ShapeBorder get toggleButtonShapeBorder => RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        side: BorderSide(color: primaryColor),
+      );
+  @override
+  ShapeBorder get fabShapeBorder => CircleBorder();
+  @override
+  ShapeBorder get barGraphShapeBorder => RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(15),
+        topRight: Radius.circular(15),
+      ));
+  @override
+  NotchedShape get bottomAppBarShape => CircularNotchedRectangle();
 }

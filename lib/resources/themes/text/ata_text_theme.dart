@@ -20,9 +20,7 @@ import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 import 'package:ulusoyapps_flutter/resources/themes/text/company_text_theme.dart';
 
 class AtaTextTheme extends CompanyTextTheme {
-  AtaTextTheme(
-    CompanyColors colors,
-  ) : super(colors);
+  AtaTextTheme(CompanyColors colors) : super(colors);
 
   @override
   TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme

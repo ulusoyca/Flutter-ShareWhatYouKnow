@@ -25,25 +25,14 @@ abstract class CompanyTextTheme {
   CompanyTextTheme(
     CompanyColors companyColors,
   ) {
-    final Color displayColor = companyColors.colorScheme.onSurface;
-    final Color bodyColor = companyColors.colorScheme.onSurface;
-    final Color primaryDisplayColor = companyColors.colorScheme.onPrimary;
-    final Color primaryBodyColor = companyColors.colorScheme.onPrimary;
-    baseTextTheme = buildBaseTextTheme(displayColor, bodyColor);
-    primaryTextTheme = buildPrimaryTextTheme(primaryDisplayColor, primaryBodyColor);
-    secondaryTextTheme = buildSecondaryTextTheme(primaryDisplayColor, primaryBodyColor);
+    final colorScheme = companyColors.colorScheme;
+    baseTextTheme = buildBaseTextTheme(colorScheme.onSurface, colorScheme.onSurface);
+    primaryTextTheme = buildPrimaryTextTheme(colorScheme.onPrimary, colorScheme.onPrimary);
+    secondaryTextTheme = buildSecondaryTextTheme(colorScheme.onSecondary, colorScheme.onSecondary);
   }
 
-  TextTheme buildBaseTextTheme(
-    Color displayColor,
-    Color bodyColor,
-  );
-
-  TextTheme buildPrimaryTextTheme(
-    Color displayColor,
-    Color bodyColor,
-  );
-
+  TextTheme buildBaseTextTheme(Color displayColor, Color bodyColor);
+  TextTheme buildPrimaryTextTheme(Color displayColor, Color bodyColor);
   TextTheme buildSecondaryTextTheme(
     Color displayColor,
     Color bodyColor,

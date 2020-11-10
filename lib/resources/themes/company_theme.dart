@@ -46,7 +46,7 @@ class CompanyTheme {
   CompanyTheme.ata(this.brightness) {
     colors = AtaColors(brightness);
     textTheme = AtaTextTheme(colors);
-    shapes = AtaShapes();
+    shapes = AtaShapes(colors);
     icons = AtaIcons();
     themeData = AtaThemeData(brightness, colors, textTheme, shapes).themeData;
   }
@@ -54,7 +54,7 @@ class CompanyTheme {
   CompanyTheme.biohack(this.brightness) {
     colors = BiohackColors(brightness);
     textTheme = BiohackTextTheme(colors);
-    shapes = BiohackShapes();
+    shapes = BiohackShapes(colors);
     icons = BiohackIcons();
     themeData = BiohackThemeData(brightness, colors, textTheme, shapes).themeData;
   }
@@ -62,7 +62,7 @@ class CompanyTheme {
   CompanyTheme.codeland(this.brightness) {
     colors = CodelandColors(brightness);
     textTheme = CodelandTextTheme(colors);
-    shapes = CodelandShapes();
+    shapes = CodelandShapes(colors);
     icons = CodelandIcons();
     themeData = CodelandThemeData(brightness, colors, textTheme, shapes).themeData;
   }

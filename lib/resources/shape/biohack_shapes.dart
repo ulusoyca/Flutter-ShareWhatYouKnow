@@ -14,29 +14,34 @@
  * limitations under the License.
  */
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 
 import 'company_shapes.dart';
 
 class BiohackShapes extends CompanyShapes {
-  ShapeBorder buttonShapeBorder = BeveledRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-  );
-  ShapeBorder cardShapeBorder = BeveledRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(24)),
-  );
-  ShapeBorder chipShapeBorder = BeveledRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(16)),
-  );
-  ShapeBorder toggleButtonShapeBorder = BeveledRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(28)),
-  );
-  ShapeBorder fabShapeBorder = BeveledRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(28)),
-  );
-  ShapeBorder barGraphShapeBorder = BeveledRectangleBorder(
-    borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(10),
-      topRight: Radius.circular(10),
-    ),
-  );
+  BiohackShapes(CompanyColors colors) : super(colors);
+  @override
+  ShapeBorder get buttonShapeBorder => BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)));
+  @override
+  ShapeBorder get cardShapeBorder => BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(24)));
+  @override
+  ShapeBorder get chipShapeBorder => BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16)));
+  @override
+  ShapeBorder get legendBoxShapeBorder => BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5)));
+  @override
+  ShapeBorder get toggleButtonShapeBorder => BeveledRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(28)), side: BorderSide(color: primaryColor));
+  @override
+  ShapeBorder get fabShapeBorder => BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(28)));
+  @override
+  ShapeBorder get barGraphShapeBorder => BeveledRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+      ));
+  @override
+  NotchedShape get bottomAppBarShape => AutomaticNotchedShape(
+        BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+        BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(28))),
+      );
 }

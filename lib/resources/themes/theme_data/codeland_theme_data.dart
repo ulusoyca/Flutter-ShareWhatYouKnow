@@ -25,26 +25,11 @@ class CodelandThemeData extends CompanyThemeData {
   @override
   FloatingActionButtonThemeData fabTheme;
 
-  @override
-  BottomAppBarTheme bottomAppBarTheme;
-
   CodelandThemeData(
     Brightness brightness,
     CompanyColors companyColors,
     CompanyTextTheme companyTextTheme,
     CompanyShapes companyShapes,
   )   : fabTheme = FloatingActionButtonThemeData(shape: companyShapes.fabShapeBorder),
-        bottomAppBarTheme = BottomAppBarTheme(
-          shape: AutomaticNotchedShape(
-            companyShapes.fabShapeBorder,
-            companyShapes.fabShapeBorder,
-          ),
-          color: companyColors.colorScheme.primary,
-        ),
-        super(
-          companyColors,
-          companyShapes,
-          companyTextTheme,
-          brightness,
-        );
+        super(companyColors, companyShapes, companyTextTheme, brightness);
 }

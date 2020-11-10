@@ -32,10 +32,7 @@ class BiohackTextTheme extends CompanyTextTheme {
           color: displayColor,
         ),
       )
-      .apply(
-        displayColor: displayColor,
-        bodyColor: bodyColor,
-      );
+      .apply(displayColor: displayColor, bodyColor: bodyColor);
 
   @override
   TextTheme buildSecondaryTextTheme(Color displayColor, Color bodyColor) => baseTextTheme

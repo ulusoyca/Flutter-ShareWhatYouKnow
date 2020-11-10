@@ -19,9 +19,10 @@ import 'package:provider/provider.dart';
 import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SampleBarChart.dart';
 import 'package:ulusoyapps_flutter/001-theme-switch-with-providers/widgets/SamplePieChart.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
-import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
+import 'package:ulusoyapps_flutter/resources/colors/app_colors.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 import 'package:ulusoyapps_flutter/resources/icon/company_icons.dart';
+import 'package:ulusoyapps_flutter/resources/strings/app_strings.dart';
 import 'package:ulusoyapps_flutter/resources/themes/company_name.dart';
 import 'package:ulusoyapps_flutter/resources/themes/theme_view_model.dart';
 
@@ -119,13 +120,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Material(
       shape: themeViewModel.shapes.toggleButtonShapeBorder,
       elevation: 2.0,
-      type: MaterialType.card,
+      type: MaterialType.canvas,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: ToggleButtons(
         children: [
-          _toggleButtonChild('ATA'),
-          _toggleButtonChild('Biohack'),
-          _toggleButtonChild('Codeland'),
+          _toggleButtonChild(AppStrings.COMPANY_ATA),
+          _toggleButtonChild(AppStrings.COMPANY_BIOHACK),
+          _toggleButtonChild(AppStrings.COMPANY_CODELAND),
         ],
         onPressed: (int index) {
           switch (index) {
@@ -212,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         children: [
           Text(
-            'You have pushed this many times:',
+            AppStrings.PUSH_MESSAGE,
           ),
           Text(
             '$_counter',
@@ -224,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
               bottom: AppDimens.SIZE_SPACING_LARGE,
             ),
             child: RaisedButton(
-              child: Text('Reset Counter'),
+              child: Text(AppStrings.RESET_COUNTER),
               onPressed: _resetCounter,
             ),
           )
@@ -236,15 +237,17 @@ class _MyHomePageState extends State<MyHomePage> {
   FloatingActionButton _floatingButton(CompanyIcons icons) {
     return FloatingActionButton(
       onPressed: _incrementCounter,
-      tooltip: 'Increment',
+      tooltip: AppStrings.INCREMENT,
       child: Icon(icons.add),
     );
   }
 
   Color _getCounterColor(ThemeViewModel themeViewModel) {
     AlertLevels alertLevels = themeViewModel.colors.alertLevels;
-    if (_counter < 5) {
+    if (_counter == 0) {
       return alertLevels.neutral;
+    } else if (_counter < 5) {
+      return alertLevels.safe;
     } else if (_counter < 10) {
       return alertLevels.warning;
     } else {

@@ -14,26 +14,34 @@
  * limitations under the License.
  */
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 
 import 'company_shapes.dart';
 
 class CodelandShapes extends CompanyShapes {
-  ShapeBorder buttonShapeBorder = ContinuousRectangleBorder(
-    borderRadius: BorderRadius.circular(5.0),
-  );
-  ShapeBorder cardShapeBorder = ContinuousRectangleBorder(
-    borderRadius: BorderRadius.circular(5.0),
-  );
-  ShapeBorder chipShapeBorder = ContinuousRectangleBorder(
-    borderRadius: BorderRadius.circular(5.0),
-  );
-  ShapeBorder toggleButtonShapeBorder = ContinuousRectangleBorder(
-    borderRadius: BorderRadius.circular(5.0),
-  );
-  ShapeBorder fabShapeBorder = ContinuousRectangleBorder(
-    borderRadius: BorderRadius.circular(12.0),
-  );
-  ShapeBorder barGraphShapeBorder = ContinuousRectangleBorder(
-    borderRadius: BorderRadius.circular(5.0),
-  );
+  CodelandShapes(CompanyColors colors) : super(colors);
+  @override
+  ShapeBorder get buttonShapeBorder => ContinuousRectangleBorder(borderRadius: BorderRadius.circular(5.0));
+  @override
+  ShapeBorder get cardShapeBorder => ContinuousRectangleBorder(borderRadius: BorderRadius.circular(5.0));
+  @override
+  ShapeBorder get chipShapeBorder => ContinuousRectangleBorder(borderRadius: BorderRadius.circular(5.0));
+  @override
+  ShapeBorder get legendBoxShapeBorder => ContinuousRectangleBorder(borderRadius: BorderRadius.circular(5.0));
+  @override
+  ShapeBorder get toggleButtonShapeBorder =>
+      ContinuousRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: BorderSide(color: primaryColor));
+  @override
+  ShapeBorder get fabShapeBorder => ContinuousRectangleBorder(borderRadius: BorderRadius.circular(12.0));
+  @override
+  ShapeBorder get barGraphShapeBorder => ContinuousRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(5),
+        topRight: Radius.circular(5),
+      ));
+  @override
+  NotchedShape get bottomAppBarShape => AutomaticNotchedShape(
+        ContinuousRectangleBorder(borderRadius: BorderRadius.zero),
+        ContinuousRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      );
 }

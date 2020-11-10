@@ -21,6 +21,7 @@ abstract class CompanyIcons {
   IconData home;
   IconData search;
   IconData add;
+
   IconData lightBulbOff = MdiIcons.lightbulbOffOutline;
   IconData lightBulbOn = MdiIcons.lightbulbOnOutline;
 }

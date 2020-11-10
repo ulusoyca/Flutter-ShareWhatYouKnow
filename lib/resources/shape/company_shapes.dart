@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/resources/colors/company_colors.dart';
 
 abstract class CompanyShapes {
+  final CompanyColors companyColors;
+  CompanyShapes(this.companyColors);
+  Color get primaryColor => companyColors.colorScheme.primary;
   ShapeBorder buttonShapeBorder;
   ShapeBorder cardShapeBorder;
-  ShapeBorder snackbarShapeBorder;
   ShapeBorder chipShapeBorder;
+  ShapeBorder legendBoxShapeBorder;
   ShapeBorder toggleButtonShapeBorder;
   ShapeBorder barGraphShapeBorder;
   ShapeBorder fabShapeBorder;
+  NotchedShape bottomAppBarShape;
 }

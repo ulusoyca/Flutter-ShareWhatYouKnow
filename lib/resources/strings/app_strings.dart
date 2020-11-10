@@ -13,3 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+class AppStrings {
+  AppStrings._();
+
+  /// !! Not localized !!
+  static const String COMPANY_ATA = 'ATA';
+  static const String COMPANY_BIOHACK = 'Biohack';
+  static const String COMPANY_CODELAND = 'Codeland';
+
+  static const String MIN = 'Min';
+  static const String MAX = 'Max';
+  static const String PUSH_MESSAGE = 'You have pushed this many times:';
+  static const String RESET_COUNTER = 'Reset Counter';
+  static const String INCREMENT = 'Increment';
+}

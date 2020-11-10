@@ -21,13 +21,10 @@ import 'company_icons.dart';
 class CodelandIcons extends CompanyIcons {
   @override
   IconData menu = Icons.menu;
-
   @override
   IconData home = Icons.home;
-
   @override
   IconData search = Icons.search;
-
   @override
   IconData add = Icons.add;
 }
