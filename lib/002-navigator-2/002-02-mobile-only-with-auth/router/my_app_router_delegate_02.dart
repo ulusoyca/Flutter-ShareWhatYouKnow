@@ -1,0 +1,129 @@
+/*
+ * Copyright 2020 Cagatay Ulusoy (Ulus Oy Apps). All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/002-02-mobile-only-with-auth/router/pages/color_page_02.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/002-02-mobile-only-with-auth/router/pages/home_page_02.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/002-02-mobile-only-with-auth/router/pages/login_page_02.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/002-02-mobile-only-with-auth/router/pages/shape_page_02.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/002-02-mobile-only-with-auth/router/pages/splash_page_02.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/data/auth_repository.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+
+class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigatorRouterDelegateMixin {
+
+  final GlobalKey<NavigatorState> _navigatorKey;
+
+  bool _isLoggedIn;
+  bool get isLoggedIn => _isLoggedIn;
+  set isLoggedIn(value) {
+    _isLoggedIn = value;
+    notifyListeners();
+  }
+
+  String _selectedColorCode;
+  String get selectedColorCode => _selectedColorCode;
+  set selectedColorCode(String value) {
+    _selectedColorCode = value;
+    notifyListeners();
+  }
+
+  ShapeBorderType _selectedShapeBorderType;
+  ShapeBorderType get selectedShapeBorderType => _selectedShapeBorderType;
+  set selectedShapeBorderType(ShapeBorderType value) {
+    _selectedShapeBorderType = value;
+    notifyListeners();
+  }
+
+  final AuthRepository authRepository;
+
+  @override
+  GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+
+  MyAppRouterDelegate(this.authRepository) : _navigatorKey = GlobalKey<NavigatorState>() {
+    _init();
+  }
+
+  _init() async {
+    isLoggedIn = await authRepository.isUserLoggedIn();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Page> stack;
+    if (isLoggedIn == null) {
+      stack = _splashStack;
+    } else if (isLoggedIn) {
+      stack = _loggedInStack;
+    } else {
+      stack = _loggedOutStack;
+    }
+    return Navigator(
+      key: navigatorKey,
+      pages: stack,
+      onPopPage: (route, result) {
+        if (!route.didPop(result)) return false;
+        if (selectedShapeBorderType == null) selectedColorCode = null;
+        selectedShapeBorderType = null;
+        return true;
+      },
+    );
+  }
+
+  List<Page> get _splashStack => [SplashPage(process: 'Splash Screen:\n\nChecking auth state')];
+
+  List<Page> get _loggedOutStack => [
+        LoginPage(onLogin: () {
+          isLoggedIn = true;
+        })
+      ];
+
+  List<Page> get _loggedInStack {
+    final onLogout = () {
+      isLoggedIn = false;
+      _clear();
+    };
+    return [
+      HomePage(
+        onColorTap: (String colorCode) {
+          selectedColorCode = colorCode;
+        },
+        onLogout: onLogout,
+      ),
+      if (selectedColorCode != null)
+        ColorPage(
+          selectedColorCode: selectedColorCode,
+          onShapeTap: (ShapeBorderType shapeBorderType) {
+            this.selectedShapeBorderType = shapeBorderType;
+          },
+          onLogout: onLogout,
+        ),
+      if (selectedShapeBorderType != null)
+        ShapePage(
+          colorCode: selectedColorCode,
+          shapeBorderType: selectedShapeBorderType,
+          onLogout: onLogout,
+        )
+    ];
+  }
+
+  _clear() {
+    selectedColorCode = null;
+    selectedShapeBorderType = null;
+  }
+
+  @override
+  Future<void> setNewRoutePath(configuration) async { /* Do Nothing */ }
+}

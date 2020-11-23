@@ -194,6 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ],
+      backgroundColor: themeViewModel.colors.colorScheme.primary,
       title: Text(
         widget.title,
         style: themeViewModel.baseTextTheme.headline6.copyWith(color: onPrimaryColor),
