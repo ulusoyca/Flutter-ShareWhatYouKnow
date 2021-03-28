@@ -28,9 +28,9 @@ class AuthRepository {
       return preference.getBool(_AUTH_KEY, defaultValue: false) ?? false;
     });
 
-  Future<bool> _updateLoginStatus(bool isLoggedIn) =>
+  Future<bool> _updateLoginStatus(bool loggedIn) =>
       Future.delayed(Duration(seconds: 2)).then((value) {
-        return preference.putBool(_AUTH_KEY, isLoggedIn) ?? false;
+        return preference.putBool(_AUTH_KEY, loggedIn) ?? false;
       });
 
   Future<bool> logout() => _updateLoginStatus(false);

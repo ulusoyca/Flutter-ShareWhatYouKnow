@@ -45,11 +45,14 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
     notifyListeners();
   }
 
-  bool _isLoggedIn;
-  bool get isLoggedIn => _isLoggedIn;
-  set isLoggedIn(value) {
-    _isLoggedIn = value;
-    if (value == false) _clear();
+  bool _loggedIn;
+  bool get loggedIn => _loggedIn;
+  set loggedIn(value) {
+    if (_loggedIn == true && value == false) {
+      // It is a logout!
+      _clear();
+    }
+    _loggedIn = value;
     notifyListeners();
   }
 
@@ -88,17 +91,17 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
   }
 
   _init() async {
-    isLoggedIn = await authRepository.isUserLoggedIn();
-    if (isLoggedIn == true) {
+    loggedIn = await authRepository.isUserLoggedIn();
+    if (loggedIn == true) {
       colors = await colorsRepository.fetchColors();
     }
   }
 
   @override
   MyAppConfiguration get currentConfiguration {
-    if (isLoggedIn == false) {
+    if (loggedIn == false) {
       return MyAppConfiguration.login();
-    } else if (isLoggedIn == null) {
+    } else if (loggedIn == null) {
       return MyAppConfiguration.splash();
     } else if (show404 == true) {
       return MyAppConfiguration.unknown();
@@ -118,9 +121,9 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
     List<Page> stack;
     if (show404 == true) {
       stack = _unknownStack;
-    }else if (isLoggedIn == null || (isLoggedIn && colors == null)) {
+    }else if (loggedIn == null || (loggedIn && colors == null)) {
       stack = _splashStack;
-    } else if (isLoggedIn) {
+    } else if (loggedIn) {
       stack = _loggedInStack;
     } else {
       stack = _loggedOutStack;
@@ -139,7 +142,7 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
 
   List<Page> get _splashStack {
     String process;
-    if (isLoggedIn == null) {
+    if (loggedIn == null) {
       process = 'Checking login state...';
     } else if (colors == null) {
       process = 'Fetching colors...';
@@ -153,14 +156,14 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
 
   List<Page> get _loggedOutStack => [
         LoginPage(onLogin: () async {
-          isLoggedIn = true;
+          loggedIn = true;
           colors = await colorsRepository.fetchColors();
         })
       ];
 
   List<Page> get _loggedInStack {
     final onLogout = () async {
-      isLoggedIn = false;
+      loggedIn = false;
     };
     return [
       HomePage(

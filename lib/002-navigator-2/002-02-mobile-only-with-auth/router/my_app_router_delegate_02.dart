@@ -26,10 +26,10 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
 
   final GlobalKey<NavigatorState> _navigatorKey;
 
-  bool _isLoggedIn;
-  bool get isLoggedIn => _isLoggedIn;
-  set isLoggedIn(value) {
-    _isLoggedIn = value;
+  bool _loggedIn;
+  bool get loggedIn => _loggedIn;
+  set loggedIn(value) {
+    _loggedIn = value;
     notifyListeners();
   }
 
@@ -57,15 +57,15 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   }
 
   _init() async {
-    isLoggedIn = await authRepository.isUserLoggedIn();
+    loggedIn = await authRepository.isUserLoggedIn();
   }
 
   @override
   Widget build(BuildContext context) {
     List<Page> stack;
-    if (isLoggedIn == null) {
+    if (loggedIn == null) {
       stack = _splashStack;
-    } else if (isLoggedIn) {
+    } else if (loggedIn) {
       stack = _loggedInStack;
     } else {
       stack = _loggedOutStack;
@@ -86,13 +86,13 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
 
   List<Page> get _loggedOutStack => [
         LoginPage(onLogin: () {
-          isLoggedIn = true;
+          loggedIn = true;
         })
       ];
 
   List<Page> get _loggedInStack {
     final onLogout = () {
-      isLoggedIn = false;
+      loggedIn = false;
       _clear();
     };
     return [

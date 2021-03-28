@@ -28,10 +28,10 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   final AuthRepository authRepository;
   final ColorsRepository colorsRepository;
 
-  bool _isLoggedIn;
-  bool get isLoggedIn => _isLoggedIn;
-  set isLoggedIn(value) {
-    _isLoggedIn = value;
+  bool _loggedIn;
+  bool get loggedIn => _loggedIn;
+  set loggedIn(value) {
+    _loggedIn = value;
     notifyListeners();
   }
 
@@ -64,8 +64,8 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   }
 
   _init() async {
-    isLoggedIn = await authRepository.isUserLoggedIn();
-    if (isLoggedIn) {
+    loggedIn = await authRepository.isUserLoggedIn();
+    if (loggedIn) {
       colors = await colorsRepository.fetchColors();
     }
   }
@@ -73,9 +73,9 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   @override
   Widget build(BuildContext context) {
     List<Page> stack;
-    if (isLoggedIn == null || (isLoggedIn && colors == null)) {
+    if (loggedIn == null || (loggedIn && colors == null)) {
       stack = _splashStack;
-    } else if (isLoggedIn) {
+    } else if (loggedIn) {
       stack = _loggedInStack;
     } else {
       stack = _loggedOutStack;
@@ -94,7 +94,7 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
 
   List<Page> get _splashStack {
     String process;
-    if (isLoggedIn == null) {
+    if (loggedIn == null) {
       process = 'Checking login state...';
     } else if (colors == null) {
       process = 'Fetching colors...';
@@ -107,14 +107,14 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   List<Page> get _loggedOutStack =>
       [
         LoginPage(onLogin: () async {
-          isLoggedIn = true;
+          loggedIn = true;
           colors = await colorsRepository.fetchColors();
         })
       ];
 
   List<Page> get _loggedInStack {
     final onLogout = () async {
-      isLoggedIn = false;
+      loggedIn = false;
       _clear();
     };
     return [
