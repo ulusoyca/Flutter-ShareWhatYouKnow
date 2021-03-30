@@ -57,7 +57,7 @@ flutter run lib/001-theme-switch-with-providers/main.dart
 
 <h2 align="center">002 - NAVIGATOR 2.0</h2>
 
-<a href= "https://medium.com/@ulusoyca/switching-between-client-specific-themes-for-b2b-flutter-apps-part-i-design-c9c501700c0e">Flutter Navigator 2.0 for Authentication and Bootstrapping — Part 1: Introduction</a>
+<a href= "https://ulusoyca.medium.com/flutter-navigator-2-0-for-authentication-and-bootstrapping-part-1-introduction-d7b6dfdd0849">Flutter Navigator 2.0 for Authentication and Bootstrapping — Part 1: Introduction</a>
 
 <p>The Navigator 2.0 API gives more control to Flutter developers to implement the application navigation by introducing multiple components with separated responsibilities. When it was announced, many Flutter devs, including me, initially found this new way of navigation complicated and hard to use due to the lack of training materials and samples. The Flutter team is well aware of this situation, and they started
 Navigator 2.0 API Usability Research. Anyone can contribute to this research project and engage in the discussions.</p>
