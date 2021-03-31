@@ -44,7 +44,7 @@ these posts for demonstration purposes.
 Here are the links for the articles:
 
 <li> <a href= "https://medium.com/@ulusoyca/switching-between-client-specific-themes-for-b2b-flutter-apps-part-i-design-c9c501700c0e">Switching Between Client Specific Themes for B2B Flutter Apps - Part I: Design</li>
-<li> <a href= "https://medium.com/@ulusoyca/switching-between-client-specific-themes-for-b2b-flutter-apps-part-i-design-c9c501700c0e">Switching Between Client Specific Themes for B2B Flutter Apps - Part II: Implementation</li>
+<li> <a href= "https://medium.com/swlh/switching-between-client-specific-themes-for-b2b-flutter-apps-part-ii-development-9b0f5e49317">Switching Between Client Specific Themes for B2B Flutter Apps - Part II: Implementation</li>
 
 #### Usage (Theme Switch )
 To start the app with the command line, first open an iOS simulator,
