@@ -5,12 +5,14 @@ import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 
 class ShapeBorderGridView extends StatelessWidget {
   final Function(ShapeBorderType) onShapeTap;
+  final ScrollPhysics scrollPhysics;
   final Color color;
 
   const ShapeBorderGridView({
     Key key,
     @required this.color,
     @required this.onShapeTap,
+    this.scrollPhysics = const AlwaysScrollableScrollPhysics(),
   }) : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class ShapeBorderGridView extends StatelessWidget {
         padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
         child: GridView.builder(
           itemCount: shapeBorders.length,
+          physics: scrollPhysics,
           itemBuilder: (BuildContext context, int index) {
             final shapeBorderType = shapeBorders[index];
             return ShapedButton(
