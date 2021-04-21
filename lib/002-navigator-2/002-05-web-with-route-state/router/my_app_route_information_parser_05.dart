@@ -71,7 +71,8 @@ class MyAppRouteInformationParser extends RouteInformationParser<MyAppConfigurat
       return RouteInformation(location: '/colors/${configuration.colorCode}');
     } else if (configuration.isShapePage) {
       return RouteInformation(
-          location: '/colors/${configuration.colorCode}/${configuration.shapeBorderType.getStringRepresentation()}');
+        location: '/colors/${configuration.colorCode}/${configuration.shapeBorderType.getStringRepresentation()}',
+      );
     } else {
       return null;
     }

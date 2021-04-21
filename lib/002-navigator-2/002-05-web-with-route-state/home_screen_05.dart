@@ -27,13 +27,12 @@ import 'package:ulusoyapps_flutter/002-navigator-2/widgets/in_progress_message.d
 import 'package:ulusoyapps_flutter/002-navigator-2/widgets/shape_border_gridview.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final Function(String) onColorTap;
   final List<Color> colors;
   final VoidCallback onLogout;
   final Function(ShapeBorderType) onShapeTap;
-  final int startIndex;
-  final ItemScrollController _itemScrollController = ItemScrollController();
+  final String selectedColorCode;
 
   HomeScreen({
     Key key,
@@ -41,8 +40,23 @@ class HomeScreen extends StatelessWidget {
     @required this.onLogout,
     @required this.colors,
     @required this.onShapeTap,
-    @required this.startIndex,
+    @required this.selectedColorCode,
   }) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final ItemScrollController _itemScrollController = ItemScrollController();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollTo(widget.selectedColorCode);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +66,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: _body(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: LogoutFab(onLogout: onLogout),
+      floatingActionButton: LogoutFab(onLogout: widget.onLogout),
     );
   }
 
@@ -85,15 +99,10 @@ class HomeScreen extends StatelessWidget {
 
   Widget _colorGrid() => Material(
         child: ColorGrid(
-          colors: colors,
+          colors: widget.colors,
           onColorTap: (String value) {
-            int index = _findIndexFromColorCode(value);
-            _itemScrollController.scrollTo(
-              index: index,
-              duration: Duration(seconds: 2),
-              curve: Curves.easeInOutCubic,
-            );
-            onColorTap(value);
+            _scrollTo(value);
+            widget.onColorTap(value);
           },
         ),
         elevation: 4.0,
@@ -102,9 +111,9 @@ class HomeScreen extends StatelessWidget {
   Widget _shapedColorList() {
     return ScrollablePositionedList.builder(
       itemScrollController: _itemScrollController,
-      itemCount: colors.length,
+      itemCount: widget.colors.length,
       itemBuilder: (BuildContext context, int index) {
-        final color = colors[index];
+        final color = widget.colors[index];
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -113,8 +122,8 @@ class HomeScreen extends StatelessWidget {
               ShapeBorderGridView(
                 color: color,
                 onShapeTap: (ShapeBorderType type) {
-                  onColorTap(color.toHex(leadingHashSign: false));
-                  onShapeTap(type);
+                  widget.onColorTap(color.toHex(leadingHashSign: false));
+                  widget.onShapeTap(type);
                 },
                 scrollPhysics: NeverScrollableScrollPhysics(),
               ),
@@ -127,7 +136,16 @@ class HomeScreen extends StatelessWidget {
   }
 
   int _findIndexFromColorCode(String value) {
-    var indexWhere = colors.indexWhere((element) => element.toHex() == value);
+    var indexWhere = widget.colors.indexWhere((element) => element.toHex() == value);
     return indexWhere == -1 ? 0 : indexWhere;
+  }
+
+  void _scrollTo(String value) {
+    int index = _findIndexFromColorCode(value);
+    _itemScrollController.scrollTo(
+      index: index,
+      duration: Duration(seconds: 2),
+      curve: Curves.easeInOutCubic,
+    );
   }
 }

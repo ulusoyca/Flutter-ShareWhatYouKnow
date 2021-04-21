@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/router/pages/home_page_05.dart';
@@ -182,7 +181,7 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
         },
         colors: colors,
         onLogout: onLogout,
-        startIndex: Random().nextInt(colors.length),
+        selectedColorCode: selectedColorCode,
         onShapeTap: (ShapeBorderType shapeBorderType) {
           selectedShapeBorderType = shapeBorderType;
         },

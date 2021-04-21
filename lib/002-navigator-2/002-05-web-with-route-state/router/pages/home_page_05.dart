@@ -24,14 +24,14 @@ class HomePage extends Page {
   final VoidCallback onLogout;
   final List<Color> colors;
   final Function(ShapeBorderType) onShapeTap;
-  final int startIndex;
+  final String selectedColorCode;
 
   HomePage({
     @required this.onColorTap,
     @required this.onLogout,
     @required this.colors,
     @required this.onShapeTap,
-    @required this.startIndex,
+    @required this.selectedColorCode,
   }) : super(key: ValueKey('HomePage'));
 
   @override
@@ -44,7 +44,7 @@ class HomePage extends Page {
           onLogout: onLogout,
           colors: colors,
           onShapeTap: onShapeTap,
-          startIndex: startIndex,
+          selectedColorCode: selectedColorCode,
         );
       },
     );
