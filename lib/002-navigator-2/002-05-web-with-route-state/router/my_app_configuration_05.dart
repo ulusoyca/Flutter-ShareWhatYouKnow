@@ -1,51 +1,30 @@
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
 class MyAppConfiguration {
-  final String colorCode;
+  final String selectedColorCode;
   final ShapeBorderType shapeBorderType;
   final bool unknown;
-  final bool loggedIn;
+  final String colorCodeFromBrowserHistory;
 
-  MyAppConfiguration.splash()
+  MyAppConfiguration.home({String selectedColorCode, String colorCodeFromBrowserHistory})
       : unknown = false,
-        loggedIn = null,
         shapeBorderType = null,
-        colorCode = null;
-  
-  MyAppConfiguration.login()
-      : unknown = false,
-        loggedIn = false,
-        shapeBorderType = null,
-        colorCode = null;
-  
+        colorCodeFromBrowserHistory = colorCodeFromBrowserHistory,
+        selectedColorCode = selectedColorCode;
+
   MyAppConfiguration.shapeBorder(String colorCode, ShapeBorderType shape)
       : unknown = false,
         shapeBorderType = shape,
-        loggedIn = true,
-        colorCode = colorCode;
-
-  MyAppConfiguration.color(String colorCode)
-      : unknown = false,
-        shapeBorderType = null,
-        loggedIn = true,
-        colorCode = colorCode;
-
-  MyAppConfiguration.home()
-      : unknown = false,
-        shapeBorderType = null,
-        loggedIn = true,
-        colorCode = null;
+        colorCodeFromBrowserHistory = null,
+        selectedColorCode = colorCode;
 
   MyAppConfiguration.unknown()
       : unknown = true,
         shapeBorderType = null,
-        loggedIn = null,
-        colorCode = null;
+        colorCodeFromBrowserHistory = null,
+        selectedColorCode = null;
 
   bool get isUnknown => unknown == true;
-  bool get isHomePage => unknown == false && loggedIn == true && colorCode == null && shapeBorderType == null;
-  bool get isColorPage =>  unknown == false && loggedIn == true && colorCode != null && shapeBorderType == null;
-  bool get isShapePage =>  unknown == false && loggedIn == true && colorCode != null && shapeBorderType != null;
-  bool get isLoginPage =>  unknown == false && loggedIn == false;
-  bool get isSplashPage =>  unknown == false && loggedIn == null;
+  bool get isHomePage => unknown == false && shapeBorderType == null;
+  bool get isShapePage => unknown == false && selectedColorCode != null && shapeBorderType != null;
 }

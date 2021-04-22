@@ -15,14 +15,8 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/router/my_app_route_information_parser_05.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/router/my_app_router_delegate_05.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/data/auth_repository.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/data/colors_repository.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/viewmodels/auth_view_model.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/viewmodels/colors_view_model.dart';
-import 'package:ulusoyapps_flutter/cache/Preference.dart';
 
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 
@@ -39,33 +33,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   MyAppRouterDelegate delegate;
   MyAppRouteInformationParser parser;
-  AuthRepository authRepository;
-  ColorsRepository colorsRepository;
+  final _colors = Colors.primaries.reversed.toList();
 
   @override
   void initState() {
-    authRepository = AuthRepository(Preference());
-    colorsRepository = ColorsRepository();
-    delegate = MyAppRouterDelegate(authRepository, colorsRepository);
-    parser = MyAppRouteInformationParser();
+    delegate = MyAppRouterDelegate(colors: _colors);
+    parser = MyAppRouteInformationParser(colors: _colors);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AuthViewModel>(
-          create: (_) => AuthViewModel(authRepository),
-        ),
-        ChangeNotifierProvider<ColorsViewModel>(
-          create: (_) => ColorsViewModel(colorsRepository),
-        ),
-      ],
-      child: MaterialApp.router(
-        routerDelegate: delegate,
-        routeInformationParser: parser,
-      ),
+    return MaterialApp.router(
+      routerDelegate: delegate,
+      routeInformationParser: parser,
     );
   }
 }

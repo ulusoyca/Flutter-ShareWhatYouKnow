@@ -15,48 +15,25 @@
  */
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import "package:provider/provider.dart";
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/widgets/logout_fab_05.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/widgets/color_gridview_05.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/widgets/shaped_color_list_05.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/viewmodels/auth_view_model.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/viewmodels/colors_view_model.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/widgets/color_gridview.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/widgets/in_progress_message.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/widgets/shape_border_gridview.dart';
-import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-class HomeScreen extends StatefulWidget {
-  final Function(String) onColorTap;
+class HomeScreen extends StatelessWidget {
   final List<Color> colors;
-  final VoidCallback onLogout;
-  final Function(ShapeBorderType) onShapeTap;
-  final String selectedColorCode;
+  final ValueListenable<ShapeBorderType> selectedShapeBorderType;
+  final ValueNotifier<String> selectedColorCode;
+  final ValueListenable<String> colorCodeFromBrowserHistory;
 
   HomeScreen({
     Key key,
-    @required this.onColorTap,
-    @required this.onLogout,
-    @required this.colors,
-    @required this.onShapeTap,
-    @required this.selectedColorCode,
+    this.colors,
+    this.selectedShapeBorderType,
+    this.selectedColorCode,
+    this.colorCodeFromBrowserHistory,
   }) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final ItemScrollController _itemScrollController = ItemScrollController();
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollTo(widget.selectedColorCode);
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,88 +41,25 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('Home Screen'),
       ),
-      body: _body(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: LogoutFab(onLogout: widget.onLogout),
-    );
-  }
-
-  Widget _body(BuildContext context) {
-    final authViewModel = context.watch<AuthViewModel>();
-    final colorsViewModel = context.watch<ColorsViewModel>();
-    bool inProgress;
-    String progressName;
-    if (authViewModel.logingOut) {
-      inProgress = true;
-      progressName = "Logout";
-    } else if (colorsViewModel.clearingColors) {
-      inProgress = true;
-      progressName = "Clearing colors";
-    } else {
-      inProgress = false;
-      progressName = null;
-    }
-    return inProgress ? InProgressMessage(progressName: progressName, screenName: "HomeScreen") : _content();
-  }
-
-  Widget _content() {
-    return Column(
-      children: [
-        _colorGrid(),
-        Expanded(child: _shapedColorList()),
-      ],
-    );
-  }
-
-  Widget _colorGrid() => Material(
-        child: ColorGrid(
-          colors: widget.colors,
-          onColorTap: (String value) {
-            _scrollTo(value);
-            widget.onColorTap(value);
-          },
-        ),
-        elevation: 4.0,
-      );
-
-  Widget _shapedColorList() {
-    return ScrollablePositionedList.builder(
-      itemScrollController: _itemScrollController,
-      itemCount: widget.colors.length,
-      itemBuilder: (BuildContext context, int index) {
-        final color = widget.colors[index];
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Text(color.toHex(leadingHashSign: true), style: Theme.of(context).textTheme.headline5),
-              ShapeBorderGridView(
-                color: color,
-                onShapeTap: (ShapeBorderType type) {
-                  widget.onColorTap(color.toHex(leadingHashSign: false));
-                  widget.onShapeTap(type);
-                },
-                scrollPhysics: NeverScrollableScrollPhysics(),
-              ),
-              Divider(thickness: 2),
-            ],
+      body: Column(
+        children: [
+          Material(
+            elevation: 4.0,
+            child: ColorGrid(
+              colors: colors,
+              selectedColorCode: selectedColorCode,
+            ),
           ),
-        );
-      },
-    );
-  }
-
-  int _findIndexFromColorCode(String value) {
-    var indexWhere = widget.colors.indexWhere((element) => element.toHex() == value);
-    return indexWhere == -1 ? 0 : indexWhere;
-  }
-
-  void _scrollTo(String value) {
-    int index = _findIndexFromColorCode(value);
-    _itemScrollController.scrollTo(
-      index: index,
-      duration: Duration(seconds: 2),
-      curve: Curves.easeInOutCubic,
+          Expanded(
+            child: ShapedColorList(
+              colors: colors,
+              selectedColorCode: selectedColorCode,
+              selectedShapeBorderType: selectedShapeBorderType,
+              colorCodeFromBrowserHistory: colorCodeFromBrowserHistory,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

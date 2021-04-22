@@ -20,7 +20,6 @@ import 'package:ulusoyapps_flutter/002-navigator-2/002-01-mobile-only/router/pag
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
 class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigatorRouterDelegateMixin {
-
   final GlobalKey<NavigatorState> _navigatorKey;
 
   @override
@@ -50,7 +49,6 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
         HomePage(
           onColorTap: (String colorCode) {
             selectedColorCode = colorCode;
-            notifyListeners();
           },
         ),
         if (selectedColorCode != null)
@@ -76,5 +74,5 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   }
 
   @override
-  Future<void> setNewRoutePath(configuration) async { /* Do Nothing */ }
+  Future<void> setNewRoutePath(configuration) async {/* Do Nothing */}
 }

@@ -15,20 +15,15 @@
  */
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-auth-and-bootstrap/widgets/app_bar_back_button.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/viewmodels/auth_view_model.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/viewmodels/colors_view_model.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/widgets/app_bar_text.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/widgets/in_progress_message.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/widgets/shaped_container.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class ShapeScreen extends StatelessWidget {
   final String colorCode;
   final ShapeBorderType shapeBorderType;
-  final VoidCallback onLogout;
 
   Color get color => colorCode.hexToColor();
 
@@ -36,54 +31,39 @@ class ShapeScreen extends StatelessWidget {
     Key key,
     this.colorCode,
     this.shapeBorderType,
-    this.onLogout,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = context.watch<AuthViewModel>();
-    final colorsViewModel = context.watch<ColorsViewModel>();
-    bool inProgress;
-    String progressName;
-    if (authViewModel.logingOut) {
-      inProgress = true;
-      progressName = "Logout";
-    } else if (colorsViewModel.clearingColors) {
-      inProgress = true;
-      progressName = "Clearing colors";
-    } else {
-      inProgress = false;
-      progressName = null;
-    }
-    return inProgress
-        ? InProgressMessage(progressName: progressName, screenName: "ShapeScreen")
-        : Center(
-            child: Container(
-              width: 400,
-              height: 300,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  AppBar(
-                    title: AppBarText(
-                      color: color,
-                      text: '${shapeBorderType.getStringRepresentation().toUpperCase()} #$colorCode ',
-                    ),
-                    leading: AppBarBackButton(color: color),
-                    backgroundColor: colorCode.hexToColor(),
+    return Center(
+      child: Container(
+        width: 400,
+        height: 250,
+        color: Colors.white,
+        child: Column(
+          children: [
+            AppBar(
+              title: AppBarText(
+                color: color,
+                text: '${shapeBorderType.getStringRepresentation().toUpperCase()} #$colorCode ',
+              ),
+              leading: AppBarBackButton(color: color),
+              backgroundColor: colorCode.hexToColor(),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: FittedBox(
+                  child: ShapedButton(
+                    color: color,
+                    shapeBorderType: shapeBorderType,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: ShapedButton(
-                        color: color,
-                        shapeBorderType: shapeBorderType,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          );
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -23,12 +23,10 @@ import '../../shape_dialog_05.dart';
 class ShapePage extends Page {
   final String colorCode;
   final ShapeBorderType shapeBorderType;
-  final VoidCallback onLogout;
 
   ShapePage({
     @required this.shapeBorderType,
     @required this.colorCode,
-    @required this.onLogout,
   }) : super(key: ValueKey("$colorCode$shapeBorderType"));
 
   @override
@@ -41,7 +39,6 @@ class ShapePage extends Page {
         return ShapeScreen(
           colorCode: colorCode,
           shapeBorderType: shapeBorderType,
-          onLogout: onLogout,
         );
       },
       context: context,

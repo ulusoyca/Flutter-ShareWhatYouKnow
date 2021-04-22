@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
 import '../../home_screen_05.dart';
 
 class HomePage extends Page {
-  final Function(String) onColorTap;
-  final VoidCallback onLogout;
   final List<Color> colors;
-  final Function(ShapeBorderType) onShapeTap;
-  final String selectedColorCode;
+  final ValueListenable<ShapeBorderType> selectedShapeBorderType;
+  final ValueListenable<String> selectedColorCode;
+  final ValueListenable<String> colorCodeFromBrowserHistory;
 
   HomePage({
-    @required this.onColorTap,
-    @required this.onLogout,
-    @required this.colors,
-    @required this.onShapeTap,
-    @required this.selectedColorCode,
+    this.colors,
+    this.selectedShapeBorderType,
+    this.selectedColorCode,
+    this.colorCodeFromBrowserHistory,
   }) : super(key: ValueKey('HomePage'));
 
   @override
@@ -40,11 +39,10 @@ class HomePage extends Page {
       settings: this,
       builder: (BuildContext context) {
         return HomeScreen(
-          onColorTap: onColorTap,
-          onLogout: onLogout,
           colors: colors,
-          onShapeTap: onShapeTap,
           selectedColorCode: selectedColorCode,
+          selectedShapeBorderType: selectedShapeBorderType,
+          colorCodeFromBrowserHistory: colorCodeFromBrowserHistory,
         );
       },
     );

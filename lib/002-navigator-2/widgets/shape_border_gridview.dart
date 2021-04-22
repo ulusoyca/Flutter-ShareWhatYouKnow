@@ -7,12 +7,19 @@ class ShapeBorderGridView extends StatelessWidget {
   final Function(ShapeBorderType) onShapeTap;
   final ScrollPhysics scrollPhysics;
   final Color color;
+  final SliverGridDelegate sliverGridDelegate;
 
   const ShapeBorderGridView({
     Key key,
     @required this.color,
     @required this.onShapeTap,
     this.scrollPhysics = const AlwaysScrollableScrollPhysics(),
+    this.sliverGridDelegate = const SliverGridDelegateWithMaxCrossAxisExtent(
+      maxCrossAxisExtent: 400,
+      crossAxisSpacing: AppDimens.SIZE_SPACING_MEDIUM,
+      mainAxisSpacing: AppDimens.SIZE_SPACING_MEDIUM,
+      childAspectRatio: 3,
+    ),
   }) : super(key: key);
 
   @override
@@ -35,12 +42,7 @@ class ShapeBorderGridView extends StatelessWidget {
             );
           },
           shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 400,
-            crossAxisSpacing: AppDimens.SIZE_SPACING_MEDIUM,
-            mainAxisSpacing: AppDimens.SIZE_SPACING_MEDIUM,
-            childAspectRatio: 3,
-          ),
+          gridDelegate: sliverGridDelegate,
         ),
       ),
     );

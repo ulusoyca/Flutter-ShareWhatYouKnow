@@ -20,25 +20,23 @@ import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 import 'my_app_configuration_05.dart';
 
 class MyAppRouteInformationParser extends RouteInformationParser<MyAppConfiguration> {
+  final List<Color> colors;
+
+  MyAppRouteInformationParser({this.colors});
+
   @override
   Future<MyAppConfiguration> parseRouteInformation(RouteInformation routeInformation) async {
     final uri = Uri.parse(routeInformation.location);
     if (uri.pathSegments.length == 0) {
       return MyAppConfiguration.home();
-    } else if (uri.pathSegments.length == 1) {
-      final first = uri.pathSegments[0].toLowerCase();
-      if (first == 'home') {
-        return MyAppConfiguration.home();
-      } else if (first == 'login') {
-        return MyAppConfiguration.login();
-      } else {
-        return MyAppConfiguration.unknown();
-      }
     } else if (uri.pathSegments.length == 2) {
       final first = uri.pathSegments[0].toLowerCase();
       final second = uri.pathSegments[1].toLowerCase();
-      if (first == 'colors' && second.length == 6 && second.isHexColor()) {
-        return MyAppConfiguration.color(second);
+      if (first == 'colors' && _isValidColor(second)) {
+        return MyAppConfiguration.home(
+          selectedColorCode: second,
+          colorCodeFromBrowserHistory: routeInformation.state,
+        );
       } else {
         return MyAppConfiguration.unknown();
       }
@@ -61,21 +59,25 @@ class MyAppRouteInformationParser extends RouteInformationParser<MyAppConfigurat
   RouteInformation restoreRouteInformation(MyAppConfiguration configuration) {
     if (configuration.isUnknown) {
       return RouteInformation(location: '/unknown');
-    } else if (configuration.isSplashPage) {
-      return null;
-    } else if (configuration.isLoginPage) {
-      return RouteInformation(location: '/login');
     } else if (configuration.isHomePage) {
-      return RouteInformation(location: '/');
-    } else if (configuration.isColorPage) {
-      return RouteInformation(location: '/colors/${configuration.colorCode}');
-    } else if (configuration.isShapePage) {
       return RouteInformation(
-        location: '/colors/${configuration.colorCode}/${configuration.shapeBorderType.getStringRepresentation()}',
+        location: configuration.selectedColorCode == null ? '/' : '/colors/${configuration.selectedColorCode}',
+        state: configuration.selectedColorCode,
       );
+    } else if (configuration.isShapePage) {
+      var location =
+          '/colors/${configuration.selectedColorCode}/${configuration.shapeBorderType.getStringRepresentation()}';
+      return RouteInformation(location: location);
     } else {
       return null;
     }
+  }
+
+  bool _isValidColor(String colorCode) {
+    final List<String> colorCodes = colors.map((e) {
+      return e.toHex();
+    }).toList();
+    return colorCodes.contains("$colorCode");
   }
 
   ShapeBorderType extractShapeBorderType(String shapeBorderTypeValue) {
