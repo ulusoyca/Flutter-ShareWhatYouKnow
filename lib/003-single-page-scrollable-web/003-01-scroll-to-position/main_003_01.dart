@@ -15,10 +15,10 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/router/my_app_route_information_parser_05.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/router/my_app_router_delegate_05.dart';
 
-import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
+import '../configure_nonweb.dart' if (dart.library.html) '../configure_web.dart';
+import 'router/single_page_app_route_information_parser_01.dart';
+import 'router/single_page_app_router_delegate_01.dart';
 
 void main() {
   configureApp();
@@ -31,14 +31,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  MyAppRouterDelegate delegate;
-  MyAppRouteInformationParser parser;
+  SinglePageAppRouterDelegate delegate;
+  SinglePageAppRouteInformationParser parser;
   final _colors = Colors.primaries.reversed.toList();
 
   @override
   void initState() {
-    delegate = MyAppRouterDelegate(colors: _colors);
-    parser = MyAppRouteInformationParser(colors: _colors);
+    delegate = SinglePageAppRouterDelegate(colors: _colors);
+    parser = SinglePageAppRouteInformationParser(colors: _colors);
     super.initState();
   }
 

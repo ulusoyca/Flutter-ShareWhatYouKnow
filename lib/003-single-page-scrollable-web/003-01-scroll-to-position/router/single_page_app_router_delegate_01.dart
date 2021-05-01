@@ -15,54 +15,57 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/router/pages/home_page_05.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/router/pages/shape_page_05.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/router/pages/unknown_page_05.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
-import 'my_app_configuration_05.dart';
+import 'pages/home_page_01.dart';
+import 'pages/shape_page_01.dart';
+import 'pages/unknown_page_01.dart';
+import 'single_page_app_configuration_01.dart';
 
-class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<MyAppConfiguration> {
+class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfiguration>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<SinglePageAppConfiguration> {
   final List<Color> colors;
   final GlobalKey<NavigatorState> _navigatorKey;
-  final ValueNotifier<String> _colorCodeFromBrowserHistory = ValueNotifier(null);
+
+  // App state fields
   final ValueNotifier<String> _selectedColorCode = ValueNotifier(null);
   final ValueNotifier<ShapeBorderType> _selectedShapeBorderType = ValueNotifier(null);
+  final ValueNotifier<bool> _unknownState = ValueNotifier(null);
+  final ValueNotifier<double> _scrollPosition = ValueNotifier(0.0);
 
-  bool _show404;
-
-  bool get show404 => _show404;
-
-  set show404(bool value) {
-    _show404 = value;
-    if (value == true) {
-      _selectedColorCode.value = null;
-      _selectedShapeBorderType.value = null;
-    }
-    notifyListeners();
+  SinglePageAppRouterDelegate({this.colors}) : _navigatorKey = GlobalKey<NavigatorState>() {
+    final _appStateListenable = Listenable.merge([
+      _selectedColorCode,
+      _selectedShapeBorderType,
+      _unknownState,
+      _scrollPosition,
+    ]);
+    _appStateListenable.addListener(() {
+      if (_unknownState.value == true) {
+        _selectedColorCode.value = null;
+        _selectedShapeBorderType.value = null;
+        _scrollPosition.value = 0.0;
+      }
+      notifyListeners();
+    });
   }
 
   @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
-  MyAppRouterDelegate({this.colors}) : _navigatorKey = GlobalKey<NavigatorState>() {
-    _selectedColorCode.addListener(() => notifyListeners());
-    _selectedShapeBorderType.addListener(() => notifyListeners());
-  }
-
   @override
-  MyAppConfiguration get currentConfiguration {
-    if (show404 == true) {
-      return MyAppConfiguration.unknown();
-    } else if (_selectedShapeBorderType == null) {
-      return MyAppConfiguration.home(selectedColorCode: _selectedColorCode.value);
+  SinglePageAppConfiguration get currentConfiguration {
+    if (_unknownState.value == true) {
+      return SinglePageAppConfiguration.unknown();
     } else if (_selectedShapeBorderType != null) {
       final color = _selectedColorCode.value;
       final shapeBorderType = _selectedShapeBorderType.value;
-      return MyAppConfiguration.shapeBorder(color, shapeBorderType);
+      return SinglePageAppConfiguration.shapeBorder(color, shapeBorderType);
     } else {
-      return null;
+      return SinglePageAppConfiguration.home(
+        selectedColorCode: _selectedColorCode.value,
+        scrollPosition: _scrollPosition.value,
+      );
     }
   }
 
@@ -70,14 +73,16 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
   Widget build(BuildContext context) {
     return Navigator(
       key: navigatorKey,
-      pages: show404 == true
-          ? [UnknownPage()]
+      pages: _unknownState.value == true
+          ? [
+              UnknownPage(),
+            ]
           : [
               HomePage(
                 colors: colors,
                 selectedColorCode: _selectedColorCode,
                 selectedShapeBorderType: _selectedShapeBorderType,
-                colorCodeFromBrowserHistory: _colorCodeFromBrowserHistory,
+                scrollPosition: _scrollPosition,
               ),
               if (_selectedColorCode.value != null && _selectedShapeBorderType.value != null)
                 ShapePage(
@@ -95,16 +100,16 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
   }
 
   @override
-  Future<void> setNewRoutePath(MyAppConfiguration configuration) async {
+  Future<void> setNewRoutePath(SinglePageAppConfiguration configuration) async {
     if (configuration.unknown) {
-      show404 = true;
+      _unknownState.value = true;
     } else if (configuration.isHomePage) {
-      show404 = false;
+      _scrollPosition.value = configuration.scrollPosition;
+      _unknownState.value = false;
       _selectedColorCode.value = configuration.selectedColorCode;
-      _colorCodeFromBrowserHistory.value = configuration.colorCodeFromBrowserHistory;
       _selectedShapeBorderType.value = null;
     } else if (configuration.isShapePage) {
-      show404 = false;
+      _unknownState.value = false;
       _selectedColorCode.value = configuration.selectedColorCode;
       _selectedShapeBorderType.value = configuration.shapeBorderType;
     } else {

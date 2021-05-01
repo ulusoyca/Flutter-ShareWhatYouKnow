@@ -23,7 +23,9 @@ class ColorGrid extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Center(
             child: ElevatedButton(
-              onPressed: () => selectedColorCode.value = color.toHex(),
+              onPressed: () {
+                selectedColorCode.value = color.toHex();
+              },
               style: ElevatedButton.styleFrom(primary: color),
               child: ColoredText(color: color),
             ),

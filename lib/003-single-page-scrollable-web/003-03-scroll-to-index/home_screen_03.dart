@@ -17,22 +17,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/widgets/color_gridview_05.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-05-web-with-route-state/widgets/shaped_color_list_05.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-scroll-to-index/widgets/shaped_color_listview.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_grid.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<Color> colors;
   final ValueListenable<ShapeBorderType> selectedShapeBorderType;
   final ValueNotifier<String> selectedColorCode;
-  final ValueListenable<String> colorCodeFromBrowserHistory;
 
   HomeScreen({
     Key key,
     this.colors,
     this.selectedShapeBorderType,
     this.selectedColorCode,
-    this.colorCodeFromBrowserHistory,
   }) : super(key: key);
 
   @override
@@ -55,7 +53,6 @@ class HomeScreen extends StatelessWidget {
               colors: colors,
               selectedColorCode: selectedColorCode,
               selectedShapeBorderType: selectedShapeBorderType,
-              colorCodeFromBrowserHistory: colorCodeFromBrowserHistory,
             ),
           ),
         ],

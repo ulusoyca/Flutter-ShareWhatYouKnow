@@ -16,7 +16,8 @@ dependencies:
   material_design_icons_flutter: 4.0.5655
   fl_chart: 0.11.1
   url_strategy: ^0.2.0
-  scrollable_positioned_list: ^0.1.10
+  scrollable_positioned_list: 0.2.0-nullsafety.0
+  tuple: ^2.0.0
 
 dev_dependencies:
   flutter_test:

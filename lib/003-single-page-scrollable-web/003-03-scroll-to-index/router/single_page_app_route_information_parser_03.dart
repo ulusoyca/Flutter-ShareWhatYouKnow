@@ -17,12 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-import 'my_app_configuration_05.dart';
+import 'single_page_app_configuration_03.dart';
 
-class MyAppRouteInformationParser extends RouteInformationParser<MyAppConfiguration> {
+class SinglePageAppRouteInformationParser extends RouteInformationParser<MyAppConfiguration> {
   final List<Color> colors;
 
-  MyAppRouteInformationParser({this.colors});
+  SinglePageAppRouteInformationParser({this.colors});
 
   @override
   Future<MyAppConfiguration> parseRouteInformation(RouteInformation routeInformation) async {
@@ -33,6 +33,7 @@ class MyAppRouteInformationParser extends RouteInformationParser<MyAppConfigurat
       final first = uri.pathSegments[0].toLowerCase();
       final second = uri.pathSegments[1].toLowerCase();
       if (first == 'colors' && _isValidColor(second)) {
+        print("selectedColorCode: $second / colorCodeFromBrowserHistory: ${routeInformation.state}");
         return MyAppConfiguration.home(
           selectedColorCode: second,
           colorCodeFromBrowserHistory: routeInformation.state,

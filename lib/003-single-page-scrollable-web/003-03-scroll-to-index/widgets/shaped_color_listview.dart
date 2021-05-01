@@ -2,21 +2,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/widgets/shape_border_gridview.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-scroll-to-index/widgets/shape_border_gridview.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class ShapedColorList extends StatefulWidget {
   final List<Color> colors;
   final ValueNotifier<ShapeBorderType> selectedShapeBorderType;
   final ValueNotifier<String> selectedColorCode;
-  final ValueListenable<String> colorCodeFromBrowserHistory;
 
   const ShapedColorList({
     Key key,
     @required this.colors,
     @required this.selectedShapeBorderType,
     @required this.selectedColorCode,
-    @required this.colorCodeFromBrowserHistory,
   }) : super(key: key);
 
   @override
@@ -28,9 +26,6 @@ class _ShapedColorListState extends State<ShapedColorList> {
 
   @override
   void initState() {
-    widget.colorCodeFromBrowserHistory.addListener(() {
-      _scrollTo(widget.colorCodeFromBrowserHistory.value);
-    });
     widget.selectedColorCode.addListener(() {
       _scrollTo(widget.selectedColorCode.value);
     });
@@ -51,17 +46,9 @@ class _ShapedColorListState extends State<ShapedColorList> {
             children: [
               Text(color.toHex(leadingHashSign: true), style: Theme.of(context).textTheme.headline5),
               ShapeBorderGridView(
-                color: color,
-                onShapeTap: (ShapeBorderType type) {
-                  widget.selectedColorCode.value = color.toHex(leadingHashSign: false);
-                  widget.selectedShapeBorderType.value = type;
-                },
-                scrollPhysics: NeverScrollableScrollPhysics(),
-                sliverGridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 4,
-                  mainAxisExtent: 120,
-                ),
+                sectionColor: color,
+                selectedColorCode: widget.selectedColorCode,
+                selectedShapeBorderType: widget.selectedShapeBorderType,
               ),
               Divider(thickness: 2),
             ],

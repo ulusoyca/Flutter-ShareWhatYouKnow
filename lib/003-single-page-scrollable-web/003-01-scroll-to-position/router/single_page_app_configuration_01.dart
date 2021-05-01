@@ -1,30 +1,32 @@
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
-class MyAppConfiguration {
+class SinglePageAppConfiguration {
   final String selectedColorCode;
   final ShapeBorderType shapeBorderType;
   final bool unknown;
-  final String colorCodeFromBrowserHistory;
+  final double scrollPosition;
 
-  MyAppConfiguration.home({String selectedColorCode, String colorCodeFromBrowserHistory})
+  SinglePageAppConfiguration.home({String selectedColorCode, double scrollPosition})
       : unknown = false,
         shapeBorderType = null,
-        colorCodeFromBrowserHistory = colorCodeFromBrowserHistory,
+        scrollPosition = scrollPosition,
         selectedColorCode = selectedColorCode;
 
-  MyAppConfiguration.shapeBorder(String colorCode, ShapeBorderType shape)
+  SinglePageAppConfiguration.shapeBorder(String colorCode, ShapeBorderType shape)
       : unknown = false,
+        scrollPosition = 0.0,
         shapeBorderType = shape,
-        colorCodeFromBrowserHistory = null,
         selectedColorCode = colorCode;
 
-  MyAppConfiguration.unknown()
+  SinglePageAppConfiguration.unknown()
       : unknown = true,
+        scrollPosition = 0.0,
         shapeBorderType = null,
-        colorCodeFromBrowserHistory = null,
         selectedColorCode = null;
 
   bool get isUnknown => unknown == true;
+
   bool get isHomePage => unknown == false && shapeBorderType == null;
+
   bool get isShapePage => unknown == false && selectedColorCode != null && shapeBorderType != null;
 }
