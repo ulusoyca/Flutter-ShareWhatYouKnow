@@ -45,14 +45,11 @@ extension ShapeBorderTypeExtensions on ShapeBorderType {
   ShapeBorder getShapeBorder() {
     switch (this) {
       case ShapeBorderType.CONTINUOUS:
-        return ContinuousRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimens.SIZE_SPACING_LARGE));
+        return ContinuousRectangleBorder(borderRadius: BorderRadius.circular(AppDimens.SIZE_SPACING_LARGE));
       case ShapeBorderType.BEVELED:
-        return BeveledRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(AppDimens.SIZE_SPACING_LARGE)));
+        return BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(AppDimens.SIZE_SPACING_LARGE)));
       case ShapeBorderType.ROUNDED:
-        return RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(AppDimens.SIZE_SPACING_LARGE)));
+        return RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(AppDimens.SIZE_SPACING_LARGE)));
       case ShapeBorderType.STADIUM:
         return StadiumBorder();
       case ShapeBorderType.CIRCLE:

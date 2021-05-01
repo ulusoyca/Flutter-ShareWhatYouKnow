@@ -18,41 +18,40 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-scroll-to-index/widgets/shaped_color_listview.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_grid.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-scroll-to-index/widgets/shaped_color_listview_03.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/top_navigation_menu.dart';
 
 class HomeScreen extends StatelessWidget {
-  final List<Color> colors;
-  final ValueListenable<ShapeBorderType> selectedShapeBorderType;
-  final ValueNotifier<String> selectedColorCode;
+  final List<MaterialColor> colors;
+  final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
+  final ValueNotifier<String> selectedColorCodeNotifier;
 
   HomeScreen({
     Key key,
     this.colors,
-    this.selectedShapeBorderType,
-    this.selectedColorCode,
+    this.selectedShapeBorderTypeNotifier,
+    this.selectedColorCodeNotifier,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Screen'),
-      ),
+      appBar: AppBar(title: Text('Home Screen')),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Material(
             elevation: 4.0,
-            child: ColorGrid(
+            child: TopNavigationMenu(
               colors: colors,
-              selectedColorCode: selectedColorCode,
+              selectedColorCodeNotifier: selectedColorCodeNotifier,
             ),
           ),
           Expanded(
             child: ShapedColorList(
               colors: colors,
-              selectedColorCode: selectedColorCode,
-              selectedShapeBorderType: selectedShapeBorderType,
+              selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
+              selectedColorCodeNotifier: selectedColorCodeNotifier,
             ),
           ),
         ],

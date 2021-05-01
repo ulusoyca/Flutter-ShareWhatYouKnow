@@ -3,22 +3,21 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-import 'shape_border_listview.dart';
+import 'shape_border_listview_01.dart';
 
 class ShapedColorList extends StatefulWidget {
-  final List<Color> colors;
-  final ValueNotifier<ShapeBorderType> selectedShapeBorderType;
-  final ValueNotifier<double> scrollPosition;
-  final ValueListenable<String> selectedColorCode;
+  final List<MaterialColor> colors;
+  final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
+  final ValueListenable<String> selectedColorCodeNotifier;
 
   const ShapedColorList({
     Key key,
     @required this.colors,
-    @required this.selectedShapeBorderType,
-    @required this.scrollPosition,
-    @required this.selectedColorCode,
+    @required this.selectedShapeBorderTypeNotifier,
+    @required this.selectedColorCodeNotifier,
   }) : super(key: key);
 
   @override
@@ -26,29 +25,22 @@ class ShapedColorList extends StatefulWidget {
 }
 
 class _ShapedColorListState extends State<ShapedColorList> {
-  ScrollController _scrollController;
+  ScrollController _scrollController = ScrollController();
 
   double itemHeight = 0;
 
   int get selectedColorCodeIndex {
-    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCode.value);
+    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
     return index > -1 ? index : 0;
   }
 
   @override
   void initState() {
-    _scrollController = ScrollController(initialScrollOffset: widget.scrollPosition.value);
-
-    _scrollController.addListener(() {
-      widget.scrollPosition.value = _scrollController.position.pixels;
-    });
-
-    widget.selectedColorCode.addListener(() {
+    widget.selectedColorCodeNotifier.addListener(() {
       if (_scrollController.hasClients) {
         _scrollToSelectedColor();
       }
     });
-
     super.initState();
   }
 
@@ -69,20 +61,9 @@ class _ShapedColorListState extends State<ShapedColorList> {
                 minHeight: minItemHeight,
                 minWidth: 600,
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(color.toHex(leadingHashSign: true), style: Theme.of(context).textTheme.headline4),
-                  ),
-                  Expanded(
-                    child: ShapeBorderListView(
-                      sectionColor: color,
-                      selectedShapeBorderType: widget.selectedShapeBorderType,
-                    ),
-                  ),
-                  Divider(thickness: 2),
-                ],
+              child: Container(
+                color: color.shade100,
+                child: _section(color, context),
               ),
             );
           },
@@ -91,11 +72,26 @@ class _ShapedColorListState extends State<ShapedColorList> {
     );
   }
 
+  Column _section(MaterialColor color, BuildContext context) {
+    return Column(
+      children: [
+        ColorSectionTitle(title: color.toHex(leadingHashSign: true)),
+        Expanded(
+          child: ShapeBorderListView(
+            sectionColor: color,
+            selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
+            selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
+          ),
+        ),
+      ],
+    );
+  }
+
   void _scrollToSelectedColor() {
     _scrollController.animateTo(
       selectedColorCodeIndex * itemHeight,
       duration: Duration(milliseconds: max(500, selectedColorCodeIndex * 100)),
-      curve: Curves.linear,
+      curve: Curves.easeInOut,
     );
   }
 }

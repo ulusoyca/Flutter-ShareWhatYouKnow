@@ -18,16 +18,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
-import '../../shape_dialog_03.dart';
+import '../../shape_dialog_02.dart';
 
 class ShapePage extends Page {
   final String colorCode;
   final ShapeBorderType shapeBorderType;
 
-  ShapePage({
-    @required this.shapeBorderType,
-    @required this.colorCode,
-  }) : super(key: ValueKey("$colorCode$shapeBorderType"));
+  static const String routeName = "ShapePage";
+
+  @override
+  String get name => routeName;
+
+  ShapePage({@required this.shapeBorderType, @required this.colorCode})
+      : super(key: ValueKey("$colorCode$shapeBorderType"));
 
   @override
   Route createRoute(BuildContext context) {
@@ -36,10 +39,7 @@ class ShapePage extends Page {
       barrierDismissible: true,
       barrierColor: Colors.black87,
       builder: (BuildContext context) {
-        return ShapeScreen(
-          colorCode: colorCode,
-          shapeBorderType: shapeBorderType,
-        );
+        return ShapeDialog(colorCode: colorCode, shapeBorderType: shapeBorderType);
       },
       context: context,
     );

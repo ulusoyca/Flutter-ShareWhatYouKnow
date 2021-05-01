@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
-import '../../shape_dialog_01.dart';
+import '../../home_screen_02.dart';
 
-class ShapePage extends Page {
-  final String colorCode;
-  final ShapeBorderType shapeBorderType;
+class HomePage extends Page {
+  final List<MaterialColor> colors;
+  final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
+  final ValueListenable<String> selectedColorCodeNotifier;
 
-  static const String routeName = "ShapePage";
-
-  @override
-  String get name => routeName;
-
-  ShapePage({@required this.shapeBorderType, @required this.colorCode})
-      : super(key: ValueKey("$colorCode$shapeBorderType"));
+  HomePage({
+    this.colors,
+    this.selectedShapeBorderTypeNotifier,
+    this.selectedColorCodeNotifier,
+  }) : super(key: ValueKey('HomePage'));
 
   @override
   Route createRoute(BuildContext context) {
-    return CupertinoDialogRoute(
+    return MaterialPageRoute(
       settings: this,
-      barrierDismissible: true,
-      barrierColor: Colors.black87,
       builder: (BuildContext context) {
-        return ShapeDialog(colorCode: colorCode, shapeBorderType: shapeBorderType);
+        return HomeScreen(
+          colors: colors,
+          selectedColorCodeNotifier: selectedColorCodeNotifier,
+          selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
+        );
       },
-      context: context,
     );
   }
 }

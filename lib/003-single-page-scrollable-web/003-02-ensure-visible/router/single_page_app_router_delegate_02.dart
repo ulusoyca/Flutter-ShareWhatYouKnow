@@ -17,10 +17,10 @@
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
-import 'pages/home_page_03.dart';
-import 'pages/shape_page_03.dart';
-import 'pages/unknown_page_03.dart';
-import 'single_page_app_configuration_03.dart';
+import 'pages/home_page_02.dart';
+import 'pages/shape_page_02.dart';
+import 'pages/unknown_page_02.dart';
+import 'single_page_app_configuration_02.dart';
 
 class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<SinglePageAppConfiguration> {

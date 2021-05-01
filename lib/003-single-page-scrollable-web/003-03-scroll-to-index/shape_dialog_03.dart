@@ -21,13 +21,11 @@ import 'package:ulusoyapps_flutter/002-navigator-2/widgets/app_bar_text.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/widgets/shaped_container.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-class ShapeScreen extends StatelessWidget {
+class ShapeDialog extends StatelessWidget {
   final String colorCode;
   final ShapeBorderType shapeBorderType;
 
-  Color get color => colorCode.hexToColor();
-
-  const ShapeScreen({
+  const ShapeDialog({
     Key key,
     this.colorCode,
     this.shapeBorderType,
@@ -35,6 +33,7 @@ class ShapeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var borderType = shapeBorderType.getStringRepresentation().toUpperCase();
     return Center(
       child: Container(
         width: 400,
@@ -42,28 +41,39 @@ class ShapeScreen extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: [
-            AppBar(
-              title: AppBarText(
-                color: color,
-                text: '${shapeBorderType.getStringRepresentation().toUpperCase()} #$colorCode ',
-              ),
-              leading: AppBarBackButton(color: color),
-              backgroundColor: colorCode.hexToColor(),
-            ),
+            _bar(borderType),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: FittedBox(
-                  child: ShapedButton(
-                    color: color,
-                    shapeBorderType: shapeBorderType,
-                  ),
-                ),
-              ),
+              child: _button(context, borderType),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Padding _button(BuildContext context, String borderType) {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: FittedBox(
+        child: ShapedButton(
+          color: colorCode.hexToColor(),
+          shapeBorderType: shapeBorderType,
+          text: "Submit",
+          onPressed: () => Navigator.maybePop(context, borderType),
+        ),
+      ),
+    );
+  }
+
+  AppBar _bar(String borderType) {
+    var hexToColor = colorCode.hexToColor();
+    return AppBar(
+      title: AppBarText(
+        color: hexToColor,
+        text: '$borderType #$colorCode ',
+      ),
+      leading: AppBarBackButton(color: hexToColor),
+      backgroundColor: hexToColor,
     );
   }
 }

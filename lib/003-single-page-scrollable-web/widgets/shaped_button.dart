@@ -15,22 +15,19 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/widgets/colored_text.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 
-import 'colored_text.dart';
-
 class ShapedButton extends StatelessWidget {
-  final Color color;
+  final MaterialColor color;
   final ShapeBorderType shapeBorderType;
   final VoidCallback onPressed;
-  final String text;
 
   const ShapedButton({
     Key key,
     @required this.color,
     @required this.shapeBorderType,
     this.onPressed,
-    this.text,
   }) : super(key: key);
 
   @override
@@ -47,7 +44,7 @@ class ShapedButton extends StatelessWidget {
           padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_LARGE),
           child: ColoredText(
             color: color,
-            text: text ?? shapeBorderType.getStringRepresentation(),
+            text: shapeBorderType.getStringRepresentation(),
           ),
         ),
       ),

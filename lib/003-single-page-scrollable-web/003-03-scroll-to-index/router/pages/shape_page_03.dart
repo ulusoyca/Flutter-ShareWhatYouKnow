@@ -18,7 +18,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
-import '../../shape_dialog_01.dart';
+import '../../shape_dialog_03.dart';
 
 class ShapePage extends Page {
   final String colorCode;

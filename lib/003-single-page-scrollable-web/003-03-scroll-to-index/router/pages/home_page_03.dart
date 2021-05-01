@@ -21,14 +21,14 @@ import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart
 import '../../home_screen_03.dart';
 
 class HomePage extends Page {
-  final List<Color> colors;
-  final ValueListenable<ShapeBorderType> selectedShapeBorderType;
-  final ValueListenable<String> selectedColorCode;
+  final List<MaterialColor> colors;
+  final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
+  final ValueListenable<String> selectedColorCodeNotifier;
 
   HomePage({
     this.colors,
-    this.selectedShapeBorderType,
-    this.selectedColorCode,
+    this.selectedShapeBorderTypeNotifier,
+    this.selectedColorCodeNotifier,
   }) : super(key: ValueKey('HomePage'));
 
   @override
@@ -38,8 +38,8 @@ class HomePage extends Page {
       builder: (BuildContext context) {
         return HomeScreen(
           colors: colors,
-          selectedColorCode: selectedColorCode,
-          selectedShapeBorderType: selectedShapeBorderType,
+          selectedColorCodeNotifier: selectedColorCodeNotifier,
+          selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
         );
       },
     );
