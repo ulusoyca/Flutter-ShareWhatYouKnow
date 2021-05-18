@@ -11,7 +11,7 @@ import 'shape_border_listview_01.dart';
 class ShapedColorList extends StatefulWidget {
   final List<MaterialColor> colors;
   final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueListenable<String> selectedColorCodeNotifier;
+  final ValueNotifier<String> selectedColorCodeNotifier;
 
   const ShapedColorList({
     Key key,
@@ -25,71 +25,68 @@ class ShapedColorList extends StatefulWidget {
 }
 
 class _ShapedColorListState extends State<ShapedColorList> {
+  final double _minItemHeight = 700;
+  double get _itemHeight => max(_scrollController.position.viewportDimension, _minItemHeight);
   ScrollController _scrollController = ScrollController();
-
-  double itemHeight = 0;
-
-  int get selectedColorCodeIndex {
-    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
-    return index > -1 ? index : 0;
-  }
 
   @override
   void initState() {
-    widget.selectedColorCodeNotifier.addListener(() {
-      if (_scrollController.hasClients) {
-        _scrollToSelectedColor();
-      }
-    });
+    widget.selectedColorCodeNotifier.addListener(() => _scrollToSelectedColor());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final minItemHeight = 700.0;
-        itemHeight = max(constraints.maxHeight, minItemHeight);
-        return ListView.builder(
-          controller: _scrollController,
-          itemCount: widget.colors.length,
-          itemBuilder: (BuildContext context, int index) {
-            final color = widget.colors[index];
-            return ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: max(constraints.maxHeight, minItemHeight),
-                minHeight: minItemHeight,
-                minWidth: 600,
-              ),
-              child: Container(
-                color: color.shade100,
-                child: _section(color, context),
-              ),
-            );
-          },
-        );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is UserScrollNotification) {
+          _notifySelectedColorCode(notification);
+        }
+        return true;
       },
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: widget.colors.length,
+        itemBuilder: (BuildContext context, int index) {
+          final color = widget.colors[index];
+          return Container(
+            height: _itemHeight,
+            color: color.shade100,
+            child: _section(color, context),
+          );
+        },
+      ),
     );
+  }
+
+  void _notifySelectedColorCode(UserScrollNotification notification) {
+    final offset = notification.metrics.pixels;
+    final leadingIndex = (offset / _itemHeight).floor();
+    widget.selectedColorCodeNotifier.value = widget.colors[leadingIndex].toHex();
   }
 
   Column _section(MaterialColor color, BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         ColorSectionTitle(title: color.toHex(leadingHashSign: true)),
-        Expanded(
-          child: ShapeBorderListView(
-            sectionColor: color,
-            selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
-            selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
-          ),
+        ShapeBorderListView(
+          sectionColor: color,
+          selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
+          selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
         ),
       ],
     );
   }
 
   void _scrollToSelectedColor() {
+    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
+    int selectedColorCodeIndex = index > -1 ? index : 0;
+    final offset = selectedColorCodeIndex * _itemHeight;
     _scrollController.animateTo(
-      selectedColorCodeIndex * itemHeight,
+      offset,
       duration: Duration(milliseconds: max(500, selectedColorCodeIndex * 100)),
       curve: Curves.easeInOut,
     );

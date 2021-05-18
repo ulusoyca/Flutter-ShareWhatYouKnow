@@ -11,13 +11,15 @@ import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 class ShapedColorList extends StatefulWidget {
   final List<MaterialColor> colors;
   final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueNotifier<String> selectedColorCodeByUserScrollNotifier;
+  final ValueListenable<String> selectedColorCodeByMenuClickNotifier;
 
   const ShapedColorList({
     Key key,
     @required this.colors,
     @required this.selectedShapeBorderTypeNotifier,
-    @required this.selectedColorCodeNotifier,
+    @required this.selectedColorCodeByUserScrollNotifier,
+    @required this.selectedColorCodeByMenuClickNotifier,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,24 @@ class ShapedColorList extends StatefulWidget {
 }
 
 class _ShapedColorListState extends State<ShapedColorList> {
+  /// Controller to scroll or jump to a particular item.
   final ItemScrollController _itemScrollController = ItemScrollController();
+
+  /// Listener that reports the position of items when the list is scrolled.
+  final ItemPositionsListener _itemPositionsListener = ItemPositionsListener.create();
+
+  int get leadingIndex {
+    /// Determine the first visible item by finding the item with the
+    /// smallest trailing edge that is greater than 0.  i.e. the first
+    /// item whose trailing edge in visible in the viewport.
+    final firstVisibleColorIndex = _itemPositionsListener.itemPositions.value
+        .where((ItemPosition position) => position.itemTrailingEdge > 0)
+        .reduce((ItemPosition min, ItemPosition position) =>
+            position.itemTrailingEdge < min.itemTrailingEdge ? position : min)
+        .index;
+    return firstVisibleColorIndex;
+  }
+
   final random = Random();
   List<EdgeInsets> paddings;
 
@@ -35,9 +54,13 @@ class _ShapedColorListState extends State<ShapedColorList> {
       widget.colors.length,
       (_) => EdgeInsets.symmetric(vertical: random.nextInt(widget.colors.length) * 16.0),
     );
-    widget.selectedColorCodeNotifier.addListener(() {
+    _itemPositionsListener.itemPositions.addListener(() {
+      widget.selectedColorCodeByUserScrollNotifier.value = widget.colors[leadingIndex].toHex();
+    });
+    widget.selectedColorCodeByMenuClickNotifier.addListener(() {
       if (_itemScrollController.isAttached) {
-        _scrollTo(widget.selectedColorCodeNotifier.value);
+        int selectedColorIndex = _findIndexFromColorCode(widget.selectedColorCodeByMenuClickNotifier.value);
+        _scrollTo(selectedColorIndex);
       }
     });
     super.initState();
@@ -47,7 +70,8 @@ class _ShapedColorListState extends State<ShapedColorList> {
   Widget build(BuildContext context) {
     return ScrollablePositionedList.builder(
       itemScrollController: _itemScrollController,
-      initialScrollIndex: _findIndexFromColorCode(widget.selectedColorCodeNotifier.value),
+      initialScrollIndex: _findIndexFromColorCode(widget.selectedColorCodeByMenuClickNotifier.value),
+      itemPositionsListener: _itemPositionsListener,
       itemCount: widget.colors.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
@@ -68,7 +92,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
           ColorSectionTitle(title: color.toHex(leadingHashSign: true)),
           ShapeBorderListView(
             sectionColor: color,
-            selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
+            selectedColorCodeNotifier: widget.selectedColorCodeByMenuClickNotifier,
             selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
           ),
         ],
@@ -81,11 +105,10 @@ class _ShapedColorListState extends State<ShapedColorList> {
     return indexWhere == -1 ? 0 : indexWhere;
   }
 
-  void _scrollTo(String value) {
-    int selectedColorIndex = _findIndexFromColorCode(value);
+  void _scrollTo(int index) {
     _itemScrollController.scrollTo(
-      index: selectedColorIndex,
-      duration: Duration(milliseconds: max(500, selectedColorIndex * 100)),
+      index: index,
+      duration: Duration(milliseconds: max(500, index * 100)),
       curve: Curves.easeInOutCubic,
     );
   }

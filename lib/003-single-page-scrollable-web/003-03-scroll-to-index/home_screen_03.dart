@@ -24,13 +24,15 @@ import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/top_na
 class HomeScreen extends StatelessWidget {
   final List<MaterialColor> colors;
   final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueListenable<String> selectedColorCodeByUserScrollNotifier;
+  final ValueListenable<String> selectedColorCodeByMenuClickNotifier;
 
   HomeScreen({
     Key key,
     this.colors,
     this.selectedShapeBorderTypeNotifier,
-    this.selectedColorCodeNotifier,
+    this.selectedColorCodeByUserScrollNotifier,
+    this.selectedColorCodeByMenuClickNotifier,
   }) : super(key: key);
 
   @override
@@ -44,14 +46,15 @@ class HomeScreen extends StatelessWidget {
             elevation: 4.0,
             child: TopNavigationMenu(
               colors: colors,
-              selectedColorCodeNotifier: selectedColorCodeNotifier,
+              selectedColorCodeNotifier: selectedColorCodeByMenuClickNotifier,
             ),
           ),
           Expanded(
             child: ShapedColorList(
               colors: colors,
               selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
-              selectedColorCodeNotifier: selectedColorCodeNotifier,
+              selectedColorCodeByUserScrollNotifier: selectedColorCodeByUserScrollNotifier,
+              selectedColorCodeByMenuClickNotifier: selectedColorCodeByMenuClickNotifier,
             ),
           ),
         ],

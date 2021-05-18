@@ -10,7 +10,7 @@ import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 class ShapedColorList extends StatefulWidget {
   final List<MaterialColor> colors;
   final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueListenable<String> selectedColorCodeNotifier;
+  final ValueNotifier<String> selectedColorCodeNotifier;
 
   const ShapedColorList({
     Key key,
@@ -47,23 +47,30 @@ class _ShapedColorListState extends State<ShapedColorList> {
         _scrollToSelectedColor();
       }
     });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: _scrollController,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (int i = 0; i < widget.colors.length; i++)
-            Container(
-              color: widget.colors[i].shade100,
-              child: _section(context, i),
-            )
-        ],
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is UserScrollNotification) {
+          _onUserScrolled(notification.metrics.pixels);
+        }
+        return false;
+      },
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (int i = 0; i < widget.colors.length; i++)
+              Container(
+                color: widget.colors[i].shade100,
+                child: _section(context, i),
+              )
+          ],
+        ),
       ),
     );
   }
@@ -84,6 +91,18 @@ class _ShapedColorListState extends State<ShapedColorList> {
         ],
       ),
     );
+  }
+
+  void _onUserScrolled(double offset) {
+    double totalItemHeight = 0;
+    for (int i = 0; i < widget.colors.length; i++) {
+      totalItemHeight += keys[i].currentContext.size.height;
+      if (totalItemHeight > offset) {
+        print("current index: $i");
+        widget.selectedColorCodeNotifier.value = widget.colors[i].toHex();
+        break;
+      }
+    }
   }
 
   void _scrollToSelectedColor() {

@@ -23,12 +23,14 @@ import '../../home_screen_03.dart';
 class HomePage extends Page {
   final List<MaterialColor> colors;
   final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueListenable<String> selectedColorCodeNotifier;
+  final ValueNotifier<String> selectedColorCodeByUserScrollNotifier;
+  final ValueNotifier<String> selectedColorCodeByMenuClickNotifier;
 
   HomePage({
     this.colors,
+    this.selectedColorCodeByUserScrollNotifier,
+    this.selectedColorCodeByMenuClickNotifier,
     this.selectedShapeBorderTypeNotifier,
-    this.selectedColorCodeNotifier,
   }) : super(key: ValueKey('HomePage'));
 
   @override
@@ -38,7 +40,8 @@ class HomePage extends Page {
       builder: (BuildContext context) {
         return HomeScreen(
           colors: colors,
-          selectedColorCodeNotifier: selectedColorCodeNotifier,
+          selectedColorCodeByMenuClickNotifier: selectedColorCodeByMenuClickNotifier,
+          selectedColorCodeByUserScrollNotifier: selectedColorCodeByUserScrollNotifier,
           selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
         );
       },

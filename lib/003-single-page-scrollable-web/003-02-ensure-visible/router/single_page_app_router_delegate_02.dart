@@ -33,15 +33,15 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
   final ValueNotifier<bool> _unknownStateNotifier = ValueNotifier(null);
 
   SinglePageAppRouterDelegate({this.colors}) : _navigatorKey = GlobalKey<NavigatorState>() {
-    final _appStateListenable = Listenable.merge([
+    Listenable.merge([
       _selectedColorCodeNotifier,
       _selectedShapeBorderTypeNotifier,
       _unknownStateNotifier,
-    ]);
-    _appStateListenable.addListener(() {
-      print("notifying the router widget");
-      notifyListeners();
-    });
+    ])
+      ..addListener(() {
+        print("notifying the router widget");
+        notifyListeners();
+      });
   }
 
   @override

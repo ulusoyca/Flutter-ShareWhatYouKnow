@@ -19,23 +19,22 @@ class ShapeBorderListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<ShapeBorderType> shapeBorders = ShapeBorderType.values;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
-        child: ListView.builder(
-          itemCount: shapeBorders.length,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) {
-            final shapeBorderType = shapeBorders[index];
-            return ShapedButton(
-                shapeBorderType: shapeBorderType,
-                color: sectionColor,
-                onPressed: () {
-                  selectedColorCodeNotifier.value = sectionColor.toHex();
-                  selectedShapeBorderTypeNotifier.value = shapeBorderType;
-                });
-          },
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(AppDimens.SIZE_SPACING_MEDIUM),
+      child: ListView.builder(
+        itemCount: shapeBorders.length,
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          final shapeBorderType = shapeBorders[index];
+          return ShapedButton(
+              shapeBorderType: shapeBorderType,
+              color: sectionColor,
+              onPressed: () {
+                selectedColorCodeNotifier.value = sectionColor.toHex();
+                selectedShapeBorderTypeNotifier.value = shapeBorderType;
+              });
+        },
       ),
     );
   }

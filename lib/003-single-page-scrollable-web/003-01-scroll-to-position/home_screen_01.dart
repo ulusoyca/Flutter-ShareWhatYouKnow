@@ -7,7 +7,7 @@ import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/top_na
 class HomeScreen extends StatelessWidget {
   final List<MaterialColor> colors;
   final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueListenable<String> selectedColorCodeNotifier;
 
   HomeScreen({
     Key key,
