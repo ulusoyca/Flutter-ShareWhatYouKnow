@@ -24,12 +24,12 @@ class HomePage extends Page {
   final List<MaterialColor> colors;
   final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
   final ValueNotifier<String> selectedColorCodeByUserScrollNotifier;
-  final ValueNotifier<String> selectedColorCodeByMenuClickNotifier;
+  final ValueNotifier<String> selectedColorCodeNotifier;
 
   HomePage({
     this.colors,
     this.selectedColorCodeByUserScrollNotifier,
-    this.selectedColorCodeByMenuClickNotifier,
+    this.selectedColorCodeNotifier,
     this.selectedShapeBorderTypeNotifier,
   }) : super(key: ValueKey('HomePage'));
 
@@ -40,8 +40,7 @@ class HomePage extends Page {
       builder: (BuildContext context) {
         return HomeScreen(
           colors: colors,
-          selectedColorCodeByMenuClickNotifier: selectedColorCodeByMenuClickNotifier,
-          selectedColorCodeByUserScrollNotifier: selectedColorCodeByUserScrollNotifier,
+          selectedColorCodeNotifier: selectedColorCodeNotifier,
           selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
         );
       },

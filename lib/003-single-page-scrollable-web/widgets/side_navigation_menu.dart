@@ -3,21 +3,21 @@ import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'navigation_menu_button.dart';
 
-class TopNavigationMenu extends StatefulWidget {
+class SideNavigationMenu extends StatefulWidget {
   final List<MaterialColor> colors;
   final ValueNotifier<String> selectedColorCodeNotifier;
 
-  const TopNavigationMenu({
+  const SideNavigationMenu({
     Key key,
     this.colors,
     this.selectedColorCodeNotifier,
   }) : super(key: key);
 
   @override
-  _TopNavigationMenuState createState() => _TopNavigationMenuState();
+  _SideNavigationMenuState createState() => _SideNavigationMenuState();
 }
 
-class _TopNavigationMenuState extends State<TopNavigationMenu> {
+class _SideNavigationMenuState extends State<SideNavigationMenu> {
   int get selectedColorCodeIndex {
     int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
     return index > -1 ? index : 0;
@@ -35,17 +35,15 @@ class _TopNavigationMenuState extends State<TopNavigationMenu> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black87,
-      child: Wrap(
-        direction: Axis.horizontal,
-        children: [
-          for (int i = 0; i < widget.colors.length; i++)
-            NavigationMenuButton(
-              color: widget.colors[i],
-              selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
-              selected: selectedColorCodeIndex == i,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            ),
-        ],
+      width: 200,
+      child: ListView.builder(
+        itemCount: widget.colors.length,
+        itemBuilder: (BuildContext context, int index) => NavigationMenuButton(
+          color: widget.colors[index],
+          selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
+          selected: selectedColorCodeIndex == index,
+          padding: EdgeInsets.all(16),
+        ),
       ),
     );
   }

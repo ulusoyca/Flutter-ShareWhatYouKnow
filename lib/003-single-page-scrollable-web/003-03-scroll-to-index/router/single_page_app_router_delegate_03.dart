@@ -29,22 +29,13 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
   final List<MaterialColor> colors;
 
   // App state fields
-  final ValueNotifier<String> _selectedColorCodeByUserScrollNotifier = ValueNotifier(null);
-  final ValueNotifier<String> _selectedColorCodeByMenuClickNotifier = ValueNotifier(null);
+  final ValueNotifier<String> _selectedColorCodeNotifier = ValueNotifier(null);
   final ValueNotifier<ShapeBorderType> _selectedShapeBorderTypeNotifier = ValueNotifier(null);
   final ValueNotifier<bool> _unknownStateNotifier = ValueNotifier(null);
-  String _selectedColorCode;
 
   SinglePageAppRouterDelegate({this.colors}) : _navigatorKey = GlobalKey<NavigatorState>() {
-    _selectedColorCodeByUserScrollNotifier.addListener(() {
-      _selectedColorCode = _selectedColorCodeByUserScrollNotifier.value;
-    });
-    _selectedColorCodeByMenuClickNotifier.addListener(() {
-      _selectedColorCode = _selectedColorCodeByMenuClickNotifier.value;
-    });
     Listenable.merge([
-      _selectedColorCodeByUserScrollNotifier,
-      _selectedColorCodeByMenuClickNotifier,
+      _selectedColorCodeNotifier,
       _selectedShapeBorderTypeNotifier,
       _unknownStateNotifier,
     ])
@@ -63,11 +54,11 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
       return SinglePageAppConfiguration.unknown();
     } else if (_selectedShapeBorderTypeNotifier.value != null) {
       return SinglePageAppConfiguration.shapeBorder(
-        _selectedColorCodeByMenuClickNotifier.value,
+        _selectedColorCodeNotifier.value,
         _selectedShapeBorderTypeNotifier.value,
       );
     } else {
-      return SinglePageAppConfiguration.home(selectedColorCode: _selectedColorCode);
+      return SinglePageAppConfiguration.home(selectedColorCode: _selectedColorCodeNotifier.value);
     }
   }
 
@@ -82,13 +73,12 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
           : [
               HomePage(
                 colors: colors,
-                selectedColorCodeByUserScrollNotifier: _selectedColorCodeByUserScrollNotifier,
-                selectedColorCodeByMenuClickNotifier: _selectedColorCodeByMenuClickNotifier,
+                selectedColorCodeNotifier: _selectedColorCodeNotifier,
                 selectedShapeBorderTypeNotifier: _selectedShapeBorderTypeNotifier,
               ),
-              if (_selectedColorCode != null && _selectedShapeBorderTypeNotifier.value != null)
+              if (_selectedColorCodeNotifier.value != null && _selectedShapeBorderTypeNotifier.value != null)
                 ShapePage(
-                  colorCode: _selectedColorCode,
+                  colorCode: _selectedColorCodeNotifier.value,
                   shapeBorderType: _selectedShapeBorderTypeNotifier.value,
                 )
             ],
@@ -111,16 +101,15 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
   Future<void> setNewRoutePath(SinglePageAppConfiguration configuration) async {
     if (configuration.unknown) {
       _unknownStateNotifier.value = true;
-      _selectedColorCodeByUserScrollNotifier.value = null;
-      _selectedColorCodeByMenuClickNotifier.value = null;
+      _selectedColorCodeNotifier.value = null;
       _selectedShapeBorderTypeNotifier.value = null;
     } else if (configuration.isHomePage) {
       _unknownStateNotifier.value = false;
-      _selectedColorCodeByMenuClickNotifier.value = configuration.selectedColorCode;
+      _selectedColorCodeNotifier.value = configuration.selectedColorCode;
       _selectedShapeBorderTypeNotifier.value = null;
     } else if (configuration.isShapePage) {
       _unknownStateNotifier.value = false;
-      _selectedColorCodeByMenuClickNotifier.value = configuration.selectedColorCode;
+      _selectedColorCodeNotifier.value = configuration.selectedColorCode;
       _selectedShapeBorderTypeNotifier.value = configuration.shapeBorderType;
     } else {
       print(' Could not set new route');

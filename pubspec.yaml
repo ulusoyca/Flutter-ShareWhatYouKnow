@@ -18,6 +18,7 @@ dependencies:
   url_strategy: ^0.2.0
   scrollable_positioned_list: 0.2.0-nullsafety.0
   tuple: ^2.0.0
+  flutter_lorem: ^2.0.0
 
 dev_dependencies:
   flutter_test:

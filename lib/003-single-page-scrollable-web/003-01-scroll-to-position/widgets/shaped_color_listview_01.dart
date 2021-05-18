@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'shape_border_listview_01.dart';
@@ -26,6 +25,7 @@ class ShapedColorList extends StatefulWidget {
 
 class _ShapedColorListState extends State<ShapedColorList> {
   final double _minItemHeight = 700;
+
   double get _itemHeight => max(_scrollController.position.viewportDimension, _minItemHeight);
   ScrollController _scrollController = ScrollController();
 
@@ -40,7 +40,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
         if (notification is UserScrollNotification) {
-          _notifySelectedColorCode(notification);
+          _onUserScroll(notification.metrics.pixels);
         }
         return true;
       },
@@ -59,10 +59,9 @@ class _ShapedColorListState extends State<ShapedColorList> {
     );
   }
 
-  void _notifySelectedColorCode(UserScrollNotification notification) {
-    final offset = notification.metrics.pixels;
-    final leadingIndex = (offset / _itemHeight).floor();
-    widget.selectedColorCodeNotifier.value = widget.colors[leadingIndex].toHex();
+  void _onUserScroll(double offset) {
+    final trailingIndex = (offset / _itemHeight).floor();
+    widget.selectedColorCodeNotifier.value = widget.colors[trailingIndex].toHex();
   }
 
   Column _section(MaterialColor color, BuildContext context) {
@@ -71,7 +70,6 @@ class _ShapedColorListState extends State<ShapedColorList> {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        ColorSectionTitle(title: color.toHex(leadingHashSign: true)),
         ShapeBorderListView(
           sectionColor: color,
           selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
@@ -87,7 +85,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
     final offset = selectedColorCodeIndex * _itemHeight;
     _scrollController.animateTo(
       offset,
-      duration: Duration(milliseconds: max(500, selectedColorCodeIndex * 100)),
+      duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }

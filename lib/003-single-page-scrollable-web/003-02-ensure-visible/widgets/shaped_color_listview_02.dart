@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-02-ensure-visible/widgets/shape_border_listview_02.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/lorem_text.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class ShapedColorList extends StatefulWidget {
@@ -25,22 +24,15 @@ class ShapedColorList extends StatefulWidget {
 
 class _ShapedColorListState extends State<ShapedColorList> {
   final ScrollController _scrollController = ScrollController();
-  final random = Random();
-  List<EdgeInsets> paddings;
+  List<GlobalKey> keys;
 
   int get selectedColorCodeIndex {
     int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
     return index > -1 ? index : 0;
   }
 
-  List<GlobalKey> keys;
-
   @override
   void initState() {
-    paddings = List.generate(
-      widget.colors.length,
-      (_) => EdgeInsets.symmetric(vertical: random.nextInt(widget.colors.length) * 16.0),
-    );
     keys = [for (int i = 0; i < widget.colors.length; i++) GlobalKey()];
     widget.selectedColorCodeNotifier.addListener(() {
       if (_scrollController.hasClients) {
@@ -57,19 +49,13 @@ class _ShapedColorListState extends State<ShapedColorList> {
         if (notification is UserScrollNotification) {
           _onUserScrolled(notification.metrics.pixels);
         }
-        return false;
+        return true;
       },
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (int i = 0; i < widget.colors.length; i++)
-              Container(
-                color: widget.colors[i].shade100,
-                child: _section(context, i),
-              )
-          ],
+          children: [for (int i = 0; i < widget.colors.length; i++) _section(context, i)],
         ),
       ),
     );
@@ -77,9 +63,11 @@ class _ShapedColorListState extends State<ShapedColorList> {
 
   Widget _section(BuildContext context, int index) {
     final color = widget.colors[index];
-    return Padding(
-      key: keys[index],
-      padding: paddings[index],
+    final key = keys[index];
+    return Container(
+      key: key,
+      color: color.shade100,
+      padding: const EdgeInsets.all(64),
       child: Column(
         children: [
           ColorSectionTitle(title: color.toHex(leadingHashSign: true)),
@@ -88,6 +76,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
             selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
             selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
           ),
+          LoremText(key: ValueKey(index)),
         ],
       ),
     );
@@ -95,11 +84,12 @@ class _ShapedColorListState extends State<ShapedColorList> {
 
   void _onUserScrolled(double offset) {
     double totalItemHeight = 0;
-    for (int i = 0; i < widget.colors.length; i++) {
+    for (int i = 0; i < keys.length; i++) {
       totalItemHeight += keys[i].currentContext.size.height;
       if (totalItemHeight > offset) {
-        print("current index: $i");
-        widget.selectedColorCodeNotifier.value = widget.colors[i].toHex();
+        Router.navigate(context, () {
+          widget.selectedColorCodeNotifier.value = widget.colors[i].toHex();
+        });
         break;
       }
     }
@@ -108,7 +98,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
   void _scrollToSelectedColor() {
     Scrollable.ensureVisible(
       keys[selectedColorCodeIndex].currentContext,
-      duration: Duration(milliseconds: selectedColorCodeIndex * 100),
+      duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }

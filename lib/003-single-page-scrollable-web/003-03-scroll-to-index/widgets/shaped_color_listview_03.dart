@@ -1,25 +1,22 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-scroll-to-index/widgets/shape_border_listview_03.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/lorem_text.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class ShapedColorList extends StatefulWidget {
   final List<MaterialColor> colors;
   final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<String> selectedColorCodeByUserScrollNotifier;
-  final ValueListenable<String> selectedColorCodeByMenuClickNotifier;
+  final ValueNotifier<String> selectedColorCodeNotifier;
 
   const ShapedColorList({
     Key key,
     @required this.colors,
     @required this.selectedShapeBorderTypeNotifier,
-    @required this.selectedColorCodeByUserScrollNotifier,
-    @required this.selectedColorCodeByMenuClickNotifier,
+    @required this.selectedColorCodeNotifier,
   }) : super(key: key);
 
   @override
@@ -33,7 +30,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
   /// Listener that reports the position of items when the list is scrolled.
   final ItemPositionsListener _itemPositionsListener = ItemPositionsListener.create();
 
-  int get leadingIndex {
+  int get trailingIndex {
     /// Determine the first visible item by finding the item with the
     /// smallest trailing edge that is greater than 0.  i.e. the first
     /// item whose trailing edge in visible in the viewport.
@@ -45,22 +42,16 @@ class _ShapedColorListState extends State<ShapedColorList> {
     return firstVisibleColorIndex;
   }
 
-  final random = Random();
-  List<EdgeInsets> paddings;
+  int get selectedColorCodeIndex {
+    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
+    return index > -1 ? index : 0;
+  }
 
   @override
   void initState() {
-    paddings = List.generate(
-      widget.colors.length,
-      (_) => EdgeInsets.symmetric(vertical: random.nextInt(widget.colors.length) * 16.0),
-    );
-    _itemPositionsListener.itemPositions.addListener(() {
-      widget.selectedColorCodeByUserScrollNotifier.value = widget.colors[leadingIndex].toHex();
-    });
-    widget.selectedColorCodeByMenuClickNotifier.addListener(() {
+    widget.selectedColorCodeNotifier.addListener(() {
       if (_itemScrollController.isAttached) {
-        int selectedColorIndex = _findIndexFromColorCode(widget.selectedColorCodeByMenuClickNotifier.value);
-        _scrollTo(selectedColorIndex);
+        _scrollToIndex();
       }
     });
     super.initState();
@@ -68,47 +59,51 @@ class _ShapedColorListState extends State<ShapedColorList> {
 
   @override
   Widget build(BuildContext context) {
-    return ScrollablePositionedList.builder(
-      itemScrollController: _itemScrollController,
-      initialScrollIndex: _findIndexFromColorCode(widget.selectedColorCodeByMenuClickNotifier.value),
-      itemPositionsListener: _itemPositionsListener,
-      itemCount: widget.colors.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          alignment: Alignment.center,
-          color: widget.colors[index].shade100,
-          child: _section(context, index),
-        );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is UserScrollNotification) {
+          widget.selectedColorCodeNotifier.value = widget.colors[trailingIndex].toHex();
+        }
+        return true;
       },
+      child: ScrollablePositionedList.builder(
+        itemScrollController: _itemScrollController,
+        itemPositionsListener: _itemPositionsListener,
+        itemCount: widget.colors.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            alignment: Alignment.center,
+            color: widget.colors[index].shade100,
+            child: _section(context, index),
+          );
+        },
+      ),
     );
   }
 
   Widget _section(BuildContext context, int index) {
     final color = widget.colors[index];
-    return Padding(
-      padding: paddings[index],
+    return Container(
+      color: color.shade100,
+      padding: const EdgeInsets.all(64),
       child: Column(
         children: [
           ColorSectionTitle(title: color.toHex(leadingHashSign: true)),
           ShapeBorderListView(
             sectionColor: color,
-            selectedColorCodeNotifier: widget.selectedColorCodeByMenuClickNotifier,
+            selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
             selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
           ),
+          LoremText(key: ValueKey(index)),
         ],
       ),
     );
   }
 
-  int _findIndexFromColorCode(String value) {
-    var indexWhere = widget.colors.indexWhere((element) => element.toHex() == value);
-    return indexWhere == -1 ? 0 : indexWhere;
-  }
-
-  void _scrollTo(int index) {
+  void _scrollToIndex() {
     _itemScrollController.scrollTo(
-      index: index,
-      duration: Duration(milliseconds: max(500, index * 100)),
+      index: selectedColorCodeIndex,
+      duration: Duration(milliseconds: 300),
       curve: Curves.easeInOutCubic,
     );
   }
