@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'navigation_menu_button.dart';
 
 class TopNavigationMenu extends StatefulWidget {
   final List<MaterialColor> colors;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
 
   const TopNavigationMenu({
     Key key,
@@ -19,7 +20,8 @@ class TopNavigationMenu extends StatefulWidget {
 
 class _TopNavigationMenuState extends State<TopNavigationMenu> {
   int get selectedColorCodeIndex {
-    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
+    final selectedHexColorCode = widget.selectedColorCodeNotifier.value.hexColorCode;
+    int index = widget.colors.indexWhere((element) => element.toHex() == selectedHexColorCode);
     return index > -1 ? index : 0;
   }
 

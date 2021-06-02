@@ -5,12 +5,13 @@ import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-scroll-to-index/widgets/shape_border_listview_03.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/lorem_text.dart';
+import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class ShapedColorList extends StatefulWidget {
   final List<MaterialColor> colors;
   final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
 
   const ShapedColorList({
     Key key,
@@ -43,7 +44,10 @@ class _ShapedColorListState extends State<ShapedColorList> {
   }
 
   int get selectedColorCodeIndex {
-    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
+    int index = widget.colors.indexWhere((element) {
+      final hexColorCode = widget.selectedColorCodeNotifier.value.hexColorCode;
+      return element.toHex() == hexColorCode;
+    });
     return index > -1 ? index : 0;
   }
 
@@ -62,7 +66,11 @@ class _ShapedColorListState extends State<ShapedColorList> {
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
         if (notification is UserScrollNotification) {
-          widget.selectedColorCodeNotifier.value = widget.colors[trailingIndex].toHex();
+          final color = widget.colors[trailingIndex];
+          widget.selectedColorCodeNotifier.value = ColorCodeSelection(
+            hexColorCode: color.toHex(),
+            fromScroll: true,
+          );
         }
         return true;
       },

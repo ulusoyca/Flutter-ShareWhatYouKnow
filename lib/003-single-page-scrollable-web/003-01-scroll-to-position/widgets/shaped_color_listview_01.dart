@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'shape_border_listview_01.dart';
@@ -10,7 +11,7 @@ import 'shape_border_listview_01.dart';
 class ShapedColorList extends StatefulWidget {
   final List<MaterialColor> colors;
   final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
 
   const ShapedColorList({
     Key key,
@@ -61,7 +62,8 @@ class _ShapedColorListState extends State<ShapedColorList> {
 
   void _onUserScroll(double offset) {
     final trailingIndex = (offset / _itemHeight).floor();
-    widget.selectedColorCodeNotifier.value = widget.colors[trailingIndex].toHex();
+    final hexColorCode = widget.colors[trailingIndex].toHex();
+    widget.selectedColorCodeNotifier.value = ColorCodeSelection(hexColorCode: hexColorCode, fromScroll: false);
   }
 
   Column _section(MaterialColor color, BuildContext context) {
@@ -80,7 +82,10 @@ class _ShapedColorListState extends State<ShapedColorList> {
   }
 
   void _scrollToSelectedColor() {
-    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
+    int index = widget.colors.indexWhere((element) {
+      final selectedHexColorCode = widget.selectedColorCodeNotifier.value.hexColorCode;
+      return element.toHex() == selectedHexColorCode;
+    });
     int selectedColorCodeIndex = index > -1 ? index : 0;
     final offset = selectedColorCodeIndex * _itemHeight;
     _scrollController.animateTo(

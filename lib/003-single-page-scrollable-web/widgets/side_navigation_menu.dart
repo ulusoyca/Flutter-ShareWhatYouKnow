@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'navigation_menu_button.dart';
 
 class SideNavigationMenu extends StatefulWidget {
   final List<MaterialColor> colors;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
 
   const SideNavigationMenu({
     Key key,
@@ -19,7 +20,10 @@ class SideNavigationMenu extends StatefulWidget {
 
 class _SideNavigationMenuState extends State<SideNavigationMenu> {
   int get selectedColorCodeIndex {
-    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
+    int index = widget.colors.indexWhere((element) {
+      final selectedHexColorCode = widget.selectedColorCodeNotifier.value.hexColorCode;
+      return element.toHex() == selectedHexColorCode;
+    });
     return index > -1 ? index : 0;
   }
 

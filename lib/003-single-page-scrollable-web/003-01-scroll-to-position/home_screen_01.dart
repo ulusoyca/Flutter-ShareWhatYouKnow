@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-01-scroll-to-position/widgets/shaped_color_listview_01.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/top_navigation_menu.dart';
+import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<MaterialColor> colors;
   final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueListenable<String> selectedColorCodeNotifier;
+  final ValueListenable<ColorCodeSelection> selectedColorCodeNotifier;
 
   HomeScreen({
     Key key,

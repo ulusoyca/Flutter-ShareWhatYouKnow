@@ -17,6 +17,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 
 import 'pages/home_page_03.dart';
 import 'pages/shape_page_03.dart';
@@ -29,13 +30,18 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
   final List<MaterialColor> colors;
 
   // App state fields
-  final ValueNotifier<String> _selectedColorCodeNotifier = ValueNotifier(null);
+  final ValueNotifier<ColorCodeSelection> _selectedColorCodeNotifier = ValueNotifier(null);
   final ValueNotifier<ShapeBorderType> _selectedShapeBorderTypeNotifier = ValueNotifier(null);
   final ValueNotifier<bool> _unknownStateNotifier = ValueNotifier(null);
 
   SinglePageAppRouterDelegate({this.colors}) : _navigatorKey = GlobalKey<NavigatorState>() {
+    _selectedColorCodeNotifier.addListener(() {
+      final fromScroll = _selectedColorCodeNotifier.value.fromScroll;
+      if (!fromScroll) {
+        notifyListeners();
+      }
+    });
     Listenable.merge([
-      _selectedColorCodeNotifier,
       _selectedShapeBorderTypeNotifier,
       _unknownStateNotifier,
     ])
@@ -54,11 +60,11 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
       return SinglePageAppConfiguration.unknown();
     } else if (_selectedShapeBorderTypeNotifier.value != null) {
       return SinglePageAppConfiguration.shapeBorder(
-        _selectedColorCodeNotifier.value,
+        _selectedColorCodeNotifier.value.hexColorCode,
         _selectedShapeBorderTypeNotifier.value,
       );
     } else {
-      return SinglePageAppConfiguration.home(selectedColorCode: _selectedColorCodeNotifier.value);
+      return SinglePageAppConfiguration.home(selectedColorCode: _selectedColorCodeNotifier.value.hexColorCode);
     }
   }
 
@@ -78,7 +84,7 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
               ),
               if (_selectedColorCodeNotifier.value != null && _selectedShapeBorderTypeNotifier.value != null)
                 ShapePage(
-                  colorCode: _selectedColorCodeNotifier.value,
+                  colorCode: _selectedColorCodeNotifier.value.hexColorCode,
                   shapeBorderType: _selectedShapeBorderTypeNotifier.value,
                 )
             ],
@@ -105,11 +111,13 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
       _selectedShapeBorderTypeNotifier.value = null;
     } else if (configuration.isHomePage) {
       _unknownStateNotifier.value = false;
-      _selectedColorCodeNotifier.value = configuration.selectedColorCode;
+      _selectedColorCodeNotifier.value =
+          ColorCodeSelection(hexColorCode: configuration.selectedColorCode, fromScroll: false);
       _selectedShapeBorderTypeNotifier.value = null;
     } else if (configuration.isShapePage) {
       _unknownStateNotifier.value = false;
-      _selectedColorCodeNotifier.value = configuration.selectedColorCode;
+      _selectedColorCodeNotifier.value =
+          ColorCodeSelection(hexColorCode: configuration.selectedColorCode, fromScroll: false);
       _selectedShapeBorderTypeNotifier.value = configuration.shapeBorderType;
     } else {
       print(' Could not set new route');

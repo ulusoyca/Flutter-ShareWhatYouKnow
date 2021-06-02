@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class NavigationMenuButton extends StatelessWidget {
   final Color color;
   final bool selected;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
   final EdgeInsets padding;
 
   const NavigationMenuButton({
@@ -34,7 +35,10 @@ class NavigationMenuButton extends StatelessWidget {
     );
   }
 
-  _onPressed() => selectedColorCodeNotifier.value = color.toHex();
+  _onPressed() => selectedColorCodeNotifier.value = ColorCodeSelection(
+        hexColorCode: color.toHex(),
+        fromScroll: false,
+      );
 
   Text _text(BuildContext context, Color textColor) => Text(
         "#${color.toHex()}",

@@ -4,12 +4,13 @@ import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-02-ensure-visible/widgets/shape_border_listview_02.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/lorem_text.dart';
+import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class ShapedColorList extends StatefulWidget {
   final List<MaterialColor> colors;
   final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<String> selectedColorCodeNotifier;
+  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
 
   const ShapedColorList({
     Key key,
@@ -27,7 +28,10 @@ class _ShapedColorListState extends State<ShapedColorList> {
   List<GlobalKey> keys;
 
   int get selectedColorCodeIndex {
-    int index = widget.colors.indexWhere((element) => element.toHex() == widget.selectedColorCodeNotifier.value);
+    int index = widget.colors.indexWhere((element) {
+      final hexColorCode = widget.selectedColorCodeNotifier.value.hexColorCode;
+      return element.toHex() == hexColorCode;
+    });
     return index > -1 ? index : 0;
   }
 
@@ -35,7 +39,8 @@ class _ShapedColorListState extends State<ShapedColorList> {
   void initState() {
     keys = [for (int i = 0; i < widget.colors.length; i++) GlobalKey()];
     widget.selectedColorCodeNotifier.addListener(() {
-      if (_scrollController.hasClients) {
+      var fromScroll = widget.selectedColorCodeNotifier.value.fromScroll;
+      if (_scrollController.hasClients && !fromScroll) {
         _scrollToSelectedColor();
       }
     });
@@ -88,7 +93,8 @@ class _ShapedColorListState extends State<ShapedColorList> {
       totalItemHeight += keys[i].currentContext.size.height;
       if (totalItemHeight > offset) {
         Router.navigate(context, () {
-          widget.selectedColorCodeNotifier.value = widget.colors[i].toHex();
+          final color = widget.colors[i];
+          widget.selectedColorCodeNotifier.value = ColorCodeSelection(hexColorCode: color.toHex(), fromScroll: true);
         });
         break;
       }
