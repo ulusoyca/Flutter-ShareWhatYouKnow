@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-02-ensure-visible/widgets/shaped_color_listview_02.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/side_navigation_menu.dart';
-import 'package:ulusoyapps_flutter/entity/color_selection.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<MaterialColor> colors;
@@ -19,6 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("rebuilding HomeScreen");
     return Scaffold(
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +30,6 @@ class HomeScreen extends StatelessWidget {
           ),
           Expanded(
             child: ShapedColorList(
-              key: ValueKey("key"),
               colors: colors,
               selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
               selectedColorCodeNotifier: selectedColorCodeNotifier,

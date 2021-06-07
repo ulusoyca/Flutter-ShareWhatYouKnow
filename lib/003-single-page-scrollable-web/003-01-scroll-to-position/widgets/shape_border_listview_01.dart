@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/widgets/shaped_container.dart';
-import 'package:ulusoyapps_flutter/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 import 'package:ulusoyapps_flutter/resources/dimens/app_dimens.dart';
 
@@ -32,8 +32,10 @@ class ShapeBorderListView extends StatelessWidget {
               shapeBorderType: shapeBorderType,
               color: sectionColor,
               onPressed: () {
-                selectedColorCodeNotifier.value =
-                    ColorCodeSelection(hexColorCode: sectionColor.toHex(), fromScroll: false);
+                selectedColorCodeNotifier.value = ColorCodeSelection(
+                  hexColorCode: sectionColor.toHex(),
+                  source: ColorCodeSelectionSource.fromButtonClick,
+                );
                 selectedShapeBorderTypeNotifier.value = shapeBorderType;
               });
         },

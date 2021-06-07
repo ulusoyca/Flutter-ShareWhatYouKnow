@@ -14,35 +14,45 @@
  * limitations under the License.
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-04-navigate-neglect/widgets/shaped_color_listview_04.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/side_navigation_menu.dart';
 
-import '../../home_screen_01.dart';
-
-class HomePage extends Page {
+class HomeScreen extends StatelessWidget {
   final List<MaterialColor> colors;
   final ValueListenable<ShapeBorderType> selectedShapeBorderTypeNotifier;
   final ValueListenable<ColorCodeSelection> selectedColorCodeNotifier;
 
-  HomePage({
+  HomeScreen({
+    Key key,
     this.colors,
     this.selectedShapeBorderTypeNotifier,
     this.selectedColorCodeNotifier,
-  }) : super(key: ValueKey('HomePage'));
+  }) : super(key: key);
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (BuildContext context) {
-        return HomeScreen(
-          colors: colors,
-          selectedColorCodeNotifier: selectedColorCodeNotifier,
-          selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
-        );
-      },
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SideNavigationMenu(
+            colors: colors,
+            selectedColorCodeNotifier: selectedColorCodeNotifier,
+          ),
+          Expanded(
+            child: ShapedColorList(
+              colors: colors,
+              selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
+              selectedColorCodeNotifier: selectedColorCodeNotifier,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

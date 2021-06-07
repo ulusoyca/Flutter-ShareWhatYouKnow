@@ -20,17 +20,16 @@ import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-au
 import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-auth-and-bootstrap/router/pages/shape_page_04.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-auth-and-bootstrap/router/pages/splash_page_04.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-auth-and-bootstrap/router/pages/unknown_page_04.dart';
-import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/data/auth_repository.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/data/colors_repository.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'my_app_configuration.dart';
 
 class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<MyAppConfiguration> {
-
-  final GlobalKey<NavigatorState> _navigatorKey;
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   final AuthRepository authRepository;
   final ColorsRepository colorsRepository;
 
@@ -86,7 +85,7 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
   @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
-  MyAppRouterDelegate(this.authRepository, this.colorsRepository) : _navigatorKey = GlobalKey<NavigatorState>() {
+  MyAppRouterDelegate(this.authRepository, this.colorsRepository) {
     _init();
   }
 
@@ -121,7 +120,7 @@ class MyAppRouterDelegate extends RouterDelegate<MyAppConfiguration>
     List<Page> stack;
     if (show404 == true) {
       stack = _unknownStack;
-    }else if (loggedIn == null || (loggedIn && colors == null)) {
+    } else if (loggedIn == null || (loggedIn && colors == null)) {
       stack = _splashStack;
     } else if (loggedIn) {
       stack = _loggedInStack;

@@ -61,11 +61,11 @@ class SinglePageAppRouteInformationParser extends RouteInformationParser<SingleP
       return RouteInformation(location: '/unknown');
     } else if (configuration.isHomePage) {
       return RouteInformation(
-        location: configuration.selectedColorCode == null ? '/' : '/colors/${configuration.selectedColorCode}',
+        location: configuration.colorCode == null ? '/' : '/colors/${configuration.colorCode}',
       );
     } else if (configuration.isShapePage) {
       final borderType = configuration.shapeBorderType.getStringRepresentation();
-      final location = '/colors/${configuration.selectedColorCode}/$borderType';
+      final location = '/colors/${configuration.colorCode}/$borderType';
       return RouteInformation(location: location);
     } else {
       return null;

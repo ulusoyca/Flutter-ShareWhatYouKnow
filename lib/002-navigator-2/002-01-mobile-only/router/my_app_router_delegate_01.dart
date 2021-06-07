@@ -20,12 +20,12 @@ import 'package:ulusoyapps_flutter/002-navigator-2/002-01-mobile-only/router/pag
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
 class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigatorRouterDelegateMixin {
-  final GlobalKey<NavigatorState> _navigatorKey;
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
-  MyAppRouterDelegate() : _navigatorKey = GlobalKey<NavigatorState>();
+  MyAppRouterDelegate();
 
   String _selectedColorCode;
   String get selectedColorCode => _selectedColorCode;

@@ -24,7 +24,7 @@ import 'package:ulusoyapps_flutter/002-navigator-2/data/colors_repository.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
 class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigatorRouterDelegateMixin {
-  final GlobalKey<NavigatorState> _navigatorKey;
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   final AuthRepository authRepository;
   final ColorsRepository colorsRepository;
 
@@ -59,7 +59,7 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
-  MyAppRouterDelegate(this.authRepository, this.colorsRepository) : _navigatorKey = GlobalKey<NavigatorState>() {
+  MyAppRouterDelegate(this.authRepository, this.colorsRepository) {
     _init();
   }
 
@@ -104,8 +104,7 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
     ];
   }
 
-  List<Page> get _loggedOutStack =>
-      [
+  List<Page> get _loggedOutStack => [
         LoginPage(onLogin: () async {
           loggedIn = true;
           colors = await colorsRepository.fetchColors();
@@ -148,5 +147,5 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
     colors = null;
   }
 
-  Future<void> setNewRoutePath(configuration) async { /* Do Nothing */ }
+  Future<void> setNewRoutePath(configuration) async {/* Do Nothing */}
 }

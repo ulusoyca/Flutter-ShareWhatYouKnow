@@ -59,7 +59,7 @@ class ShapeDialog extends StatelessWidget {
           color: colorCode.hexToColor(),
           shapeBorderType: shapeBorderType,
           text: "Submit",
-          onPressed: () => Navigator.maybePop(context, borderType),
+          onPressed: () => print("Submit clicked"),
         ),
       ),
     );

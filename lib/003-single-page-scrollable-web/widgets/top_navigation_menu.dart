@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'navigation_menu_button.dart';
@@ -20,7 +20,7 @@ class TopNavigationMenu extends StatefulWidget {
 
 class _TopNavigationMenuState extends State<TopNavigationMenu> {
   int get selectedColorCodeIndex {
-    final selectedHexColorCode = widget.selectedColorCodeNotifier.value.hexColorCode;
+    final selectedHexColorCode = widget.selectedColorCodeNotifier.value?.hexColorCode;
     int index = widget.colors.indexWhere((element) => element.toHex() == selectedHexColorCode);
     return index > -1 ? index : 0;
   }
@@ -46,6 +46,12 @@ class _TopNavigationMenuState extends State<TopNavigationMenu> {
               selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
               selected: selectedColorCodeIndex == i,
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              onPressed: () {
+                widget.selectedColorCodeNotifier.value = ColorCodeSelection(
+                  hexColorCode: widget.colors[i].toHex(),
+                  source: ColorCodeSelectionSource.fromButtonClick,
+                );
+              },
             ),
         ],
       ),

@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'shape_border_listview_01.dart';
@@ -27,12 +28,20 @@ class ShapedColorList extends StatefulWidget {
 class _ShapedColorListState extends State<ShapedColorList> {
   final double _minItemHeight = 700;
 
-  double get _itemHeight => max(_scrollController.position.viewportDimension, _minItemHeight);
+  double get _itemHeight {
+    return max(_scrollController.position.viewportDimension, _minItemHeight);
+  }
+
   ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    widget.selectedColorCodeNotifier.addListener(() => _scrollToSelectedColor());
+    widget.selectedColorCodeNotifier.addListener(() {
+      final fromButtonClick = widget.selectedColorCodeNotifier.value.source == ColorCodeSelectionSource.fromButtonClick;
+      if (_scrollController.hasClients && fromButtonClick) {
+        _scrollToSelectedColor();
+      }
+    });
     super.initState();
   }
 
@@ -63,7 +72,10 @@ class _ShapedColorListState extends State<ShapedColorList> {
   void _onUserScroll(double offset) {
     final trailingIndex = (offset / _itemHeight).floor();
     final hexColorCode = widget.colors[trailingIndex].toHex();
-    widget.selectedColorCodeNotifier.value = ColorCodeSelection(hexColorCode: hexColorCode, fromScroll: false);
+    widget.selectedColorCodeNotifier.value = ColorCodeSelection(
+      hexColorCode: hexColorCode,
+      source: ColorCodeSelectionSource.fromScroll,
+    );
   }
 
   Column _section(MaterialColor color, BuildContext context) {
@@ -72,6 +84,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
+        ColorSectionTitle(title: color.toHex(leadingHashSign: true)),
         ShapeBorderListView(
           sectionColor: color,
           selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,

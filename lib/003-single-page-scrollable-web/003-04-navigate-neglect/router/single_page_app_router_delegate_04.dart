@@ -15,14 +15,15 @@
  */
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
 
-import '../home_screen_02.dart';
-import '../shape_dialog_02.dart';
-import '../unknown_screen_02.dart';
-import 'single_page_app_configuration_02.dart';
+import '../home_screen_04.dart';
+import '../shape_dialog_04.dart';
+import '../unknown_screen_04.dart';
+import 'single_page_app_configuration_04.dart';
 
 class ShapePage extends Page {
   final String colorCode;
@@ -70,10 +71,18 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
         selectedShapeBorderTypeNotifier: _selectedShapeBorderTypeNotifier,
       ),
     );
+    _selectedColorCodeNotifier.addListener(() {
+      if (_selectedColorCodeNotifier.value.source == ColorCodeSelectionSource.fromScroll) {
+        Router.neglect(navigatorKey.currentContext, () {
+          notifyListeners();
+        });
+      } else {
+        notifyListeners();
+      }
+    });
     Listenable.merge([
       _selectedShapeBorderTypeNotifier,
       _unknownStateNotifier,
-      _selectedColorCodeNotifier,
     ])
       ..addListener(() {
         print("notifying the router widget");

@@ -23,8 +23,7 @@ import 'package:ulusoyapps_flutter/002-navigator-2/data/auth_repository.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 
 class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigatorRouterDelegateMixin {
-
-  final GlobalKey<NavigatorState> _navigatorKey;
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   bool _loggedIn;
   bool get loggedIn => _loggedIn;
@@ -52,7 +51,7 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
-  MyAppRouterDelegate(this.authRepository) : _navigatorKey = GlobalKey<NavigatorState>() {
+  MyAppRouterDelegate(this.authRepository) {
     _init();
   }
 
@@ -125,5 +124,5 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   }
 
   @override
-  Future<void> setNewRoutePath(configuration) async { /* Do Nothing */ }
+  Future<void> setNewRoutePath(configuration) async {/* Do Nothing */}
 }

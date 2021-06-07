@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class NavigationMenuButton extends StatelessWidget {
@@ -7,6 +7,7 @@ class NavigationMenuButton extends StatelessWidget {
   final bool selected;
   final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
   final EdgeInsets padding;
+  final VoidCallback onPressed;
 
   const NavigationMenuButton({
     Key key,
@@ -14,6 +15,7 @@ class NavigationMenuButton extends StatelessWidget {
     this.selected,
     this.selectedColorCodeNotifier,
     this.padding,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -24,21 +26,16 @@ class NavigationMenuButton extends StatelessWidget {
       padding: padding,
       child: selected
           ? ElevatedButton(
-              onPressed: _onPressed,
+              onPressed: () {},
               style: ElevatedButton.styleFrom(primary: color),
               child: _text(context, textColor),
             )
           : TextButton(
-              onPressed: _onPressed,
+              onPressed: onPressed,
               child: _text(context, color),
             ),
     );
   }
-
-  _onPressed() => selectedColorCodeNotifier.value = ColorCodeSelection(
-        hexColorCode: color.toHex(),
-        fromScroll: false,
-      );
 
   Text _text(BuildContext context, Color textColor) => Text(
         "#${color.toHex()}",
