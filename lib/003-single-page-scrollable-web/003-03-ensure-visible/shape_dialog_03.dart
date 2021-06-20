@@ -15,10 +15,10 @@
  */
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-auth-and-bootstrap/widgets/app_bar_back_button.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/widgets/app_bar_text.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/widgets/shaped_container.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/app_bar_back_button.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class ShapeDialog extends StatelessWidget {
@@ -66,14 +66,14 @@ class ShapeDialog extends StatelessWidget {
   }
 
   AppBar _bar(String borderType) {
-    var hexToColor = colorCode.hexToColor();
+    final color = colorCode.hexToColor();
     return AppBar(
       title: AppBarText(
-        color: hexToColor,
+        color: color,
         text: '$borderType #$colorCode ',
       ),
-      leading: AppBarBackButton(color: hexToColor),
-      backgroundColor: hexToColor,
+      leading: AppBarBackButton(color: color),
+      backgroundColor: color,
     );
   }
 }

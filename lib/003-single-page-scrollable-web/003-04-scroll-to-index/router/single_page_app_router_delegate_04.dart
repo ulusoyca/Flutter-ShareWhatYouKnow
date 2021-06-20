@@ -20,10 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
 
-import '../home_screen_03.dart';
-import '../shape_dialog_03.dart';
-import '../unknown_screen_03.dart';
-import 'single_page_app_configuration_03.dart';
+import '../home_screen_04.dart';
+import '../shape_dialog_04.dart';
+import '../unknown_screen_04.dart';
+import 'single_page_app_configuration_04.dart';
 
 class ShapePage extends Page {
   final String colorCode;

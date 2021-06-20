@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-02-ensure-visible/widgets/shape_border_listview_02.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-ensure-visible/widgets/shape_border_listview_03.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/lorem_text.dart';
@@ -38,6 +38,11 @@ class _ShapedColorListState extends State<ShapedColorList> {
   @override
   void initState() {
     keys = [for (int i = 0; i < widget.colors.length; i++) GlobalKey()];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients && widget.selectedColorCodeNotifier.value != null) {
+        _scrollToSelectedColor();
+      }
+    });
     widget.selectedColorCodeNotifier.addListener(() {
       final fromScroll = widget.selectedColorCodeNotifier.value.source == ColorCodeSelectionSource.fromScroll;
       if (_scrollController.hasClients && !fromScroll) {

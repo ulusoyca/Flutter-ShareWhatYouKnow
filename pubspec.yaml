@@ -16,7 +16,10 @@ dependencies:
   material_design_icons_flutter: ^4.0.5955
   fl_chart: ^0.36.1
   url_strategy: ^0.2.0
-  scrollable_positioned_list: 0.1.10
+  scrollable_positioned_list:
+    git:
+      url: git@github.com:ulusoyca/flutter.widgets.git
+      path: packages/scrollable_positioned_list
   tuple: ^2.0.0
   flutter_lorem: ^2.0.0
   equatable: ^2.0.2

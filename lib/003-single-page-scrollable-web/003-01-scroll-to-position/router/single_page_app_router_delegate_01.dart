@@ -149,8 +149,6 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
         source: ColorCodeSelectionSource.fromBrowserAddressBar,
       );
       _selectedShapeBorderTypeNotifier.value = configuration.shapeBorderType;
-    } else {
-      print(' Could not set new route');
     }
   }
 }

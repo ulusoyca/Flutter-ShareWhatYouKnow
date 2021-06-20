@@ -20,17 +20,19 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.topCenter,
+      body: Column(
         children: [
-          ShapedColorList(
-            colors: colors,
-            selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
-            selectedColorCodeNotifier: selectedColorCodeNotifier,
-          ),
           TopNavigationMenu(
             colors: colors,
             selectedColorCodeNotifier: selectedColorCodeNotifier,
+          ),
+          Expanded(
+            child: ShapedColorList(
+              key: ValueKey(MediaQuery.of(context).size.height),
+              colors: colors,
+              selectedShapeBorderTypeNotifier: selectedShapeBorderTypeNotifier,
+              selectedColorCodeNotifier: selectedColorCodeNotifier,
+            ),
           ),
         ],
       ),
