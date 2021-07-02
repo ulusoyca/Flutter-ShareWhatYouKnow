@@ -15,7 +15,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-02-scroll-to-page/router/single_page_app_configuration_02.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-05-query-params/router/single_page_app_configuration_05.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class SinglePageAppRouteInformationParser
@@ -30,50 +30,38 @@ class SinglePageAppRouteInformationParser
     final uri = Uri.parse(routeInformation.location);
     if (uri.pathSegments.length == 0) {
       return SinglePageAppConfiguration.home();
-    } else if (uri.pathSegments.length == 2) {
-      final first = uri.pathSegments[0].toLowerCase();
-      final second = uri.pathSegments[1].toLowerCase();
-      if (first == 'colors' && _isValidColor(second)) {
-        return SinglePageAppConfiguration.home(colorCode: second);
-      } else {
-        return SinglePageAppConfiguration.unknown();
+    } else if (uri.pathSegments.length == 1) {
+      if (uri.pathSegments[0] == "section" && uri.query.isNotEmpty) {
+        final queryParams = uri.queryParameters;
+        final color = queryParams["color"];
+        final borderType = queryParams["borderType"];
+        if (borderType == null && color != null && _isValidColor(color)) {
+          return SinglePageAppConfiguration.home(color);
+        } else if (borderType != null &&
+            extractShapeBorderType(borderType) != null &&
+            color != null &&
+            _isValidColor(color)) {
+          return SinglePageAppConfiguration.home(color, extractShapeBorderType(borderType));
+        }
       }
-    } else if (uri.pathSegments.length == 3) {
-      final first = uri.pathSegments[0].toLowerCase();
-      final second = uri.pathSegments[1].toLowerCase();
-      final third = uri.pathSegments[2].toLowerCase();
-      final shapeBorderType = extractShapeBorderType(third);
-      if (first == 'colors' && shapeBorderType != null) {
-        return SinglePageAppConfiguration.shapeBorder(
-          second,
-          shapeBorderType,
-        );
-      } else {
-        return SinglePageAppConfiguration.unknown();
-      }
-    } else {
-      return SinglePageAppConfiguration.unknown();
     }
+    return SinglePageAppConfiguration.unknown();
   }
 
   @override
-  RouteInformation restoreRouteInformation(
-      SinglePageAppConfiguration configuration) {
+  RouteInformation restoreRouteInformation(SinglePageAppConfiguration configuration) {
     if (configuration.isUnknown) {
       return RouteInformation(location: '/unknown');
-    } else if (configuration.isHomePage) {
-      return RouteInformation(
-        location: configuration.colorCode == null
-            ? '/'
-            : '/colors/${configuration.colorCode}',
-      );
-    } else if (configuration.isShapePage) {
-      final borderType =
-          configuration.shapeBorderType.getStringRepresentation();
-      final location = '/colors/${configuration.colorCode}/$borderType';
-      return RouteInformation(location: location);
     } else {
-      return null;
+      final colorCode = configuration.colorCode;
+      if (colorCode == null) {
+        return RouteInformation(location: '/');
+      } else if (configuration.shapeBorderType == null) {
+        return RouteInformation(location: '/section?color=$colorCode');
+      } else {
+        final shapeBorderType = configuration.shapeBorderType.getStringRepresentation();
+        return RouteInformation(location: '/section?color=$colorCode&borderType=$shapeBorderType');
+      }
     }
   }
 

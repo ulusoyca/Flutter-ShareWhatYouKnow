@@ -1,60 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_code.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 import 'navigation_menu_button.dart';
 
-class TopNavigationMenu extends StatefulWidget {
+class TopNavigationMenu extends StatelessWidget {
   final List<MaterialColor> colors;
-  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
+  final ValueNotifier<ColorCode> colorCodeNotifier;
 
   const TopNavigationMenu({
     Key key,
     this.colors,
-    this.selectedColorCodeNotifier,
+    this.colorCodeNotifier,
   }) : super(key: key);
 
-  @override
-  _TopNavigationMenuState createState() => _TopNavigationMenuState();
-}
-
-class _TopNavigationMenuState extends State<TopNavigationMenu> {
-  int get selectedColorCodeIndex {
-    final selectedHexColorCode = widget.selectedColorCodeNotifier.value?.hexColorCode;
-    int index = widget.colors.indexWhere((element) => element.toHex() == selectedHexColorCode);
+  int get colorCodeIndex {
+    final selectedHexColorCode = colorCodeNotifier.value?.hexColorCode;
+    int index = colors.indexWhere((element) => element.toHex() == selectedHexColorCode);
     return index > -1 ? index : 0;
   }
 
   @override
-  void initState() {
-    widget.selectedColorCodeNotifier.addListener(() {
-      setState(() => {});
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black87,
-      child: Wrap(
-        direction: Axis.horizontal,
-        children: [
-          for (int i = 0; i < widget.colors.length; i++)
-            NavigationMenuButton(
-              color: widget.colors[i],
-              selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
-              selected: selectedColorCodeIndex == i,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              onPressed: () {
-                widget.selectedColorCodeNotifier.value = ColorCodeSelection(
-                  hexColorCode: widget.colors[i].toHex(),
-                  source: ColorCodeSelectionSource.fromButtonClick,
-                );
-              },
-            ),
-        ],
-      ),
+    return ValueListenableBuilder(
+      valueListenable: colorCodeNotifier,
+      builder: (BuildContext context, ColorCode value, Widget child) {
+        return Container(
+          color: Colors.black87,
+          child: Wrap(
+            direction: Axis.horizontal,
+            children: [
+              for (int i = 0; i < colors.length; i++)
+                NavigationMenuButton(
+                  color: colors[i],
+                  colorCodeNotifier: colorCodeNotifier,
+                  selected: colorCodeIndex == i,
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  onPressed: () {
+                    colorCodeNotifier.value = ColorCode(
+                      hexColorCode: colors[i].toHex(),
+                      source: ColorCodeSelectionSource.fromButtonClick,
+                    );
+                  },
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

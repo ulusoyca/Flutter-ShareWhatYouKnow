@@ -2,29 +2,29 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-04-scroll-to-index/widgets/shape_border_listview_04.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-04-scroll-to-index/shape_border_listview_04.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_code.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/color_section_title.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/lorem_text.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-class ShapedColorList extends StatefulWidget {
+class ColorSections extends StatefulWidget {
   final List<MaterialColor> colors;
-  final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
+  final ValueNotifier<ShapeBorderType> shapeBorderTypeNotifier;
+  final ValueNotifier<ColorCode> colorCodeNotifier;
 
-  const ShapedColorList({
+  const ColorSections({
     Key key,
     @required this.colors,
-    @required this.selectedShapeBorderTypeNotifier,
-    @required this.selectedColorCodeNotifier,
+    @required this.shapeBorderTypeNotifier,
+    @required this.colorCodeNotifier,
   }) : super(key: key);
 
   @override
-  _ShapedColorListState createState() => _ShapedColorListState();
+  _ColorSectionsState createState() => _ColorSectionsState();
 }
 
-class _ShapedColorListState extends State<ShapedColorList> {
+class _ColorSectionsState extends State<ColorSections> {
   /// Controller to scroll or jump to a particular item.
   final ItemScrollController _itemScrollController = ItemScrollController();
 
@@ -43,9 +43,9 @@ class _ShapedColorListState extends State<ShapedColorList> {
     return firstVisibleColorIndex;
   }
 
-  int get selectedColorCodeIndex {
+  int get colorCodeIndex {
     int index = widget.colors.indexWhere((element) {
-      final hexColorCode = widget.selectedColorCodeNotifier.value.hexColorCode;
+      final hexColorCode = widget.colorCodeNotifier.value?.hexColorCode;
       return element.toHex() == hexColorCode;
     });
     return index > -1 ? index : 0;
@@ -53,18 +53,17 @@ class _ShapedColorListState extends State<ShapedColorList> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_itemScrollController.isAttached && widget.selectedColorCodeNotifier.value != null) {
-        _scrollToIndex();
-      }
-    });
-    widget.selectedColorCodeNotifier.addListener(() {
-      final fromScroll = widget.selectedColorCodeNotifier.value.source == ColorCodeSelectionSource.fromScroll;
-      if (_itemScrollController.isAttached && !fromScroll) {
-        _scrollToIndex();
-      }
-    });
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToIndex();
+      widget.colorCodeNotifier.addListener(() {
+        final fromScroll =
+            widget.colorCodeNotifier.value?.source == ColorCodeSelectionSource.fromScroll;
+        if (_itemScrollController.isAttached && !fromScroll) {
+          _scrollToIndex();
+        }
+      });
+    });
   }
 
   @override
@@ -72,25 +71,30 @@ class _ShapedColorListState extends State<ShapedColorList> {
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
         if (notification is UserScrollNotification) {
-          widget.selectedColorCodeNotifier.value = ColorCodeSelection(
+          widget.colorCodeNotifier.value = ColorCode(
             hexColorCode: widget.colors[trailingIndex].toHex(),
             source: ColorCodeSelectionSource.fromScroll,
           );
         }
         return true;
       },
-      child: ScrollablePositionedList.builder(
-        itemScrollController: _itemScrollController,
-        itemPositionsListener: _itemPositionsListener,
-        itemCount: widget.colors.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            alignment: Alignment.center,
-            color: widget.colors[index].shade100,
-            child: _section(context, index),
-          );
-        },
-      ),
+      child: _scrollablePositionedList(),
+    );
+  }
+
+  ScrollablePositionedList _scrollablePositionedList() {
+    return ScrollablePositionedList.builder(
+      itemScrollController: _itemScrollController,
+      itemPositionsListener: _itemPositionsListener,
+      itemCount: widget.colors.length,
+      physics: AlwaysScrollableScrollPhysics(),
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          alignment: Alignment.center,
+          color: widget.colors[index].shade100,
+          child: _section(context, index),
+        );
+      },
     );
   }
 
@@ -104,10 +108,10 @@ class _ShapedColorListState extends State<ShapedColorList> {
           ColorSectionTitle(title: color.toHex(leadingHashSign: true)),
           ShapeBorderListView(
             sectionColor: color,
-            selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
-            selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
+            colorCodeNotifier: widget.colorCodeNotifier,
+            shapeBorderTypeNotifier: widget.shapeBorderTypeNotifier,
           ),
-          LoremText(key: ValueKey(index)),
+          LoremText(seed: index),
         ],
       ),
     );
@@ -115,7 +119,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
 
   void _scrollToIndex() {
     _itemScrollController.scrollTo(
-      index: selectedColorCodeIndex,
+      index: colorCodeIndex,
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOutCubic,
     );

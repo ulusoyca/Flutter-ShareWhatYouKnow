@@ -21,8 +21,8 @@ import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_c
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/shape_dialog.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/unknown_screen.dart';
 
-import '../home_screen_01.dart';
-import 'single_page_app_configuration_01.dart';
+import '../home_screen_05.dart';
+import 'single_page_app_configuration_05.dart';
 
 class ShapePage extends Page {
   final String colorCode;
@@ -91,14 +91,10 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
   SinglePageAppConfiguration get currentConfiguration {
     if (_unknownStateNotifier.value == true) {
       return SinglePageAppConfiguration.unknown();
-    } else if (_shapeBorderTypeNotifier.value != null) {
-      return SinglePageAppConfiguration.shapeBorder(
-        _colorCodeNotifier.value.hexColorCode,
-        _shapeBorderTypeNotifier.value,
-      );
     } else {
       return SinglePageAppConfiguration.home(
-        colorCode: _colorCodeNotifier.value?.hexColorCode,
+        _colorCodeNotifier.value?.hexColorCode,
+        _shapeBorderTypeNotifier.value,
       );
     }
   }
@@ -138,14 +134,7 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
       _unknownStateNotifier.value = true;
       _colorCodeNotifier.value = null;
       _shapeBorderTypeNotifier.value = null;
-    } else if (configuration.isHomePage) {
-      _unknownStateNotifier.value = false;
-      _colorCodeNotifier.value = ColorCode(
-        hexColorCode: configuration.colorCode,
-        source: ColorCodeSelectionSource.fromBrowserAddressBar,
-      );
-      _shapeBorderTypeNotifier.value = null;
-    } else if (configuration.isShapePage) {
+    } else {
       _unknownStateNotifier.value = false;
       _colorCodeNotifier.value = ColorCode(
         hexColorCode: configuration.colorCode,

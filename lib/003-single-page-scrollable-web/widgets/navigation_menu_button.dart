@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_code.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
 class NavigationMenuButton extends StatelessWidget {
   final Color color;
   final bool selected;
-  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
   final EdgeInsets padding;
   final VoidCallback onPressed;
+  final ValueNotifier<ColorCode> colorCodeNotifier;
 
   const NavigationMenuButton({
     Key key,
     this.color,
     this.selected,
-    this.selectedColorCodeNotifier,
+    this.colorCodeNotifier,
     this.padding,
     this.onPressed,
   }) : super(key: key);

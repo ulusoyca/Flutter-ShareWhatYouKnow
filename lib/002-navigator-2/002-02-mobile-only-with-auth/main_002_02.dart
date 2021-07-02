@@ -36,9 +36,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
     delegate = MyAppRouterDelegate(AuthRepository(Preference()));
     authRepository = AuthRepository(Preference());
-    super.initState();
   }
 
   @override

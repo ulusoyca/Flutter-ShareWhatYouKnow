@@ -15,17 +15,18 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-ensure-visible/router/single_page_app_configuration_03.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-import 'single_page_app_configuration_03.dart';
-
-class SinglePageAppRouteInformationParser extends RouteInformationParser<SinglePageAppConfiguration> {
+class SinglePageAppRouteInformationParser
+    extends RouteInformationParser<SinglePageAppConfiguration> {
   final List<MaterialColor> colors;
 
   SinglePageAppRouteInformationParser({this.colors});
 
   @override
-  Future<SinglePageAppConfiguration> parseRouteInformation(RouteInformation routeInformation) async {
+  Future<SinglePageAppConfiguration> parseRouteInformation(
+      RouteInformation routeInformation) async {
     final uri = Uri.parse(routeInformation.location);
     if (uri.pathSegments.length == 0) {
       return SinglePageAppConfiguration.home();
@@ -33,7 +34,7 @@ class SinglePageAppRouteInformationParser extends RouteInformationParser<SingleP
       final first = uri.pathSegments[0].toLowerCase();
       final second = uri.pathSegments[1].toLowerCase();
       if (first == 'colors' && _isValidColor(second)) {
-        return SinglePageAppConfiguration.home(selectedColorCode: second);
+        return SinglePageAppConfiguration.home(colorCode: second);
       } else {
         return SinglePageAppConfiguration.unknown();
       }

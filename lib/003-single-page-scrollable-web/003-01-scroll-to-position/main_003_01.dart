@@ -37,14 +37,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
     delegate = SinglePageAppRouterDelegate(colors: _colors);
     parser = SinglePageAppRouteInformationParser(colors: _colors);
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       routerDelegate: delegate,
       routeInformationParser: parser,
     );

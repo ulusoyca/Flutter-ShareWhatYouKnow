@@ -5,10 +5,10 @@ class SinglePageAppConfiguration {
   final ShapeBorderType shapeBorderType;
   final bool unknown;
 
-  SinglePageAppConfiguration.home({String selectedColorCode})
+  SinglePageAppConfiguration.home({String colorCode})
       : unknown = false,
         shapeBorderType = null,
-        colorCode = selectedColorCode;
+        colorCode = colorCode;
 
   SinglePageAppConfiguration.shapeBorder(String colorCode, ShapeBorderType shape)
       : unknown = false,

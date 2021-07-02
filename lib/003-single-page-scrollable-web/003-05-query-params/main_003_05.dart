@@ -15,8 +15,8 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-ensure-visible/router/single_page_app_route_information_parser_03.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-03-ensure-visible/router/single_page_app_router_delegate_03.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-05-query-params/router/single_page_app_route_information_parser_05.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-05-query-params/router/single_page_app_router_delegate_05.dart';
 
 import '../configure_nonweb.dart' if (dart.library.html) '../configure_web.dart';
 

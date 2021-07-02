@@ -15,17 +15,18 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-04-scroll-to-index/router/single_page_app_configuration_04.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-import 'single_page_app_configuration_04.dart';
-
-class SinglePageAppRouteInformationParser extends RouteInformationParser<SinglePageAppConfiguration> {
+class SinglePageAppRouteInformationParser
+    extends RouteInformationParser<SinglePageAppConfiguration> {
   final List<MaterialColor> colors;
 
   SinglePageAppRouteInformationParser({this.colors});
 
   @override
-  Future<SinglePageAppConfiguration> parseRouteInformation(RouteInformation routeInformation) async {
+  Future<SinglePageAppConfiguration> parseRouteInformation(
+      RouteInformation routeInformation) async {
     final uri = Uri.parse(routeInformation.location);
     if (uri.pathSegments.length == 0) {
       return SinglePageAppConfiguration.home();
@@ -33,7 +34,7 @@ class SinglePageAppRouteInformationParser extends RouteInformationParser<SingleP
       final first = uri.pathSegments[0].toLowerCase();
       final second = uri.pathSegments[1].toLowerCase();
       if (first == 'colors' && _isValidColor(second)) {
-        return SinglePageAppConfiguration.home(selectedColorCode: second);
+        return SinglePageAppConfiguration.home(colorCode: second);
       } else {
         return SinglePageAppConfiguration.unknown();
       }
@@ -56,15 +57,19 @@ class SinglePageAppRouteInformationParser extends RouteInformationParser<SingleP
   }
 
   @override
-  RouteInformation restoreRouteInformation(SinglePageAppConfiguration configuration) {
+  RouteInformation restoreRouteInformation(
+      SinglePageAppConfiguration configuration) {
     if (configuration.isUnknown) {
       return RouteInformation(location: '/unknown');
     } else if (configuration.isHomePage) {
       return RouteInformation(
-        location: configuration.colorCode == null ? '/' : '/colors/${configuration.colorCode}',
+        location: configuration.colorCode == null
+            ? '/'
+            : '/colors/${configuration.colorCode}',
       );
     } else if (configuration.isShapePage) {
-      final borderType = configuration.shapeBorderType.getStringRepresentation();
+      final borderType =
+          configuration.shapeBorderType.getStringRepresentation();
       final location = '/colors/${configuration.colorCode}/$borderType';
       return RouteInformation(location: location);
     } else {

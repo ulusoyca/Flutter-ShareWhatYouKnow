@@ -17,11 +17,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_code.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/shape_dialog.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/widgets/unknown_screen.dart';
 
 import '../home_screen_02.dart';
-import '../shape_dialog_02.dart';
-import '../unknown_screen_02.dart';
 import 'single_page_app_configuration_02.dart';
 
 class ShapePage extends Page {
@@ -44,7 +44,10 @@ class ShapePage extends Page {
       settings: this,
       barrierDismissible: true,
       barrierColor: Colors.black87,
-      builder: (BuildContext context) => ShapeDialog(colorCode: colorCode, shapeBorderType: shapeBorderType),
+      builder: (BuildContext context) => ShapeDialog(
+        colorCode: colorCode,
+        shapeBorderType: shapeBorderType,
+      ),
       context: context,
     );
   }
@@ -57,8 +60,8 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
   Page _homePage;
 
   // App state fields
-  final ValueNotifier<ColorCodeSelection> _selectedColorCodeNotifier = ValueNotifier(null);
-  final ValueNotifier<ShapeBorderType> _selectedShapeBorderTypeNotifier = ValueNotifier(null);
+  final ValueNotifier<ColorCode> _colorCodeNotifier = ValueNotifier(null);
+  final ValueNotifier<ShapeBorderType> _shapeBorderTypeNotifier = ValueNotifier(null);
   final ValueNotifier<bool> _unknownStateNotifier = ValueNotifier(null);
 
   SinglePageAppRouterDelegate({this.colors}) {
@@ -66,14 +69,14 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
       key: ValueKey<String>("HomePage"),
       child: HomeScreen(
         colors: colors,
-        selectedColorCodeNotifier: _selectedColorCodeNotifier,
-        selectedShapeBorderTypeNotifier: _selectedShapeBorderTypeNotifier,
+        colorCodeNotifier: _colorCodeNotifier,
+        shapeBorderTypeNotifier: _shapeBorderTypeNotifier,
       ),
     );
     Listenable.merge([
-      _selectedShapeBorderTypeNotifier,
+      _shapeBorderTypeNotifier,
       _unknownStateNotifier,
-      _selectedColorCodeNotifier,
+      _colorCodeNotifier,
     ])
       ..addListener(() {
         print("notifying the router widget");
@@ -88,14 +91,14 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
   SinglePageAppConfiguration get currentConfiguration {
     if (_unknownStateNotifier.value == true) {
       return SinglePageAppConfiguration.unknown();
-    } else if (_selectedShapeBorderTypeNotifier.value != null) {
+    } else if (_shapeBorderTypeNotifier.value != null) {
       return SinglePageAppConfiguration.shapeBorder(
-        _selectedColorCodeNotifier.value.hexColorCode,
-        _selectedShapeBorderTypeNotifier.value,
+        _colorCodeNotifier.value.hexColorCode,
+        _shapeBorderTypeNotifier.value,
       );
     } else {
       return SinglePageAppConfiguration.home(
-        selectedColorCode: _selectedColorCodeNotifier.value.hexColorCode,
+        colorCode: _colorCodeNotifier.value?.hexColorCode,
       );
     }
   }
@@ -113,16 +116,16 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
             ]
           : [
               _homePage,
-              if (_selectedColorCodeNotifier.value != null && _selectedShapeBorderTypeNotifier.value != null)
+              if (_colorCodeNotifier.value != null && _shapeBorderTypeNotifier.value != null)
                 ShapePage(
-                  colorCode: _selectedColorCodeNotifier.value.hexColorCode,
-                  shapeBorderType: _selectedShapeBorderTypeNotifier.value,
+                  colorCode: _colorCodeNotifier.value.hexColorCode,
+                  shapeBorderType: _shapeBorderTypeNotifier.value,
                 ),
             ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) return false;
         if (route.settings.name == ShapePage.routeName) {
-          _selectedShapeBorderTypeNotifier.value = null;
+          _shapeBorderTypeNotifier.value = null;
         }
         return true;
       },
@@ -133,24 +136,22 @@ class SinglePageAppRouterDelegate extends RouterDelegate<SinglePageAppConfigurat
   Future<void> setNewRoutePath(SinglePageAppConfiguration configuration) async {
     if (configuration.unknown) {
       _unknownStateNotifier.value = true;
-      _selectedColorCodeNotifier.value = null;
-      _selectedShapeBorderTypeNotifier.value = null;
+      _colorCodeNotifier.value = null;
+      _shapeBorderTypeNotifier.value = null;
     } else if (configuration.isHomePage) {
       _unknownStateNotifier.value = false;
-      _selectedColorCodeNotifier.value = ColorCodeSelection(
+      _colorCodeNotifier.value = ColorCode(
         hexColorCode: configuration.colorCode,
         source: ColorCodeSelectionSource.fromBrowserAddressBar,
       );
-      _selectedShapeBorderTypeNotifier.value = null;
+      _shapeBorderTypeNotifier.value = null;
     } else if (configuration.isShapePage) {
       _unknownStateNotifier.value = false;
-      _selectedColorCodeNotifier.value = ColorCodeSelection(
+      _colorCodeNotifier.value = ColorCode(
         hexColorCode: configuration.colorCode,
         source: ColorCodeSelectionSource.fromBrowserAddressBar,
       );
-      _selectedShapeBorderTypeNotifier.value = configuration.shapeBorderType;
-    } else {
-      print(' Could not set new route');
+      _shapeBorderTypeNotifier.value = configuration.shapeBorderType;
     }
   }
 }

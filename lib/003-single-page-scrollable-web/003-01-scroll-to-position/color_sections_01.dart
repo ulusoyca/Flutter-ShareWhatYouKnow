@@ -3,58 +3,56 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/entity/shape_border_type.dart';
-import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_selection.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-01-scroll-to-position/shape_border_listview_01.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/entity/color_code.dart';
 import 'package:ulusoyapps_flutter/extensions/color_extensions.dart';
 
-import 'shape_border_listview_01.dart';
-
-class ShapedColorList extends StatefulWidget {
+class ColorSections extends StatefulWidget {
   final List<MaterialColor> colors;
-  final ValueNotifier<ShapeBorderType> selectedShapeBorderTypeNotifier;
-  final ValueNotifier<ColorCodeSelection> selectedColorCodeNotifier;
+  final ValueNotifier<ShapeBorderType> shapeBorderTypeNotifier;
+  final ValueNotifier<ColorCode> colorCodeNotifier;
 
-  const ShapedColorList({
+  ColorSections({
     Key key,
     @required this.colors,
-    @required this.selectedShapeBorderTypeNotifier,
-    @required this.selectedColorCodeNotifier,
-  }) : super(key: key);
+    @required this.shapeBorderTypeNotifier,
+    @required this.colorCodeNotifier,
+  }) : super(key: key) {
+    print("reconstructing HomeScreen");
+  }
 
   @override
-  _ShapedColorListState createState() => _ShapedColorListState();
+  _ColorSectionsState createState() => _ColorSectionsState();
 }
 
-class _ShapedColorListState extends State<ShapedColorList> {
+class _ColorSectionsState extends State<ColorSections> {
   final double _minItemHeight = 700;
 
   ScrollController _scrollController = ScrollController();
-
-  int get _selectedColorCodeIndex {
-    int index = widget.colors.indexWhere((element) {
-      final hexColorCode = widget.selectedColorCodeNotifier.value.hexColorCode;
-      return element.toHex() == hexColorCode;
-    });
-    return index > -1 ? index : 0;
-  }
 
   double _calculateItemHeight({double availableHeight}) {
     return max(availableHeight, _minItemHeight);
   }
 
+  // Find the index of the color code from the colors list
+  int get _colorCodeIndex {
+    int index = widget.colors.indexWhere((element) {
+      final hexColorCode = widget.colorCodeNotifier.value?.hexColorCode;
+      return element.toHex() == hexColorCode;
+    });
+    return index > -1 ? index : 0;
+  }
+
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients && widget.selectedColorCodeNotifier.value != null) {
-        _scrollToSelectedColor();
-      }
-    });
-    widget.selectedColorCodeNotifier.addListener(() {
-      final fromButtonClick = widget.selectedColorCodeNotifier.value.source == ColorCodeSelectionSource.fromButtonClick;
-      if (_scrollController.hasClients && fromButtonClick) {
-        _scrollToSelectedColor();
-      }
-    });
     super.initState();
+    widget.colorCodeNotifier.addListener(() {
+      final fromScroll =
+          widget.colorCodeNotifier.value?.source == ColorCodeSelectionSource.fromScroll;
+      if (_scrollController.hasClients && !fromScroll) {
+        _scrollToSection();
+      }
+    });
   }
 
   @override
@@ -62,7 +60,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final itemHeight = _calculateItemHeight(availableHeight: constraints.maxHeight);
-        _scrollController = ScrollController(initialScrollOffset: itemHeight * _selectedColorCodeIndex);
+        _scrollController = ScrollController(initialScrollOffset: itemHeight * _colorCodeIndex);
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification is UserScrollNotification) {
@@ -73,6 +71,7 @@ class _ShapedColorListState extends State<ShapedColorList> {
           child: ListView.builder(
             controller: _scrollController,
             itemCount: widget.colors.length,
+            physics: AlwaysScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               final color = widget.colors[index];
               return Container(
@@ -88,10 +87,11 @@ class _ShapedColorListState extends State<ShapedColorList> {
   }
 
   void _onUserScroll(double offset) {
-    final itemHeight = _calculateItemHeight(availableHeight: _scrollController.position.viewportDimension);
+    final itemHeight =
+        _calculateItemHeight(availableHeight: _scrollController.position.viewportDimension);
     final trailingIndex = (offset / itemHeight).floor();
     final hexColorCode = widget.colors[trailingIndex].toHex();
-    widget.selectedColorCodeNotifier.value = ColorCodeSelection(
+    widget.colorCodeNotifier.value = ColorCode(
       hexColorCode: hexColorCode,
       source: ColorCodeSelectionSource.fromScroll,
     );
@@ -100,14 +100,14 @@ class _ShapedColorListState extends State<ShapedColorList> {
   Widget _section(MaterialColor color, BuildContext context) {
     return ShapeBorderListView(
       sectionColor: color,
-      selectedShapeBorderTypeNotifier: widget.selectedShapeBorderTypeNotifier,
-      selectedColorCodeNotifier: widget.selectedColorCodeNotifier,
+      shapeBorderTypeNotifier: widget.shapeBorderTypeNotifier,
+      colorCodeNotifier: widget.colorCodeNotifier,
     );
   }
 
-  void _scrollToSelectedColor() {
-    final itemHeight = _calculateItemHeight(availableHeight: _scrollController.position.viewportDimension);
-    final offset = _selectedColorCodeIndex * itemHeight;
+  void _scrollToSection() {
+    final itemHeight = _calculateItemHeight(availableHeight: context.size.height);
+    final offset = _colorCodeIndex * itemHeight;
     _scrollController.animateTo(
       offset,
       duration: Duration(milliseconds: 300),

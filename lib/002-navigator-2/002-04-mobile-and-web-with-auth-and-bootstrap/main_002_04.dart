@@ -16,13 +16,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-auth-and-bootstrap/router/my_app_router_delegate_04.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-auth-and-bootstrap/router/my_app_route_information_parser_04.dart';
+import 'package:ulusoyapps_flutter/002-navigator-2/002-04-mobile-and-web-with-auth-and-bootstrap/router/my_app_router_delegate_04.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/data/auth_repository.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/data/colors_repository.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/viewmodels/auth_view_model.dart';
 import 'package:ulusoyapps_flutter/002-navigator-2/viewmodels/colors_view_model.dart';
 import 'package:ulusoyapps_flutter/cache/Preference.dart';
+
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 
 void main() {
@@ -43,11 +44,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
     authRepository = AuthRepository(Preference());
     colorsRepository = ColorsRepository();
     delegate = MyAppRouterDelegate(authRepository, colorsRepository);
     parser = MyAppRouteInformationParser();
-    super.initState();
   }
 
   @override

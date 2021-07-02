@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 
 class LoremText extends StatefulWidget {
-  const LoremText({Key key}) : super(key: key);
+  const LoremText({Key key, this.seed}) : super(key: key);
+
+  final int seed;
 
   @override
   _LoremTextState createState() => _LoremTextState();
@@ -18,8 +20,9 @@ class _LoremTextState extends State<LoremText> {
 
   @override
   void initState() {
-    numOfParagraphs = max(Random().nextInt(maxNumberOfParagraphs), minNumberOfParagraphs);
     super.initState();
+    final randomNumberOfParagraphs = Random(widget.seed).nextInt(maxNumberOfParagraphs);
+    numOfParagraphs = max(randomNumberOfParagraphs, minNumberOfParagraphs);
   }
 
   @override

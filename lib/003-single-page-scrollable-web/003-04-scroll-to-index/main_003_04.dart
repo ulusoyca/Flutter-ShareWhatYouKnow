@@ -15,10 +15,10 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-04-scroll-to-index/router/single_page_app_route_information_parser_04.dart';
 import 'package:ulusoyapps_flutter/003-single-page-scrollable-web/003-04-scroll-to-index/router/single_page_app_router_delegate_04.dart';
 
 import '../configure_nonweb.dart' if (dart.library.html) '../configure_web.dart';
-import 'router/single_page_app_route_information_parser_04.dart';
 
 void main() {
   configureApp();
@@ -37,14 +37,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
     delegate = SinglePageAppRouterDelegate(colors: _colors);
     parser = SinglePageAppRouteInformationParser(colors: _colors);
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       routerDelegate: delegate,
       routeInformationParser: parser,
     );

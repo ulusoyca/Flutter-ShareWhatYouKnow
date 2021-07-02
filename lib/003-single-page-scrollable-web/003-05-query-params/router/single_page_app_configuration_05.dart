@@ -5,12 +5,7 @@ class SinglePageAppConfiguration {
   final ShapeBorderType shapeBorderType;
   final bool unknown;
 
-  SinglePageAppConfiguration.home({String colorCode})
-      : unknown = false,
-        shapeBorderType = null,
-        colorCode = colorCode;
-
-  SinglePageAppConfiguration.shapeBorder(String colorCode, ShapeBorderType shape)
+  SinglePageAppConfiguration.home([String colorCode, ShapeBorderType shape])
       : unknown = false,
         shapeBorderType = shape,
         colorCode = colorCode;
@@ -21,8 +16,4 @@ class SinglePageAppConfiguration {
         colorCode = null;
 
   bool get isUnknown => unknown == true;
-
-  bool get isHomePage => unknown == false && shapeBorderType == null;
-
-  bool get isShapePage => unknown == false && colorCode != null && shapeBorderType != null;
 }
