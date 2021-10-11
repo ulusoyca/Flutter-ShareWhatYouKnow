@@ -1,0 +1,21 @@
+name: theme_switch_with_provider
+description: An application for showcasing several flutter implementations.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^2.1.0
+  provider: ^6.0.0
+  material_design_icons_flutter: ^5.0.6295
+  fl_chart: ^0.40.0
+  tuple: ^2.0.0
+  common:
+    path: ../common
+
+flutter:
+  uses-material-design: true
