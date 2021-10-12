@@ -15,10 +15,7 @@ dependencies:
   common:
     path: ../common
   url_strategy: ^0.2.0
-  scrollable_positioned_list:
-    git:
-      url: git@github.com:ulusoyca/flutter.widgets.git
-      path: packages/scrollable_positioned_list
+  scrollable_positioned_list: ^0.2.2
   tuple: ^2.0.0
   flutter_lorem: ^2.0.0
   equatable: ^2.0.3
