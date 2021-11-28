@@ -1,0 +1,21 @@
+name: multi_page_scrollable_bottom_sheet
+description: A demo app to demonstrate mulyi page scrollable bottomsheet.
+
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  very_good_analysis: ^2.4.0
+  google_fonts: ^2.1.0
+  material_design_icons_flutter: ^5.0.6295
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+
