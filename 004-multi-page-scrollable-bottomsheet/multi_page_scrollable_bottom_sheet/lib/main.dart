@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:multi_page_scrollable_bottom_sheet/resources/colors/app_colors.dart';
 import 'package:multi_page_scrollable_bottom_sheet/resources/themes/text_theme/app_text_theme.dart';
 import 'package:multi_page_scrollable_bottom_sheet/widgets/buttons/circular_button.dart';
@@ -31,6 +33,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool slowAnimation = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +60,15 @@ class _HomePageState extends State<HomePage> {
                     style: Theme.of(context).textTheme.headline6,
                     textAlign: TextAlign.center,
                   )),
-                  CircularButton(iconData: Icons.add_rounded),
+                  CircularButton(
+                    iconData: slowAnimation ? MdiIcons.speedometerSlow : MdiIcons.speedometer,
+                    onPressed: () {
+                      timeDilation = slowAnimation ? 1.0 : 8.0;
+                      setState(() {
+                        slowAnimation = !slowAnimation;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),

@@ -56,7 +56,11 @@ class _MyAppState extends State<MyApp> {
           create: (_) => ColorsViewModel(colorsRepository),
         ),
       ],
-      child: MaterialApp(home: Router(routerDelegate: delegate)),
+      child: MaterialApp(
+          home: Router(
+        routerDelegate: delegate,
+        backButtonDispatcher: RootBackButtonDispatcher(),
+      )),
     );
   }
 }

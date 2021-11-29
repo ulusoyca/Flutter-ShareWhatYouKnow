@@ -45,7 +45,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<AuthViewModel>(
       create: (_) => AuthViewModel(authRepository),
-      child: MaterialApp(home: Router(routerDelegate: delegate)),
+      child: MaterialApp(
+          home: Router(
+        routerDelegate: delegate,
+        backButtonDispatcher: RootBackButtonDispatcher(),
+      )),
     );
   }
 }

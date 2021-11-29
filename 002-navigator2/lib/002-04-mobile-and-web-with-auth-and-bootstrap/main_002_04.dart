@@ -65,6 +65,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp.router(
         routerDelegate: delegate,
         routeInformationParser: parser,
+        backButtonDispatcher: RootBackButtonDispatcher(),
       ),
     );
   }
