@@ -10,10 +10,11 @@ final _pageIndexNotifier = ValueNotifier(0);
 final _selectedMemeIndex = ValueNotifier(0);
 final _topText = ValueNotifier("");
 final _bottomText = ValueNotifier("");
+
 bool get _bothTextFieldsEmpty => _topText.value.isEmpty && _bottomText.value.isEmpty;
 
 showMemeGeneratorBottomSheet(BuildContext context) {
-  showScrollableWoltBottomSheet(
+  showScrollableBottomSheet(
     context: context,
     pageIndexListenable: _pageIndexNotifier,
     pages: (_) => [
@@ -24,12 +25,13 @@ showMemeGeneratorBottomSheet(BuildContext context) {
   );
 }
 
-ScrollableWoltBottomSheetPage _firstPage(BuildContext context) {
-  return ScrollableWoltBottomSheetPage(
+ScrollableBottomSheetPage _firstPage(BuildContext context) {
+  return ScrollableBottomSheetPage(
     title: Text(
       "Select Meme",
       style: _titleTextStyle(context),
     ),
+    appbarTitle: "Select Meme",
     content: MemeBottomSheetFirstPageContent(
       selectedImageIndex: _selectedMemeIndex,
       pageIndexNotifier: _pageIndexNotifier,
@@ -41,16 +43,20 @@ ScrollableWoltBottomSheetPage _firstPage(BuildContext context) {
   );
 }
 
-ScrollableWoltBottomSheetPage _secondPage(BuildContext context) {
+ScrollableBottomSheetPage _secondPage(BuildContext context) {
   final primaryButtonEnabled = ValueNotifier(!_bothTextFieldsEmpty);
   Listenable.merge([_topText, _bottomText]).addListener(() {
     primaryButtonEnabled.value = !_bothTextFieldsEmpty;
   });
-  return ScrollableWoltBottomSheetPage(
-    title: Text(
-      "Add your text",
-      style: _titleTextStyle(context),
+  return ScrollableBottomSheetPage(
+    title: Padding(
+      padding: EdgeInsets.only(top: 16),
+      child: Text(
+        "Add your text",
+        style: _titleTextStyle(context),
+      ),
     ),
+    appbarTitle: "Add your text",
     headerHeight: 250,
     header: ValueListenableBuilder(
       valueListenable: _selectedMemeIndex,
@@ -79,13 +85,14 @@ ScrollableWoltBottomSheetPage _secondPage(BuildContext context) {
   );
 }
 
-ScrollableWoltBottomSheetPage _thirdPage(BuildContext context) {
+ScrollableBottomSheetPage _thirdPage(BuildContext context) {
   final primaryButtonState = ValueNotifier(PrimaryButtonState.idle);
-  return ScrollableWoltBottomSheetPage(
+  return ScrollableBottomSheetPage(
     title: Text(
       "Share the love",
       style: _titleTextStyle(context),
     ),
+    appbarTitle: "Share the love",
     content: MemeBottomSheetThirdPageContent(
       selectedImageIndex: _selectedMemeIndex,
       pageIndexNotifier: _pageIndexNotifier,

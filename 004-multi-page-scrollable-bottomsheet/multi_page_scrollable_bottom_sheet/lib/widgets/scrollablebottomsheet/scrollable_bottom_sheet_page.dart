@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:multi_page_scrollable_bottom_sheet/resources/colors/app_colors.dart';
 import 'package:multi_page_scrollable_bottom_sheet/widgets/buttons/primary_button.dart';
 
-class ScrollableWoltBottomSheetPage {
-  final Text title;
+class ScrollableBottomSheetPage {
+  final Widget title;
+  final String appbarTitle;
   final Widget content;
   final Widget? header;
   final double? headerHeight;
@@ -17,9 +18,10 @@ class ScrollableWoltBottomSheetPage {
   final ValueListenable<VoidCallback?>? actionListenable;
   final ValueListenable<AppColorNames>? actionButtonColor;
 
-  ScrollableWoltBottomSheetPage({
+  ScrollableBottomSheetPage({
     required this.title,
     required this.content,
+    required this.appbarTitle,
     this.actionTextListenable,
     this.actionEnabledListenable,
     this.actionListenable,

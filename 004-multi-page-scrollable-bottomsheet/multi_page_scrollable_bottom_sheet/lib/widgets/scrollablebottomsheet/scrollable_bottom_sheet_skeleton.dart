@@ -53,7 +53,7 @@ class OutgoingWidgets {
 
 class ScrollableBottomSheetSkeleton extends StatefulWidget {
   final ValueNotifier<int> pageIndexListenable;
-  final List<ScrollableWoltBottomSheetPage> pages;
+  final List<ScrollableBottomSheetPage> pages;
   final EdgeInsetsDirectional edgeInsetsDirectional;
   final int index;
 
@@ -80,9 +80,7 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
 
   final double _topBarHeight = 74;
 
-  final double _titleTopMargin = 24;
-
-  ScrollableWoltBottomSheetPage get _page => widget.pages[_index];
+  ScrollableBottomSheetPage get _page => widget.pages[_index];
 
   late List<GlobalKey> _titleKeys;
   late List<GlobalKey> _offstagedTitleKeys;
@@ -94,6 +92,8 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   late List<ValueNotifier<double>> _scrollPositions;
 
   ValueNotifier<double> get _currentScrollPosition => _scrollPositions[_index];
+
+  bool forwardMove = true;
 
   @override
   void initState() {
@@ -116,6 +116,7 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   @override
   void didUpdateWidget(covariant ScrollableBottomSheetSkeleton oldWidget) {
     super.didUpdateWidget(oldWidget);
+    forwardMove = oldWidget.index < widget.index;
     if (oldWidget.index != widget.index) {
       _addChild(animate: true);
     }
@@ -232,6 +233,7 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
           controller: animationController,
           currentMainContentKey: _currentOffstagedMainContentKeys[_index],
           outgoingMainContentKey: _outgoingOffstagedMainContentKeys[_index],
+          forwardMove: forwardMove,
         ),
         offstagedMainContent: _createMainContent(_offstagedTitleKeys[_index]),
         topBarAnimatedBuilder: CurrentTopBarWidgetsAnimatedBuilder(
@@ -263,6 +265,7 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
           mainContent: currentWidgetsToBeOutgoing.mainContentAnimatedBuilder.mainContent,
           currentMainContentKey: _currentOffstagedMainContentKeys[_index],
           outgoingMainContentKey: _outgoingOffstagedMainContentKeys[_index],
+          forwardMove: forwardMove,
         ),
         offstagedMainContent: currentWidgetsToBeOutgoing.offstagedMainContent,
         topBarAnimatedBuilder: OutgoingTopBarWidgetsAnimatedBuilder(
@@ -286,7 +289,6 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   ScrollableBottomSheetMainContent _createMainContent(GlobalKey titleKey) =>
       ScrollableBottomSheetMainContent(
         key: UniqueKey(),
-        titleTopMargin: _titleTopMargin,
         titleKey: titleKey,
         topBarHeight: _topBarHeight,
         edgeInsetsDirectional: widget.edgeInsetsDirectional,
@@ -301,12 +303,11 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   ScrollableBottomSheetTopBar _createTopBar() => ScrollableBottomSheetTopBar(
         key: UniqueKey(),
         topBarHeight: _topBarHeight,
-        titleTopMargin: _titleTopMargin,
         backgroundColor: _page.backgroundColor,
         currentScrollPositionListenable: _currentScrollPosition,
-        topBarTitle: _page.title,
+        topBarTitle: _page.appbarTitle,
         titleKey: _titleKeys[_index],
-        availableTopSpace: _page.headerHeight ?? _topBarHeight,
+        headerHeight: _page.headerHeight,
       );
 
   BottomSheetCloseButton _createCloseButton() => BottomSheetCloseButton(
@@ -380,6 +381,8 @@ class _Skeleton extends StatelessWidget {
     required this.topBarHeight,
   }) : super(key: key);
 
+  final handlerHeight = 12.0;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -388,7 +391,7 @@ class _Skeleton extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: 0,
+          top: -4,
           height: topBarHeight,
           child: topBar,
         ),
@@ -402,7 +405,8 @@ class _Skeleton extends StatelessWidget {
           top: 0,
           end: 0,
           child: Padding(
-            padding: EdgeInsets.only(top: edgeInsetsDirectional.top),
+            padding: EdgeInsets.only(
+                top: edgeInsetsDirectional.top - ScrollableBottomSheetHandler.topMargin),
             child: closeButtton,
           ),
         ),
@@ -410,7 +414,8 @@ class _Skeleton extends StatelessWidget {
           top: 0,
           start: 0,
           child: Padding(
-            padding: EdgeInsets.only(top: edgeInsetsDirectional.top),
+            padding: EdgeInsets.only(
+                top: edgeInsetsDirectional.top - ScrollableBottomSheetHandler.topMargin),
             child: backButton,
           ),
         ),

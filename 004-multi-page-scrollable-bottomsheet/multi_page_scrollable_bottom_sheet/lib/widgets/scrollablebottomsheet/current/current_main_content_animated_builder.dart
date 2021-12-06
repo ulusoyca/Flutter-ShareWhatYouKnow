@@ -6,6 +6,7 @@ class CurrentMainContentAnimatedBuilder extends StatefulWidget {
   final GlobalKey outgoingMainContentKey;
   final GlobalKey currentMainContentKey;
   final Widget mainContent;
+  final bool forwardMove;
 
   CurrentMainContentAnimatedBuilder({
     Key? key,
@@ -13,6 +14,7 @@ class CurrentMainContentAnimatedBuilder extends StatefulWidget {
     required this.mainContent,
     required this.outgoingMainContentKey,
     required this.currentMainContentKey,
+    required this.forwardMove,
   })  : _opacity = Tween<double>(
           begin: 0.0,
           end: 1.0,
@@ -36,6 +38,7 @@ class CurrentMainContentAnimatedBuilder extends StatefulWidget {
 class _CurrentMainContentAnimatedBuilderState extends State<CurrentMainContentAnimatedBuilder> {
   late Animation<double> _sizeFactor;
   bool firstTick = true;
+  double beginOffsetX = 0;
 
   @override
   void initState() {
@@ -78,7 +81,7 @@ class _CurrentMainContentAnimatedBuilderState extends State<CurrentMainContentAn
               builder: (BuildContext context, BoxConstraints constraints) {
                 return SlideTransition(
                   position: Tween<Offset>(
-                    begin: Offset(80 / constraints.maxWidth, 0),
+                    begin: Offset(80 * (widget.forwardMove ? 1 : -1) / constraints.maxWidth, 0),
                     end: const Offset(0, 0),
                   ).animate(
                     CurvedAnimation(

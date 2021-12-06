@@ -9,9 +9,9 @@ const _emptyContainerLayoutId = 'empty_container';
 const _bottomSheetLayoutId = 'bottomSheet';
 
 /// maxHeightFactor
-Future<T?> showScrollableWoltBottomSheet<T>(
+Future<T?> showScrollableBottomSheet<T>(
     {required BuildContext context,
-    required List<ScrollableWoltBottomSheetPage> Function(BuildContext) pages,
+    required List<ScrollableBottomSheetPage> Function(BuildContext) pages,
     ValueNotifier<int>? pageIndexListenable,
     EdgeInsetsDirectional? edgeInsetsDirectional,
     ScrollController? scrollController,
@@ -25,7 +25,7 @@ Future<T?> showScrollableWoltBottomSheet<T>(
     enableDrag: true,
     clipBehavior: Clip.antiAliasWithSaveLayer,
     builder: (context) {
-      final bottomSheet = WoltScrollableBottomSheet(
+      final bottomSheet = ScrollableBottomSheet(
         bottomSheetPageBuilders: pages,
         pageIndexListenable: pageIndexListenable ?? ValueNotifier(0),
         scrollController: scrollController,
@@ -37,8 +37,8 @@ Future<T?> showScrollableWoltBottomSheet<T>(
   );
 }
 
-class WoltScrollableBottomSheet extends StatefulWidget {
-  const WoltScrollableBottomSheet({
+class ScrollableBottomSheet extends StatefulWidget {
+  const ScrollableBottomSheet({
     required this.bottomSheetPageBuilders,
     required this.pageIndexListenable,
     this.scrollController,
@@ -46,22 +46,22 @@ class WoltScrollableBottomSheet extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final List<ScrollableWoltBottomSheetPage> Function(BuildContext) bottomSheetPageBuilders;
+  final List<ScrollableBottomSheetPage> Function(BuildContext) bottomSheetPageBuilders;
   final ValueNotifier<int> pageIndexListenable;
   final EdgeInsetsDirectional? edgeInsetsDirectional;
   final ScrollController? scrollController;
 
   @override
-  _WoltScrollableBottomSheetState createState() => _WoltScrollableBottomSheetState();
+  _ScrollableBottomSheetState createState() => _ScrollableBottomSheetState();
 }
 
-class _WoltScrollableBottomSheetState extends State<WoltScrollableBottomSheet>
+class _ScrollableBottomSheetState extends State<ScrollableBottomSheet>
     with TickerProviderStateMixin {
   int get _index => widget.pageIndexListenable.value;
 
-  ScrollableWoltBottomSheetPage get _page => _pages![_index];
+  ScrollableBottomSheetPage get _page => _pages![_index];
 
-  List<ScrollableWoltBottomSheetPage>? _pages;
+  List<ScrollableBottomSheetPage>? _pages;
 
   EdgeInsetsDirectional get _edgeInsetsDirectional =>
       widget.edgeInsetsDirectional ?? EdgeInsetsDirectional.all(16);
@@ -90,9 +90,7 @@ class _WoltScrollableBottomSheetState extends State<WoltScrollableBottomSheet>
                       id: _emptyContainerLayoutId,
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          Navigator.maybePop(context);
-                        },
+                        onTap: () => Navigator.maybePop(context),
                         child: Container(color: Colors.transparent),
                       ),
                     ),
@@ -115,10 +113,6 @@ class _WoltScrollableBottomSheetState extends State<WoltScrollableBottomSheet>
                 ),
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).padding.bottom,
-              color: _page.backgroundColor,
-            ),
           ],
         );
       },
@@ -129,22 +123,27 @@ class _WoltScrollableBottomSheetState extends State<WoltScrollableBottomSheet>
 class _BottomSheetContainerLayoutDelegate extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
-    Size bottomSheetContainerSize = Size.zero;
-    bottomSheetContainerSize = layoutChild(
+    Size bottomSheetContainerSize = layoutChild(
       _bottomSheetLayoutId,
       BoxConstraints(
-        maxHeight: size.height * 0.9,
-        minHeight: size.height * 0.4,
-        maxWidth: size.width,
-        minWidth: size.width,
-      ),
+          maxHeight: size.height * 0.9,
+          minHeight: size.height * 0.4,
+          maxWidth: size.width,
+          minWidth: size.width),
     );
-    positionChild(_bottomSheetLayoutId, Offset(0, size.height - bottomSheetContainerSize.height));
+    positionChild(
+        _bottomSheetLayoutId,
+        Offset(
+          0,
+          size.height - bottomSheetContainerSize.height,
+        ));
 
     layoutChild(
       _emptyContainerLayoutId,
       BoxConstraints(
-          maxWidth: size.width, maxHeight: size.height - bottomSheetContainerSize.height),
+        maxWidth: size.width,
+        maxHeight: size.height - bottomSheetContainerSize.height,
+      ),
     );
     positionChild(_emptyContainerLayoutId, const Offset(0, 0));
   }

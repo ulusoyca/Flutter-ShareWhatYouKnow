@@ -7,7 +7,6 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
   final ValueNotifier<double> currentScrollPosition;
   final EdgeInsetsDirectional edgeInsetsDirectional;
   final double topBarHeight;
-  final double titleTopMargin;
   final GlobalKey titleKey;
   final Widget? header;
   final double? headerHeight;
@@ -20,7 +19,6 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
     required this.currentScrollPosition,
     required this.edgeInsetsDirectional,
     required this.topBarHeight,
-    required this.titleTopMargin,
     required this.titleKey,
     required this.header,
     required this.headerHeight,
@@ -61,9 +59,8 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
                 padding: EdgeInsetsDirectional.only(
                   start: edgeInsetsDirectional.start,
                   end: edgeInsetsDirectional.end,
-                  top: header == null ? 0.0 : titleTopMargin,
                 ),
-                child: Container(
+                child: KeyedSubtree(
                   key: titleKey,
                   child: title,
                 ),
