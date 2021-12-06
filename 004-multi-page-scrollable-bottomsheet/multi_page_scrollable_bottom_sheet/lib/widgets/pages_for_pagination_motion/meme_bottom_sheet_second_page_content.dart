@@ -30,10 +30,18 @@ class MemeBottomSheetSecondPageContent extends StatelessWidget {
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
-        _MemeInputText(labelText: "Top text", textNotifier: topText),
+        _MemeInputText(
+          labelText: "Top text",
+          textNotifier: topText,
+          scrollPaddingMultiplier: 2,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, bottom: 40),
-          child: _MemeInputText(labelText: "Bottom text", textNotifier: bottomText),
+          child: _MemeInputText(
+            labelText: "Bottom text",
+            textNotifier: bottomText,
+            scrollPaddingMultiplier: 1,
+          ),
         ),
       ],
     );
@@ -43,11 +51,13 @@ class MemeBottomSheetSecondPageContent extends StatelessWidget {
 class _MemeInputText extends StatelessWidget {
   final String labelText;
   final ValueNotifier<String> textNotifier;
+  final double scrollPaddingMultiplier;
 
   const _MemeInputText({
     Key? key,
     required this.labelText,
     required this.textNotifier,
+    required this.scrollPaddingMultiplier,
   }) : super(key: key);
 
   @override
@@ -68,7 +78,8 @@ class _MemeInputText extends StatelessWidget {
           ),
         ),
         cursorColor: AppColors.blue,
-        scrollPadding: EdgeInsets.all(80) + EdgeInsets.only(bottom: PrimaryButton.height),
+        scrollPadding: EdgeInsets.all(80 * scrollPaddingMultiplier) +
+            EdgeInsets.only(bottom: PrimaryButton.height),
       ),
     );
   }

@@ -11,8 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   very_good_analysis: ^2.4.0
-  google_fonts: ^2.1.0
-  material_design_icons_flutter: ^5.0.6295
+  google_fonts: ^2.2.0
+  material_design_icons_flutter: ^5.0.6595
+  flutter_lorem: ^2.0.0
 
 flutter:
   uses-material-design: true

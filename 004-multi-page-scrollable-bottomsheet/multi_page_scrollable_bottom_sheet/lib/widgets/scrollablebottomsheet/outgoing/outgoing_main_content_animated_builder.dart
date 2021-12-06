@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 class OutgoingMainContentAnimatedBuilder extends StatefulWidget {
   final AnimationController controller;
   final Animation<double> _opacity;
-  final GlobalKey outgoingMainContentKey;
-  final GlobalKey currentMainContentKey;
+  final GlobalKey outgoingOffstagedMainContentKey;
+  final GlobalKey currentOffstagedMainContentKey;
   final Widget mainContent;
+  final bool forwardMove;
 
   OutgoingMainContentAnimatedBuilder({
     Key? key,
     required this.controller,
     required this.mainContent,
-    required this.outgoingMainContentKey,
-    required this.currentMainContentKey,
+    required this.outgoingOffstagedMainContentKey,
+    required this.currentOffstagedMainContentKey,
+    required this.forwardMove,
   })  : _opacity = Tween<double>(
           begin: 1.0,
           end: 0.0,
@@ -43,19 +45,12 @@ class _OutgoingMainContentAnimatedBuilderState extends State<OutgoingMainContent
     _sizeFactor = Tween<double>(begin: 1.0, end: 0.0).animate(widget.controller);
     widget.controller.addListener(() {
       if (firstTick) {
-        final currentHeight = widget.currentMainContentKey.currentContext!.size!.height;
-        final outgoingHeight = widget.outgoingMainContentKey.currentContext!.size!.height;
-        _sizeFactor = Tween<double>(
-          begin: 1.0,
-          end: currentHeight / outgoingHeight,
-        ).animate(
+        final currentHeight = widget.currentOffstagedMainContentKey.currentContext!.size!.height;
+        final outgoingHeight = widget.outgoingOffstagedMainContentKey.currentContext!.size!.height;
+        _sizeFactor = Tween<double>(begin: 1.0, end: currentHeight / outgoingHeight).animate(
           CurvedAnimation(
             parent: widget.controller,
-            curve: const Interval(
-              0 / 350,
-              300 / 350,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval(0 / 350, 300 / 350, curve: Curves.fastOutSlowIn),
           ),
         );
         firstTick = false;
@@ -70,7 +65,7 @@ class _OutgoingMainContentAnimatedBuilderState extends State<OutgoingMainContent
       builder: (BuildContext context, Widget? _) {
         return SizeTransition(
           axis: Axis.vertical,
-          axisAlignment: 1,
+          axisAlignment: -1,
           sizeFactor: _sizeFactor,
           child: Opacity(
             opacity: widget._opacity.value,
@@ -79,7 +74,7 @@ class _OutgoingMainContentAnimatedBuilderState extends State<OutgoingMainContent
                 return SlideTransition(
                   position: Tween<Offset>(
                     begin: const Offset(0, 0),
-                    end: Offset(-80 / constraints.maxWidth, 0),
+                    end: Offset(80 * (widget.forwardMove ? -1 : 1) / constraints.maxWidth, 0),
                   ).animate(
                     CurvedAnimation(
                       parent: widget.controller,

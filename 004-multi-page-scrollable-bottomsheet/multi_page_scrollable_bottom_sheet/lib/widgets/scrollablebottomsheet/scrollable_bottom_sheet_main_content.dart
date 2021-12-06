@@ -1,16 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_page_scrollable_bottom_sheet/widgets/buttons/primary_button.dart';
-import 'package:multi_page_scrollable_bottom_sheet/widgets/scrollablebottomsheet/scrollable_bottom_sheet_header.dart';
+import 'package:multi_page_scrollable_bottom_sheet/widgets/scrollablebottomsheet/scrollable_bottom_sheet_hero_image.dart';
 
 class ScrollableBottomSheetMainContent extends StatelessWidget {
   final ValueNotifier<double> currentScrollPosition;
   final EdgeInsetsDirectional edgeInsetsDirectional;
   final double topBarHeight;
-  final double titleTopMargin;
   final GlobalKey titleKey;
-  final Widget? header;
-  final double? headerHeight;
+  final Widget? heroImage;
+  final double? heroImageHeight;
   final Widget content;
   final bool hasActionButton;
   final Widget title;
@@ -20,10 +19,9 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
     required this.currentScrollPosition,
     required this.edgeInsetsDirectional,
     required this.topBarHeight,
-    required this.titleTopMargin,
     required this.titleKey,
-    required this.header,
-    required this.headerHeight,
+    required this.heroImage,
+    required this.heroImageHeight,
     required this.content,
     required this.hasActionButton,
     required this.title,
@@ -31,8 +29,6 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final header = this.header;
-    final headerHeight = this.headerHeight;
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         if (scrollNotification is ScrollUpdateNotification) {
@@ -49,11 +45,11 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (header != null && headerHeight != null)
-                ScrollableBottomSheetHeader(
+              if (heroImage != null && heroImageHeight != null)
+                ScrollableBottomSheetHeroImage(
                   topBarHeight: topBarHeight,
-                  child: header,
-                  headerHeight: headerHeight,
+                  heroImage: heroImage!,
+                  heroImageHeight: heroImageHeight!,
                 )
               else
                 SizedBox(height: topBarHeight),
@@ -61,9 +57,8 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
                 padding: EdgeInsetsDirectional.only(
                   start: edgeInsetsDirectional.start,
                   end: edgeInsetsDirectional.end,
-                  top: header == null ? 0.0 : titleTopMargin,
                 ),
-                child: Container(
+                child: KeyedSubtree(
                   key: titleKey,
                   child: title,
                 ),

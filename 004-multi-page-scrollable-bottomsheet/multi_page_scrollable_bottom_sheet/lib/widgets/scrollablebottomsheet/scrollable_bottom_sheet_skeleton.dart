@@ -15,7 +15,7 @@ import 'package:multi_page_scrollable_bottom_sheet/widgets/scrollablebottomsheet
 
 import 'scrollable_bottom_sheet_main_content.dart';
 
-class CurrentWidgets {
+class CurrentPageWidgets {
   final CurrentMainContentAnimatedBuilder mainContentAnimatedBuilder;
   final CurrentTopBarWidgetsAnimatedBuilder topBarAnimatedBuilder;
   final CurrentTopBarWidgetsAnimatedBuilder closeButtonAnimatedBuilder;
@@ -23,7 +23,7 @@ class CurrentWidgets {
   final CurrentActionButtonAnimatedBuilder actionButtonAnimatedBuilder;
   final ScrollableBottomSheetMainContent offstagedMainContent;
 
-  CurrentWidgets({
+  CurrentPageWidgets({
     required this.mainContentAnimatedBuilder,
     required this.topBarAnimatedBuilder,
     required this.closeButtonAnimatedBuilder,
@@ -33,7 +33,7 @@ class CurrentWidgets {
   });
 }
 
-class OutgoingWidgets {
+class OutgoingPageWidgets {
   final OutgoingMainContentAnimatedBuilder mainContentAnimatedBuilder;
   final OutgoingTopBarWidgetsAnimatedBuilder topBarAnimatedBuilder;
   final OutgoingTopBarWidgetsAnimatedBuilder closeButtonAnimatedBuilder;
@@ -41,7 +41,7 @@ class OutgoingWidgets {
   final OutgoingActionButtonAnimatedBuilder actionButtonAnimatedBuilder;
   final ScrollableBottomSheetMainContent offstagedMainContent;
 
-  OutgoingWidgets({
+  OutgoingPageWidgets({
     required this.mainContentAnimatedBuilder,
     required this.topBarAnimatedBuilder,
     required this.closeButtonAnimatedBuilder,
@@ -53,7 +53,7 @@ class OutgoingWidgets {
 
 class ScrollableBottomSheetSkeleton extends StatefulWidget {
   final ValueNotifier<int> pageIndexListenable;
-  final List<ScrollableWoltBottomSheetPage> pages;
+  final List<ScrollableBottomSheetPage> pages;
   final EdgeInsetsDirectional edgeInsetsDirectional;
   final int index;
 
@@ -71,8 +71,8 @@ class ScrollableBottomSheetSkeleton extends StatefulWidget {
 
 class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSkeleton>
     with TickerProviderStateMixin {
-  CurrentWidgets? _currentWidgets;
-  OutgoingWidgets? _outgoingWidgets;
+  CurrentPageWidgets? _currentPageWidgets;
+  OutgoingPageWidgets? _outgoingPageWidgets;
 
   int get pagesLength => widget.pages.length;
 
@@ -80,9 +80,7 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
 
   final double _topBarHeight = 74;
 
-  final double _titleTopMargin = 24;
-
-  ScrollableWoltBottomSheetPage get _page => widget.pages[_index];
+  ScrollableBottomSheetPage get _page => widget.pages[_index];
 
   late List<GlobalKey> _titleKeys;
   late List<GlobalKey> _offstagedTitleKeys;
@@ -94,6 +92,8 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   late List<ValueNotifier<double>> _scrollPositions;
 
   ValueNotifier<double> get _currentScrollPosition => _scrollPositions[_index];
+
+  bool forwardMove = true;
 
   @override
   void initState() {
@@ -108,45 +108,46 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_currentWidgets == null) {
-      _addChild(animate: false);
+    if (_currentPageWidgets == null) {
+      _addPage(animate: false);
     }
   }
 
   @override
   void didUpdateWidget(covariant ScrollableBottomSheetSkeleton oldWidget) {
     super.didUpdateWidget(oldWidget);
+    forwardMove = oldWidget.index < widget.index;
     if (oldWidget.index != widget.index) {
-      _addChild(animate: true);
+      _addPage(animate: true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentWidgets = _currentWidgets;
-    final outgoingWidgets = _outgoingWidgets;
+    final currentWidgets = _currentPageWidgets;
+    final outgoingWidgets = _outgoingPageWidgets;
     return Stack(
       children: [
         _Skeleton(
           mainContent: _SwitcherLayout(
-            currentChild: currentWidgets?.mainContentAnimatedBuilder,
+            currentPageWidgets: currentWidgets?.mainContentAnimatedBuilder,
             outgoingChild: outgoingWidgets?.mainContentAnimatedBuilder,
           ),
           topBar: _SwitcherLayout(
-            currentChild: currentWidgets?.topBarAnimatedBuilder,
+            currentPageWidgets: currentWidgets?.topBarAnimatedBuilder,
             outgoingChild: outgoingWidgets?.topBarAnimatedBuilder,
           ),
           handler: const ScrollableBottomSheetHandler(),
           closeButtton: _SwitcherLayout(
-            currentChild: currentWidgets?.closeButtonAnimatedBuilder,
+            currentPageWidgets: currentWidgets?.closeButtonAnimatedBuilder,
             outgoingChild: outgoingWidgets?.closeButtonAnimatedBuilder,
           ),
           backButton: _SwitcherLayout(
-            currentChild: currentWidgets?.backButtonButtonAnimatedBuilder,
+            currentPageWidgets: currentWidgets?.backButtonButtonAnimatedBuilder,
             outgoingChild: outgoingWidgets?.backButtonButtonAnimatedBuilder,
           ),
           actionButton: _SwitcherLayout(
-            currentChild: currentWidgets?.actionButtonAnimatedBuilder,
+            currentPageWidgets: currentWidgets?.actionButtonAnimatedBuilder,
             outgoingChild: outgoingWidgets?.actionButtonAnimatedBuilder,
           ),
           edgeInsetsDirectional: widget.edgeInsetsDirectional,
@@ -201,22 +202,25 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   List<GlobalKey<State<StatefulWidget>>> _createGlobalKeys() =>
       [for (int i = 0; i < widget.pages.length; i++) GlobalKey()];
 
-  void _addChild({required bool animate}) {
+  void _addPage({required bool animate}) {
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 350),
       vsync: this,
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          setState(() => _outgoingWidgets = null);
+          setState(() => _outgoingPageWidgets = null);
           _animationController?.dispose();
           _animationController = null;
         }
       });
-    final currentWidgetsToBeOutgoing = _currentWidgets;
+    final currentWidgetsToBeOutgoing = _currentPageWidgets;
     if (currentWidgetsToBeOutgoing != null) {
-      _outgoingWidgets = _createOutgoingWidgets(_animationController!, currentWidgetsToBeOutgoing);
+      _outgoingPageWidgets = _createOutgoingWidgets(
+        _animationController!,
+        currentWidgetsToBeOutgoing,
+      );
     }
-    _currentWidgets = _createCurrentWidgets(_animationController!);
+    _currentPageWidgets = _createCurrentWidgets(_animationController!);
     if (animate) {
       _animationController?.forward();
     } else {
@@ -224,14 +228,15 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
     }
   }
 
-  CurrentWidgets _createCurrentWidgets(AnimationController animationController) {
-    return CurrentWidgets(
+  CurrentPageWidgets _createCurrentWidgets(AnimationController animationController) {
+    return CurrentPageWidgets(
         mainContentAnimatedBuilder: CurrentMainContentAnimatedBuilder(
           key: UniqueKey(),
           mainContent: _createMainContent(_titleKeys[_index]),
           controller: animationController,
-          currentMainContentKey: _currentOffstagedMainContentKeys[_index],
-          outgoingMainContentKey: _outgoingOffstagedMainContentKeys[_index],
+          currentOffstagedMainContentKey: _currentOffstagedMainContentKeys[_index],
+          outgoingOffstagedMainContentKey: _outgoingOffstagedMainContentKeys[_index],
+          forwardMove: forwardMove,
         ),
         offstagedMainContent: _createMainContent(_offstagedTitleKeys[_index]),
         topBarAnimatedBuilder: CurrentTopBarWidgetsAnimatedBuilder(
@@ -252,17 +257,18 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
         ));
   }
 
-  OutgoingWidgets _createOutgoingWidgets(
+  OutgoingPageWidgets _createOutgoingWidgets(
     AnimationController animationController,
-    CurrentWidgets currentWidgetsToBeOutgoing,
+    CurrentPageWidgets currentWidgetsToBeOutgoing,
   ) {
-    return OutgoingWidgets(
+    return OutgoingPageWidgets(
         mainContentAnimatedBuilder: OutgoingMainContentAnimatedBuilder(
           key: UniqueKey(),
           controller: animationController,
           mainContent: currentWidgetsToBeOutgoing.mainContentAnimatedBuilder.mainContent,
-          currentMainContentKey: _currentOffstagedMainContentKeys[_index],
-          outgoingMainContentKey: _outgoingOffstagedMainContentKeys[_index],
+          currentOffstagedMainContentKey: _currentOffstagedMainContentKeys[_index],
+          outgoingOffstagedMainContentKey: _outgoingOffstagedMainContentKeys[_index],
+          forwardMove: forwardMove,
         ),
         offstagedMainContent: currentWidgetsToBeOutgoing.offstagedMainContent,
         topBarAnimatedBuilder: OutgoingTopBarWidgetsAnimatedBuilder(
@@ -286,14 +292,13 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   ScrollableBottomSheetMainContent _createMainContent(GlobalKey titleKey) =>
       ScrollableBottomSheetMainContent(
         key: UniqueKey(),
-        titleTopMargin: _titleTopMargin,
         titleKey: titleKey,
         topBarHeight: _topBarHeight,
         edgeInsetsDirectional: widget.edgeInsetsDirectional,
         currentScrollPosition: _currentScrollPosition,
         hasActionButton: _page.actionListenable != null,
-        header: _page.header,
-        headerHeight: _page.headerHeight,
+        heroImage: _page.heroImage,
+        heroImageHeight: _page.heroImageHeight,
         content: _page.content,
         title: _page.title,
       );
@@ -301,12 +306,11 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   ScrollableBottomSheetTopBar _createTopBar() => ScrollableBottomSheetTopBar(
         key: UniqueKey(),
         topBarHeight: _topBarHeight,
-        titleTopMargin: _titleTopMargin,
         backgroundColor: _page.backgroundColor,
         currentScrollPositionListenable: _currentScrollPosition,
-        topBarTitle: _page.title,
+        topBarTitle: _page.appbarTitle,
         titleKey: _titleKeys[_index],
-        availableTopSpace: _page.headerHeight ?? _topBarHeight,
+        heroImageHeight: _page.heroImageHeight,
       );
 
   BottomSheetCloseButton _createCloseButton() => BottomSheetCloseButton(
@@ -336,18 +340,18 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
 }
 
 class _SwitcherLayout extends StatelessWidget {
-  final Widget? currentChild;
+  final Widget? currentPageWidgets;
   final Widget? outgoingChild;
 
   const _SwitcherLayout({
     Key? key,
-    required this.currentChild,
+    required this.currentPageWidgets,
     required this.outgoingChild,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final currentChild = this.currentChild;
+    final currentChild = this.currentPageWidgets;
     final outgoingChild = this.outgoingChild;
     return Stack(
       children: [
@@ -380,6 +384,8 @@ class _Skeleton extends StatelessWidget {
     required this.topBarHeight,
   }) : super(key: key);
 
+  final handlerHeight = 12.0;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -388,7 +394,7 @@ class _Skeleton extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: 0,
+          top: -4,
           height: topBarHeight,
           child: topBar,
         ),
@@ -402,7 +408,8 @@ class _Skeleton extends StatelessWidget {
           top: 0,
           end: 0,
           child: Padding(
-            padding: EdgeInsets.only(top: edgeInsetsDirectional.top),
+            padding: EdgeInsets.only(
+                top: edgeInsetsDirectional.top - ScrollableBottomSheetHandler.topMargin),
             child: closeButtton,
           ),
         ),
@@ -410,7 +417,8 @@ class _Skeleton extends StatelessWidget {
           top: 0,
           start: 0,
           child: Padding(
-            padding: EdgeInsets.only(top: edgeInsetsDirectional.top),
+            padding: EdgeInsets.only(
+                top: edgeInsetsDirectional.top - ScrollableBottomSheetHandler.topMargin),
             child: backButton,
           ),
         ),

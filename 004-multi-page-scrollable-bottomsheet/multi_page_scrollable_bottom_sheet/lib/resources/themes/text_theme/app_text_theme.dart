@@ -36,7 +36,7 @@ class AppTextTheme {
         color: AppColors.black,
       ),
       headline6: GoogleFonts.varelaRound(
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.15,
         color: AppColors.black,
