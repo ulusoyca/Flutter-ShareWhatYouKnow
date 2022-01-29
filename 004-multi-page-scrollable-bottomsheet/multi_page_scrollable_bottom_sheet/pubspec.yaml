@@ -15,6 +15,11 @@ dependencies:
   material_design_icons_flutter: ^5.0.6595
   flutter_lorem: ^2.0.0
 
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.2.0
+
 flutter:
   uses-material-design: true
   assets:

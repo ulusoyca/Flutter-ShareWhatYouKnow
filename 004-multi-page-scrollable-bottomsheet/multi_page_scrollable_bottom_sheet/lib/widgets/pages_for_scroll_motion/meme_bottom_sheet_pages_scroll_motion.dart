@@ -41,20 +41,13 @@ ScrollableBottomSheetPage _pageWithoutHero(BuildContext context) {
 }
 
 ScrollableBottomSheetPage _pageWithHero(BuildContext context) {
-  final primaryButtonEnabled = ValueNotifier(!_bothTextFieldsEmpty);
-  Listenable.merge([_topText, _bottomText]).addListener(() {
-    primaryButtonEnabled.value = !_bothTextFieldsEmpty;
-  });
   return ScrollableBottomSheetPage(
-    title: Padding(
-      padding: EdgeInsets.only(top: 16),
-      child: Text(
-        "Story of the cat",
-        style: _titleTextStyle(context),
-      ),
+    title: Text(
+      "Story of the meme",
+      style: _titleTextStyle(context),
     ),
     heroImageHeight: 250,
-    appbarTitle: "Story of the cat",
+    appbarTitle: "Story of the meme",
     heroImage: ValueListenableBuilder(
       valueListenable: _selectedMemeIndex,
       builder: (BuildContext context, value, Widget? child) {
@@ -72,10 +65,11 @@ ScrollableBottomSheetPage _pageWithHero(BuildContext context) {
       ),
     ),
     actionListenable: ValueNotifier(() {
-      _pageIndexNotifier.value = 2;
+      _setToDefault();
+      Navigator.maybePop(context);
     }),
-    actionEnabledListenable: primaryButtonEnabled,
-    actionTextListenable: ValueNotifier("Generate"),
+    actionEnabledListenable: ValueNotifier(true),
+    actionTextListenable: ValueNotifier("Done"),
     onClosePressed: () {
       _setToDefault();
       Navigator.maybePop(context);

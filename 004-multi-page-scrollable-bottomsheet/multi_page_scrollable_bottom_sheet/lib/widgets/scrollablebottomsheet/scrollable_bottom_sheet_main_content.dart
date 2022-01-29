@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_page_scrollable_bottom_sheet/widgets/buttons/primary_button.dart';
 import 'package:multi_page_scrollable_bottom_sheet/widgets/scrollablebottomsheet/scrollable_bottom_sheet_hero_image.dart';
@@ -13,6 +12,7 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
   final Widget content;
   final bool hasActionButton;
   final Widget title;
+  final double titleTopPadding;
 
   const ScrollableBottomSheetMainContent({
     Key? key,
@@ -25,6 +25,7 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
     required this.content,
     required this.hasActionButton,
     required this.title,
+    required this.titleTopPadding,
   }) : super(key: key);
 
   @override
@@ -57,6 +58,7 @@ class ScrollableBottomSheetMainContent extends StatelessWidget {
                 padding: EdgeInsetsDirectional.only(
                   start: edgeInsetsDirectional.start,
                   end: edgeInsetsDirectional.end,
+                  top: titleTopPadding,
                 ),
                 child: KeyedSubtree(
                   key: titleKey,

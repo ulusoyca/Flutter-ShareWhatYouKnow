@@ -78,7 +78,9 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
 
   int get _index => widget.index;
 
-  final double _topBarHeight = 74;
+  final double _topBarHeight = 72;
+  final double _pageTitleTopPadding = 12;
+  final double _topBarTranslationYAmountInPx = 4;
 
   ScrollableBottomSheetPage get _page => widget.pages[_index];
 
@@ -129,6 +131,7 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
     return Stack(
       children: [
         _Skeleton(
+          key: ValueKey("_Skeleton$_index"),
           mainContent: _SwitcherLayout(
             currentPageWidgets: currentWidgets?.mainContentAnimatedBuilder,
             outgoingChild: outgoingWidgets?.mainContentAnimatedBuilder,
@@ -152,12 +155,13 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
           ),
           edgeInsetsDirectional: widget.edgeInsetsDirectional,
           topBarHeight: _topBarHeight,
+          topBarTranslationYAmountInPx: _topBarTranslationYAmountInPx,
         ),
         if (currentWidgets != null)
           Offstage(
+            key: ValueKey("CurrentOffstage$_index"),
             offstage: true,
             child: _Skeleton(
-              key: UniqueKey(),
               mainContent: KeyedSubtree(
                 key: _currentOffstagedMainContentKeys[_index],
                 child: currentWidgets.offstagedMainContent,
@@ -169,13 +173,14 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
               actionButton: currentWidgets.actionButtonAnimatedBuilder.actionButton,
               edgeInsetsDirectional: widget.edgeInsetsDirectional,
               topBarHeight: _topBarHeight,
+              topBarTranslationYAmountInPx: _topBarTranslationYAmountInPx,
             ),
           ),
         if (outgoingWidgets != null)
           Offstage(
+            key: ValueKey("_OutgoingOffstage$_index"),
             offstage: true,
             child: _Skeleton(
-              key: UniqueKey(),
               mainContent: KeyedSubtree(
                 key: _outgoingOffstagedMainContentKeys[_index],
                 child: outgoingWidgets.offstagedMainContent,
@@ -187,6 +192,7 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
               actionButton: outgoingWidgets.actionButtonAnimatedBuilder.actionButton,
               edgeInsetsDirectional: widget.edgeInsetsDirectional,
               topBarHeight: _topBarHeight,
+              topBarTranslationYAmountInPx: _topBarTranslationYAmountInPx,
             ),
           ),
       ],
@@ -209,6 +215,7 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           setState(() => _outgoingPageWidgets = null);
+          _animationController!.value = _animationController!.upperBound;
           _animationController?.dispose();
           _animationController = null;
         }
@@ -231,7 +238,6 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   CurrentPageWidgets _createCurrentWidgets(AnimationController animationController) {
     return CurrentPageWidgets(
         mainContentAnimatedBuilder: CurrentMainContentAnimatedBuilder(
-          key: UniqueKey(),
           mainContent: _createMainContent(_titleKeys[_index]),
           controller: animationController,
           currentOffstagedMainContentKey: _currentOffstagedMainContentKeys[_index],
@@ -263,7 +269,6 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   ) {
     return OutgoingPageWidgets(
         mainContentAnimatedBuilder: OutgoingMainContentAnimatedBuilder(
-          key: UniqueKey(),
           controller: animationController,
           mainContent: currentWidgetsToBeOutgoing.mainContentAnimatedBuilder.mainContent,
           currentOffstagedMainContentKey: _currentOffstagedMainContentKeys[_index],
@@ -291,7 +296,6 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
 
   ScrollableBottomSheetMainContent _createMainContent(GlobalKey titleKey) =>
       ScrollableBottomSheetMainContent(
-        key: UniqueKey(),
         titleKey: titleKey,
         topBarHeight: _topBarHeight,
         edgeInsetsDirectional: widget.edgeInsetsDirectional,
@@ -301,27 +305,27 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
         heroImageHeight: _page.heroImageHeight,
         content: _page.content,
         title: _page.title,
+        titleTopPadding: _pageTitleTopPadding,
       );
 
   ScrollableBottomSheetTopBar _createTopBar() => ScrollableBottomSheetTopBar(
-        key: UniqueKey(),
         topBarHeight: _topBarHeight,
         backgroundColor: _page.backgroundColor,
         currentScrollPositionListenable: _currentScrollPosition,
         topBarTitle: _page.appbarTitle,
         titleKey: _titleKeys[_index],
         heroImageHeight: _page.heroImageHeight,
+        pageTitleTopPadding: _pageTitleTopPadding,
+        topBarTranslationYAmountInPx: _topBarTranslationYAmountInPx,
       );
 
   BottomSheetCloseButton _createCloseButton() => BottomSheetCloseButton(
-        key: UniqueKey(),
         onPressed: _page.onClosePressed,
       );
 
   Widget _createBackButton() => _index == 0
       ? const SizedBox.shrink()
       : BottomSheetBackButton(
-          key: UniqueKey(),
           onPressed: _page.onBackPressed ??
               () => widget.pageIndexListenable.value = widget.pageIndexListenable.value - 1,
         );
@@ -329,7 +333,6 @@ class _ScrollableBottomSheetSkeletonState extends State<ScrollableBottomSheetSke
   Widget _createActionButton() => _page.actionTextListenable == null
       ? const SizedBox.shrink()
       : ScrollableBottomSheetActionButton(
-          key: UniqueKey(),
           edgeInsetsDirectional: widget.edgeInsetsDirectional,
           actionButtonColor: _page.actionButtonColor,
           actionTextListenable: _page.actionTextListenable,
@@ -382,9 +385,11 @@ class _Skeleton extends StatelessWidget {
     required this.actionButton,
     required this.edgeInsetsDirectional,
     required this.topBarHeight,
+    required this.topBarTranslationYAmountInPx,
   }) : super(key: key);
 
   final handlerHeight = 12.0;
+  final double topBarTranslationYAmountInPx;
 
   @override
   Widget build(BuildContext context) {
@@ -394,8 +399,8 @@ class _Skeleton extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: -4,
-          height: topBarHeight,
+          top: -1 * topBarTranslationYAmountInPx,
+          height: topBarHeight + topBarTranslationYAmountInPx,
           child: topBar,
         ),
         Positioned(

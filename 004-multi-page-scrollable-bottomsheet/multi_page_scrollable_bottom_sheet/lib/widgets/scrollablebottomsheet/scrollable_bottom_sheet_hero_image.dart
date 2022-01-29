@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:multi_page_scrollable_bottom_sheet/widgets/scrollablebottomsheet/transformation_utils.dart';
 
 class ScrollableBottomSheetHeroImage extends StatelessWidget {
   final Widget heroImage;
@@ -56,25 +55,18 @@ class _HeroImageFlowDelegate extends FlowDelegate {
     final currentScrollPosition = scrollPosition.pixels;
 
     /// Calculate scale
-    final _scaleStart = 1.1;
-    final _scaleEnd = 1.0;
-    double scale = _calculatePropertyValue(
-      currentScrollPosition: currentScrollPosition,
-      startPointInPx: 0,
-      endPointInPx: heroImageHeight - topBarHeight,
-      lowerLimit: min(_scaleStart, _scaleEnd),
-      upperLimit: max(_scaleStart, _scaleEnd),
-    );
+    double scale = calculateTransformationValue(
+        startValue: 1.1,
+        endValue: 1.0,
+        rangeInPx: heroImageHeight - topBarHeight,
+        progressInRangeInPx: currentScrollPosition);
 
     /// Calculate opacity
-    final _opacityStart = 1.0;
-    final _opacityEnd = 0.0;
-    double opacity = _calculatePropertyValue(
-      currentScrollPosition: currentScrollPosition,
-      startPointInPx: (heroImageHeight / 2) - topBarHeight,
-      endPointInPx: heroImageHeight - topBarHeight,
-      lowerLimit: _opacityEnd,
-      upperLimit: _opacityStart,
+    double opacity = calculateTransformationValue(
+      rangeInPx: heroImageHeight / 2,
+      progressInRangeInPx: currentScrollPosition - ((heroImageHeight / 2) - topBarHeight),
+      startValue: 1.0,
+      endValue: 0.0,
     );
 
     flowPaintingContext.paintChild(
@@ -87,21 +79,7 @@ class _HeroImageFlowDelegate extends FlowDelegate {
   @override
   bool shouldRepaint(covariant _HeroImageFlowDelegate oldDelegate) {
     return heroImageHeight != oldDelegate.heroImageHeight ||
+        scrollPosition != oldDelegate.scrollPosition ||
         topBarHeight != oldDelegate.topBarHeight;
-  }
-
-  double _calculatePropertyValue({
-    required double currentScrollPosition,
-    required double startPointInPx,
-    required double endPointInPx,
-    required double lowerLimit,
-    required double upperLimit,
-  }) {
-    final distanceInPx = endPointInPx - startPointInPx;
-    final progressInPx = currentScrollPosition - startPointInPx;
-    final progress = progressInPx / distanceInPx;
-
-    final rawValue = upperLimit - (progress * (upperLimit - lowerLimit));
-    return rawValue.clamp(lowerLimit, upperLimit);
   }
 }

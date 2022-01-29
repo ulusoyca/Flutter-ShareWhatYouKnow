@@ -36,15 +36,13 @@ class OutgoingMainContentAnimatedBuilder extends StatefulWidget {
 }
 
 class _OutgoingMainContentAnimatedBuilderState extends State<OutgoingMainContentAnimatedBuilder> {
-  late Animation<double> _sizeFactor;
-  bool firstTick = true;
+  Animation<double>? _sizeFactor;
 
   @override
   void initState() {
     super.initState();
-    _sizeFactor = Tween<double>(begin: 1.0, end: 0.0).animate(widget.controller);
     widget.controller.addListener(() {
-      if (firstTick) {
+      if (_sizeFactor == null) {
         final currentHeight = widget.currentOffstagedMainContentKey.currentContext!.size!.height;
         final outgoingHeight = widget.outgoingOffstagedMainContentKey.currentContext!.size!.height;
         _sizeFactor = Tween<double>(begin: 1.0, end: currentHeight / outgoingHeight).animate(
@@ -53,7 +51,6 @@ class _OutgoingMainContentAnimatedBuilderState extends State<OutgoingMainContent
             curve: const Interval(0 / 350, 300 / 350, curve: Curves.fastOutSlowIn),
           ),
         );
-        firstTick = false;
       }
     });
   }
@@ -66,7 +63,7 @@ class _OutgoingMainContentAnimatedBuilderState extends State<OutgoingMainContent
         return SizeTransition(
           axis: Axis.vertical,
           axisAlignment: -1,
-          sizeFactor: _sizeFactor,
+          sizeFactor: _sizeFactor ?? Tween<double>(begin: 1.0, end: 0.0).animate(widget.controller),
           child: Opacity(
             opacity: widget._opacity.value,
             child: LayoutBuilder(

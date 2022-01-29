@@ -50,12 +50,9 @@ ScrollableBottomSheetPage _secondPage(BuildContext context) {
     primaryButtonEnabled.value = !_bothTextFieldsEmpty;
   });
   return ScrollableBottomSheetPage(
-    title: Padding(
-      padding: EdgeInsets.only(top: 16),
-      child: Text(
-        "Add your text",
-        style: _titleTextStyle(context),
-      ),
+    title: Text(
+      "Add your text",
+      style: _titleTextStyle(context),
     ),
     appbarTitle: "Add your text",
     heroImageHeight: 250,

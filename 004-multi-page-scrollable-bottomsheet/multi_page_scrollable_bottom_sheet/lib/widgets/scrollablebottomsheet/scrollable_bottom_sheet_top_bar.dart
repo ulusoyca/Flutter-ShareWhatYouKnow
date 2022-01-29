@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_page_scrollable_bottom_sheet/widgets/scrollablebottomsheet/transformation_utils.dart';
 
 class ScrollableBottomSheetTopBar extends StatelessWidget {
   final String topBarTitle;
@@ -8,15 +9,8 @@ class ScrollableBottomSheetTopBar extends StatelessWidget {
   final Color backgroundColor;
   final ValueListenable<double> currentScrollPositionListenable;
   final GlobalKey titleKey;
-  final double pageTitleTopMargin;
-
-  final double _topBarTranslationYStart = 0;
-
-  final double _topBarTranslationYEnd = 4;
-
-  final double _topBarTitleTranslationYStart = 0;
-
-  final double _topBarTitleTranslationYEnd = 8;
+  final double pageTitleTopPadding;
+  final double topBarTranslationYAmountInPx;
 
   const ScrollableBottomSheetTopBar({
     required this.topBarTitle,
@@ -25,7 +19,8 @@ class ScrollableBottomSheetTopBar extends StatelessWidget {
     required this.backgroundColor,
     required this.currentScrollPositionListenable,
     required this.titleKey,
-    this.pageTitleTopMargin = 24,
+    required this.pageTitleTopPadding,
+    required this.topBarTranslationYAmountInPx,
     Key? key,
   }) : super(key: key);
 
@@ -37,11 +32,8 @@ class ScrollableBottomSheetTopBar extends StatelessWidget {
         heroImageHeight: heroImageHeight,
         currentScrollPositionListenable: currentScrollPositionListenable,
         titleKey: titleKey,
-        topBarTranslationYStart: _topBarTranslationYStart,
-        topBarTranslationYEnd: _topBarTranslationYEnd,
-        topBarTitleTranslationYStart: _topBarTitleTranslationYStart,
-        topBarTitleTranslationYEnd: _topBarTitleTranslationYEnd,
-        pageTitleTopMargin: pageTitleTopMargin,
+        pageTitleTopPadding: pageTitleTopPadding,
+        topBarTranslationYAmountInPx: topBarTranslationYAmountInPx,
       ),
       children: [
         _TopBar(backgroundColor: backgroundColor, height: topBarHeight),
@@ -56,60 +48,79 @@ class _TopBarFlowDelegate extends FlowDelegate {
   final double? heroImageHeight;
   final ValueListenable<double> currentScrollPositionListenable;
   final GlobalKey titleKey;
-  final double topBarTranslationYEnd;
-  final double topBarTranslationYStart;
-  final double topBarTitleTranslationYEnd;
-  final double topBarTitleTranslationYStart;
-  final double pageTitleTopMargin;
+  final double pageTitleTopPadding;
+  final double topBarTranslationYAmountInPx;
 
   _TopBarFlowDelegate({
     required this.topBarHeight,
     required this.heroImageHeight,
     required this.currentScrollPositionListenable,
     required this.titleKey,
-    required this.topBarTranslationYStart,
-    required this.topBarTranslationYEnd,
-    required this.topBarTitleTranslationYStart,
-    required this.topBarTitleTranslationYEnd,
-    required this.pageTitleTopMargin,
+    required this.pageTitleTopPadding,
+    required this.topBarTranslationYAmountInPx,
   }) : super(repaint: currentScrollPositionListenable);
-
-  final double _topBarOpacityStart = 0;
-  final double _topBarOpacityEnd = 1;
-
-  double get _topBarTranslationYDistance => topBarTranslationYEnd - topBarTranslationYStart;
-  final double _topBarTitleOpacityStart = 0;
-  final double _topBarTitleOpacityEnd = 1;
-
-  double get _topBarTitleTranslationYDistance =>
-      topBarTitleTranslationYEnd - topBarTitleTranslationYStart;
 
   @override
   void paintChildren(FlowPaintingContext context) {
     final currentScrollPosition = currentScrollPositionListenable.value;
     final pageTitleHeight = titleKey.currentContext!.size!.height;
 
-    /// Paint Top Bar
-    final topBarOpacity = _calculateTopBarOpacity(currentScrollPosition);
-    final topBarTranslationY = _calculateTopBarTranslationY(
-      currentScrollPosition,
-      pageTitleHeight,
+    final topBarTranslationYStart = 0.0;
+    final topBarTranslationYEnd = topBarTranslationYAmountInPx;
+    final totalTopBarTranslationYAmount = topBarTranslationYEnd - topBarTranslationYStart;
+    final topBarTranslationYAndOpacityStartPoint = heroImageHeight == null
+        ? 0
+        : heroImageHeight! - totalTopBarTranslationYAmount - topBarHeight;
+
+    final topBarTitleTranslationYStart = 0.0;
+    final topBarTitleTranslationYEnd = 8.0;
+    final totalTopBarTitleTranslationYAmount =
+        topBarTitleTranslationYEnd - topBarTitleTranslationYStart;
+
+    final topBarTitleTranslationYAndOpacityStartPoint = heroImageHeight == null
+        ? totalTopBarTranslationYAmount + pageTitleTopPadding
+        : heroImageHeight! - topBarHeight + pageTitleTopPadding;
+
+    /// Top bar translation Y
+    final topBarTranslationY = calculateTransformationValue(
+      rangeInPx:
+          totalTopBarTranslationYAmount + totalTopBarTitleTranslationYAmount + pageTitleHeight,
+      progressInRangeInPx: currentScrollPosition - topBarTranslationYAndOpacityStartPoint,
+      startValue: topBarTranslationYStart,
+      endValue: topBarTranslationYEnd,
     );
+
+    /// Top bar opacity
+    final topBarOpacity = calculateTransformationValue(
+      rangeInPx: totalTopBarTranslationYAmount + pageTitleTopPadding,
+      progressInRangeInPx: currentScrollPosition - topBarTranslationYAndOpacityStartPoint,
+      startValue: 0.0,
+      endValue: 1.0,
+    );
+
+    /// Paint Top Bar
     context.paintChild(
       0,
       transform: Transform.translate(offset: Offset(0.0, topBarTranslationY)).transform,
       opacity: topBarOpacity,
     );
 
-    /// Paint Top Bar Title
-    final topBarTitleOpacity = _calculateTopBarTitleOpacity(
-      currentScrollPosition,
-      pageTitleHeight,
+    /// Top Bar Title translation Y
+    final topBarTitleTranslationY = calculateTransformationValue(
+      rangeInPx: totalTopBarTitleTranslationYAmount + pageTitleHeight - pageTitleTopPadding,
+      progressInRangeInPx: currentScrollPosition - topBarTitleTranslationYAndOpacityStartPoint,
+      startValue: topBarTitleTranslationYStart,
+      endValue: topBarTitleTranslationYEnd,
     );
-    final topBarTitleTranslationY = _calculateTopBarTitleTranslationY(
-      currentScrollPosition,
-      pageTitleHeight,
+
+    /// Top Bar Title Opacity
+    final topBarTitleOpacity = calculateTransformationValue(
+      rangeInPx: pageTitleHeight * 0.75,
+      progressInRangeInPx: currentScrollPosition - topBarTitleTranslationYAndOpacityStartPoint,
+      startValue: 0.0,
+      endValue: 1.0,
     );
+
     context.paintChild(
       1,
       transform: Transform.translate(
@@ -124,55 +135,9 @@ class _TopBarFlowDelegate extends FlowDelegate {
     return heroImageHeight != oldDelegate.heroImageHeight ||
         titleKey != oldDelegate.titleKey ||
         currentScrollPositionListenable != oldDelegate.currentScrollPositionListenable ||
-        pageTitleTopMargin != oldDelegate.pageTitleTopMargin ||
+        pageTitleTopPadding != oldDelegate.pageTitleTopPadding ||
+        topBarTranslationYAmountInPx != oldDelegate.topBarTranslationYAmountInPx ||
         topBarHeight != oldDelegate.topBarHeight;
-  }
-
-  double _calculateTopBarTitleOpacity(double currentScrollPosition, double pageTitleHeight) {
-    final double distance = 0.75 * pageTitleHeight;
-    final headerHeight = this.heroImageHeight;
-    final double startPoint = headerHeight == null
-        ? pageTitleTopMargin + _topBarTranslationYDistance
-        : headerHeight - topBarHeight + _topBarTitleTranslationYDistance;
-    final double progress = (currentScrollPosition - startPoint) / distance;
-    return progress.clamp(_topBarTitleOpacityStart, _topBarTitleOpacityEnd);
-  }
-
-  _calculateTopBarOpacity(double currentScrollPosition) {
-    final double distance = pageTitleTopMargin + _topBarTranslationYDistance;
-    final headerHeight = this.heroImageHeight;
-    final double startPoint =
-        headerHeight == null ? 0 : headerHeight - topBarHeight - _topBarTranslationYDistance;
-    final double progress = (currentScrollPosition - startPoint) / distance;
-    return progress.clamp(_topBarOpacityStart, _topBarOpacityEnd);
-  }
-
-  double _calculateTopBarTranslationY(double currentScrollPosition, double pageTitleHeight) {
-    final double distance =
-        pageTitleHeight + _topBarTranslationYDistance + _topBarTitleTranslationYDistance;
-    final headerHeight = this.heroImageHeight;
-    final double startPoint =
-        headerHeight == null ? 0 : headerHeight - topBarHeight - _topBarTranslationYDistance;
-    final double progress = (currentScrollPosition - startPoint) / distance;
-    final double topBarTranslationY = topBarTranslationYEnd * progress;
-    return topBarTranslationY.clamp(
-      topBarTranslationYStart,
-      topBarTranslationYEnd,
-    );
-  }
-
-  double _calculateTopBarTitleTranslationY(double currentScrollPosition, double pageTitleHeight) {
-    final double distance = pageTitleHeight;
-    final headerHeight = this.heroImageHeight;
-    final double startPoint = headerHeight == null
-        ? _topBarTitleTranslationYDistance + _topBarTranslationYDistance
-        : headerHeight - topBarHeight + _topBarTitleTranslationYDistance;
-    final double progress = (currentScrollPosition - startPoint) / distance;
-    final double topBarTitleTranslationY = topBarTitleTranslationYEnd * progress;
-    return topBarTitleTranslationY.clamp(
-      topBarTitleTranslationYStart,
-      topBarTitleTranslationYEnd,
-    );
   }
 }
 
@@ -186,17 +151,13 @@ class _TopBar extends StatelessWidget {
     required this.height,
   }) : super(key: key);
 
+  final double elevation = 4.0;
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10),
-      child: Material(
-        elevation: 4.0,
-        child: Container(
-          height: height,
-          color: backgroundColor,
-        ),
-      ),
+    return Material(
+      elevation: elevation,
+      child: Container(height: height - elevation, color: backgroundColor),
     );
   }
 }
@@ -209,7 +170,7 @@ class _TopBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 60, left: 60, top: 20),
+      padding: const EdgeInsets.only(right: 60, left: 60, top: 24),
       child: Align(
         alignment: Alignment.topCenter,
         child: Text(
